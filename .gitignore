@@ -1,0 +1,7 @@
+node_modules/
+out/
+results/raw/
+*.db
+*.db-wal
+*.db-shm
+data/

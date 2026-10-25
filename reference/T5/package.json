@@ -1,0 +1,9 @@
+{
+  "name": "tersa-reference-t5",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.18" },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/main.ts"
+  }
+}
