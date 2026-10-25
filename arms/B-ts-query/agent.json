@@ -1,0 +1,9 @@
+{
+  "ready": false,
+  "notReadyReason": "query layer MCP server not built yet",
+  "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash"],
+  "mcpServers": {
+    "tersa-query": { "type": "stdio", "command": "tersa-query", "args": ["--root", "."] }
+  },
+  "contextFiles": ["query-layer.md"]
+}

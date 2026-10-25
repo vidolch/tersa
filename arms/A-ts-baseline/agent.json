@@ -1,0 +1,6 @@
+{
+  "ready": true,
+  "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash"],
+  "mcpServers": {},
+  "contextFiles": []
+}

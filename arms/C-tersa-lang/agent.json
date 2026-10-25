@@ -1,0 +1,9 @@
+{
+  "ready": false,
+  "notReadyReason": "Tersa language prototype not built yet",
+  "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash"],
+  "mcpServers": {
+    "tersa-query": { "type": "stdio", "command": "tersa-query", "args": ["--root", "."] }
+  },
+  "contextFiles": ["tersa-language.md"]
+}

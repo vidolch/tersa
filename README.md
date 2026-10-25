@@ -62,4 +62,4 @@ See `harness/PROTOCOL.md`.
 - [x] Reference solution for T5 (passes all 70 acceptance tests, both storage modes)
 - [x] Reference snapshots T1, T2, T3-start, T3, T4 (each validated at its task level)
 - [ ] Larger seeded codebase (15–30k LOC) where P1 effects are visible
-- [ ] Harness runner (headless agent + usage logging)
+- [x] Harness runner (Claude Agent SDK, usage + metrics, acceptance, perf, report)
