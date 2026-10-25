@@ -2,14 +2,15 @@
 
 Never shown to agents. Used as start states for later tasks and to validate the acceptance suite.
 
-| Snapshot | Used as start state for | Status |
-|---|---|---|
-| `T1` | T2 | TODO (strip T2–T5 features from `T5`) |
-| `T2` | — | TODO |
-| `T3-start` | T3 | TODO (`T2` + click counted before method/expiry check) |
-| `T3` | T4 | TODO |
-| `T4` | T5 | TODO |
-| `T5` | — | done |
+| Snapshot | Start state for | Satisfies | Notes |
+|---|---|---|---|
+| `T1` | T2 | T1 | single file, SQLite inline |
+| `T2` | — | T1–T2 | same code as `T3` |
+| `T3-start` | T3 | T1–T2 | `T2` with click counted before method/expiry check; fails exactly T3 R2–R4 |
+| `T3` | T4 | T1–T3 | persistence mixed into `src/main.ts`, so it fails T4 R5 by design |
+| `T4` | T5 | T1–T4 | `src/storage/` boundary, `file` and `memory` stores |
+| `T5` | — | T1–T5 | |
 
-Validate any snapshot with `acceptance/run.sh <task> reference/<snapshot> A-ts-baseline`.
-`T3-start` must fail T3 R2–R4 and pass everything else.
+All snapshots run on Node 22.18+ with no dependencies (`node:http`, `node:sqlite`).
+
+Validate a snapshot: `acceptance/run.sh <task> reference/<snapshot> A-ts-baseline`.
