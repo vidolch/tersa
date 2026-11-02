@@ -1,6 +1,6 @@
 // Aggregates results/<arm>/<task>/run-*.json into results/summary.md.
 // Primary metric: cost per passing task = Σ cost ÷ passing runs.
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { ARMS, paths, TASKS } from "./config.ts";
 
@@ -38,5 +38,6 @@ for (const arm of ARMS) {
 }
 
 const out = `# Results\n\nGenerated ${new Date().toISOString()}. Independent runs only (chained runs excluded).\n\n${rows.join("\n")}\n`;
+mkdirSync(paths.results, { recursive: true });
 writeFileSync(join(paths.results, "summary.md"), out);
 console.log(out);

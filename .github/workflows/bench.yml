@@ -144,7 +144,7 @@ jobs:
           node -e '
             const fs = require("fs"), path = require("path");
             const dir = process.argv[1];
-            if (!fs.existsSync(dir)) process.exit(0);
+            if (!fs.existsSync(dir)) { console.log("no records"); process.exit(0); }
             for (const sub of fs.readdirSync(dir)) for (const f of fs.readdirSync(path.join(dir, sub))) {
               const r = JSON.parse(fs.readFileSync(path.join(dir, sub, f), "utf8"));
               const out = path.join("results", r.arm, r.task, `run-${r.run}.json`);
@@ -153,7 +153,7 @@ jobs:
               console.log(out);
             }
           ' "${{ runner.temp }}/records"
-          node harness/runner/src/report.ts
+          if [ -d results ]; then node harness/runner/src/report.ts; fi
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
