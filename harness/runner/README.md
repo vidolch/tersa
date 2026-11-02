@@ -23,7 +23,14 @@ npm run run -- --arm A-ts-baseline --task T3 --run 1 --fake-agent ../../referenc
 npm run report
 ```
 
-Options: `--max-turns` (default 150), `--skip-perf`, `--force` (overwrite an existing record).
+Options: `--max-turns` (default 150), `--skip-perf`, `--force` (overwrite an existing record), `--raw-dir` (workspaces and logs outside the repo).
+
+### Phases
+`--phase prepare|agent|eval` runs one step of a run (default: all three). CI uses this to delete `acceptance/`, `reference/`, `perf/` and `.git` from disk before the agent starts, then evaluates from a fresh checkout. Locally, the agent could in principle read the hidden tests, so run real benchmarks in CI or a container.
+
+## GitHub Actions
+- **ci** (every push): `harness/validate.sh` typechecks everything and plays each task with its reference solution through the phased pipeline. Free, no API key.
+- **bench** (manual, Actions → bench → Run workflow): matrix of tasks × runs for one arm. Needs the repository secret `ANTHROPIC_API_KEY`. Optional secret `ANTHROPIC_BASE_URL` for an Anthropic-compatible provider (cost in records is then wrong: it uses Claude prices). Records are committed to `results/`, transcripts and logs are kept as workflow artifacts for 30 days. Perf is skipped on shared runners.
 
 ## Outputs
 - `results/<arm>/<task>/run-<n>.json`: run record (commit these)

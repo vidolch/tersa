@@ -1,0 +1,26 @@
+name: ci
+
+# Self-check of the benchmark on every push: typecheck, then every task played
+# by its reference solution through the real pipeline. No API calls, no cost.
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            acceptance/package-lock.json
+            harness/runner/package-lock.json
+      - run: npm ci --no-audit --no-fund
+        working-directory: acceptance
+      - run: npm ci --no-audit --no-fund
+        working-directory: harness/runner
+      - run: harness/validate.sh

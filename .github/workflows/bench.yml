@@ -1,0 +1,160 @@
+name: bench
+
+# Real benchmark runs. Manual trigger only; costs API credits.
+# Each matrix job: prepare workspace -> delete hidden tests and .git ->
+# run agent -> fresh checkout -> evaluate. Records are committed to results/.
+# Perf is skipped: shared runners are too noisy for latency numbers.
+on:
+  workflow_dispatch:
+    inputs:
+      arm:
+        description: Arm
+        type: choice
+        options: [A-ts-baseline, B-ts-query, C-tersa-lang]
+        default: A-ts-baseline
+      tasks:
+        description: Tasks (comma-separated)
+        default: T1,T2,T3,T4,T5
+      runs:
+        description: Runs per task
+        default: "5"
+      first_run:
+        description: Number of the first run (records are results/<arm>/<task>/run-<n>.json)
+        default: "1"
+      model:
+        description: Model id
+        default: claude-sonnet-5-5
+      max_turns:
+        description: Max agent turns per run
+        default: "150"
+      max_parallel:
+        description: Max concurrent runs (keep low to avoid rate limits)
+        default: "4"
+
+concurrency:
+  group: bench
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - id: m
+        env:
+          TASKS: ${{ inputs.tasks }}
+          RUNS: ${{ inputs.runs }}
+          FIRST: ${{ inputs.first_run }}
+        run: |
+          node -e '
+            const tasks = process.env.TASKS.split(",").map(s => s.trim()).filter(Boolean);
+            const n = Number(process.env.RUNS), f = Number(process.env.FIRST);
+            const include = [];
+            for (const task of tasks) for (let r = f; r < f + n; r++) include.push({ task, run: r });
+            console.log("matrix=" + JSON.stringify({ include }));
+          ' >> "$GITHUB_OUTPUT"
+
+  run:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ fromJSON(inputs.max_parallel) }}
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    env:
+      ARGS: --arm ${{ inputs.arm }} --task ${{ matrix.task }} --run ${{ matrix.run }} --force
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: bench
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install runner
+        working-directory: bench/harness/runner
+        run: npm ci --no-audit --no-fund
+
+      - name: Prepare workspace
+        working-directory: bench/harness/runner
+        run: node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RUNNER_TEMP/raw" --phase prepare
+
+      - name: Hide tests and solutions from the agent
+        run: rm -rf bench/acceptance bench/reference bench/perf bench/results bench/.git
+
+      - name: Run agent
+        working-directory: bench/harness/runner
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+        run: |
+          [ -n "$ANTHROPIC_BASE_URL" ] || unset ANTHROPIC_BASE_URL
+          node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RUNNER_TEMP/raw" --phase agent \
+            --model "${{ inputs.model }}" --max-turns "${{ inputs.max_turns }}"
+
+      - uses: actions/checkout@v4
+        with:
+          path: eval
+          persist-credentials: false
+      - name: Install evaluation
+        run: |
+          (cd eval/acceptance && npm ci --no-audit --no-fund)
+          (cd eval/harness/runner && npm ci --no-audit --no-fund)
+      - name: Evaluate
+        working-directory: eval/harness/runner
+        run: node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RUNNER_TEMP/raw" --phase eval --skip-perf
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: record-${{ matrix.task }}-${{ matrix.run }}
+          path: eval/results/${{ inputs.arm }}/${{ matrix.task }}/run-${{ matrix.run }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: logs-${{ matrix.task }}-${{ matrix.run }}
+          path: |
+            ${{ runner.temp }}/raw/${{ inputs.arm }}/${{ matrix.task }}/run-${{ matrix.run }}
+            !${{ runner.temp }}/raw/**/node_modules/**
+          retention-days: 30
+
+  commit:
+    needs: run
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: record-*
+          path: ${{ runner.temp }}/records
+      - name: Place records and update summary
+        run: |
+          node -e '
+            const fs = require("fs"), path = require("path");
+            const dir = process.argv[1];
+            if (!fs.existsSync(dir)) process.exit(0);
+            for (const sub of fs.readdirSync(dir)) for (const f of fs.readdirSync(path.join(dir, sub))) {
+              const r = JSON.parse(fs.readFileSync(path.join(dir, sub, f), "utf8"));
+              const out = path.join("results", r.arm, r.task, `run-${r.run}.json`);
+              fs.mkdirSync(path.dirname(out), { recursive: true });
+              fs.copyFileSync(path.join(dir, sub, f), out);
+              console.log(out);
+            }
+          ' "${{ runner.temp }}/records"
+          node harness/runner/src/report.ts
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add results
+          git diff --cached --quiet && { echo "no records"; exit 0; }
+          git commit -m "Bench results: ${{ inputs.arm }} ${{ inputs.tasks }} x${{ inputs.runs }} (${{ inputs.model }})"
+          git pull --rebase
+          git push

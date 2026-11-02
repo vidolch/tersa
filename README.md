@@ -63,3 +63,4 @@ See `harness/PROTOCOL.md`.
 - [x] Reference snapshots T1, T2, T3-start, T3, T4 (each validated at its task level)
 - [ ] Larger seeded codebase (15–30k LOC) where P1 effects are visible
 - [x] Harness runner (Claude Agent SDK, usage + metrics, acceptance, perf, report)
+- [x] GitHub Actions: `ci` self-check on every push, `bench` manual benchmark runs

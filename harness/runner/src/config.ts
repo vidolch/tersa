@@ -45,7 +45,7 @@ export const paths = {
   acceptance: join(ROOT, "acceptance"),
   perf: join(ROOT, "perf", "load.js"),
   schema: join(ROOT, "harness", "run-record.schema.json"),
-  results: join(ROOT, "results"),
+  results: process.env.TERSA_RESULTS_DIR ? resolve(process.env.TERSA_RESULTS_DIR) : join(ROOT, "results"),
 };
 
 export function loadArm(arm: Arm): ArmConfig {
