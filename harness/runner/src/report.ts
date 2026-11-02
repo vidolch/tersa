@@ -14,7 +14,7 @@ const fmt = (n: number, d = 0) => (Number.isFinite(n) ? n.toLocaleString("en-US"
 
 const rows: string[] = [];
 const header =
-  "| Arm | Task | Runs | Pass | Cost/pass $ | Median $ | Median input tok | Median output tok | Median tool calls | Median repeat reads |";
+  "| Arm | Task | Model | Runs | Pass | Cost/pass $ | Median $ | Median input tok | Median output tok | Median tool calls | Median repeat reads |";
 rows.push(header, header.replace(/[^|]/g, "-"));
 
 for (const arm of ARMS) {
@@ -24,13 +24,16 @@ for (const arm of ARMS) {
     const recs = readdirSync(dir)
       .filter((f) => f.endsWith(".json"))
       .map((f) => JSON.parse(readFileSync(join(dir, f), "utf8")));
-    if (!recs.length) continue;
+    const byModel = new Map<string, any[]>();
+    for (const r of recs) byModel.set(r.model, [...(byModel.get(r.model) ?? []), r]);
+    for (const [model, recs] of byModel) {
     const pass = recs.filter((r) => r.acceptance.passed && (r.perf?.passed ?? true));
     const cost = recs.reduce((n, r) => n + r.costUsd, 0);
     const input = recs.map((r) => r.usage.inputUncached + r.usage.cacheRead + r.usage.cacheWrite);
     rows.push(
-      `| ${arm} | ${task} | ${recs.length} | ${pass.length} | ${pass.length ? fmt(cost / pass.length, 3) : "∞"} | ${fmt(median(recs.map((r) => r.costUsd)), 3)} | ${fmt(median(input))} | ${fmt(median(recs.map((r) => r.usage.output)))} | ${fmt(median(recs.map((r) => r.agent.toolCalls)))} | ${fmt(median(recs.map((r) => r.agent.repeatReads ?? 0)))} |`,
+      `| ${arm} | ${task} | ${model} | ${recs.length} | ${pass.length} | ${pass.length ? fmt(cost / pass.length, 3) : "∞"} | ${fmt(median(recs.map((r) => r.costUsd)), 3)} | ${fmt(median(input))} | ${fmt(median(recs.map((r) => r.usage.output)))} | ${fmt(median(recs.map((r) => r.agent.toolCalls)))} | ${fmt(median(recs.map((r) => r.agent.repeatReads ?? 0)))} |`,
     );
+    }
   }
 }
 

@@ -21,9 +21,14 @@ on:
       first_run:
         description: Number of the first run (records are results/<arm>/<task>/run-<n>.json)
         default: "1"
+      provider:
+        description: Provider (secret ANTHROPIC_API_KEY or DEEPSEEK_API_KEY)
+        type: choice
+        options: [anthropic, deepseek]
+        default: anthropic
       model:
-        description: Model id
-        default: claude-sonnet-5-5
+        description: Model id (empty = provider default; deepseek-v4-flash / claude-sonnet-5-5)
+        default: ""
       max_turns:
         description: Max agent turns per run
         default: "150"
@@ -87,12 +92,12 @@ jobs:
       - name: Run agent
         working-directory: bench/harness/runner
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+          ANTHROPIC_API_KEY: ${{ inputs.provider == 'anthropic' && secrets.ANTHROPIC_API_KEY || '' }}
+          DEEPSEEK_API_KEY: ${{ inputs.provider == 'deepseek' && secrets.DEEPSEEK_API_KEY || '' }}
+          TERSA_MODEL: ${{ inputs.model }}
         run: |
-          [ -n "$ANTHROPIC_BASE_URL" ] || unset ANTHROPIC_BASE_URL
           node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RUNNER_TEMP/raw" --phase agent \
-            --model "${{ inputs.model }}" --max-turns "${{ inputs.max_turns }}"
+            --provider "${{ inputs.provider }}" --max-turns "${{ inputs.max_turns }}"
 
       - uses: actions/checkout@v4
         with:
@@ -155,6 +160,6 @@ jobs:
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
           git add results
           git diff --cached --quiet && { echo "no records"; exit 0; }
-          git commit -m "Bench results: ${{ inputs.arm }} ${{ inputs.tasks }} x${{ inputs.runs }} (${{ inputs.model }})"
+          git commit -m "Bench results: ${{ inputs.arm }} ${{ inputs.tasks }} x${{ inputs.runs }} (${{ inputs.provider }} ${{ inputs.model }})"
           git pull --rebase
           git push

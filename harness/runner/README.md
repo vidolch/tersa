@@ -30,7 +30,10 @@ Options: `--max-turns` (default 150), `--skip-perf`, `--force` (overwrite an exi
 
 ## GitHub Actions
 - **ci** (every push): `harness/validate.sh` typechecks everything and plays each task with its reference solution through the phased pipeline. Free, no API key.
-- **bench** (manual, Actions → bench → Run workflow): matrix of tasks × runs for one arm. Needs the repository secret `ANTHROPIC_API_KEY`. Optional secret `ANTHROPIC_BASE_URL` for an Anthropic-compatible provider (cost in records is then wrong: it uses Claude prices). Records are committed to `results/`, transcripts and logs are kept as workflow artifacts for 30 days. Perf is skipped on shared runners.
+- **bench** (manual, Actions → bench → Run workflow): matrix of tasks × runs for one arm. Needs the repository secret `ANTHROPIC_API_KEY`. Choose the provider when starting it: `anthropic` (secret `ANTHROPIC_API_KEY`) or `deepseek` (secret `DEEPSEEK_API_KEY`). Records are committed to `results/`, transcripts and logs are kept as workflow artifacts for 30 days. Perf is skipped on shared runners.
+
+## Providers
+`--provider anthropic|deepseek` (default anthropic). DeepSeek runs Claude Code against DeepSeek's Anthropic-compatible endpoint with `DEEPSEEK_API_KEY`; background model calls use the same model, so nothing goes to Anthropic. Its cost is recomputed from `harness/prices.json` (`costSource` in the record). Compare token counts and cost only between runs of the same model: DeepSeek caches differently from Claude. The report groups by model.
 
 ## Outputs
 - `results/<arm>/<task>/run-<n>.json`: run record (commit these)

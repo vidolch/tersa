@@ -45,6 +45,7 @@ export const paths = {
   acceptance: join(ROOT, "acceptance"),
   perf: join(ROOT, "perf", "load.js"),
   schema: join(ROOT, "harness", "run-record.schema.json"),
+  prices: join(ROOT, "harness", "prices.json"),
   results: process.env.TERSA_RESULTS_DIR ? resolve(process.env.TERSA_RESULTS_DIR) : join(ROOT, "results"),
 };
 
@@ -57,4 +58,18 @@ export function isTask(v: string): v is Task {
 }
 export function isArm(v: string): v is Arm {
   return (ARMS as readonly string[]).includes(v);
+}
+
+/** How the agent reaches a model. Anthropic is the default; others use an Anthropic-compatible endpoint. */
+export const PROVIDERS = {
+  anthropic: { baseUrl: null, keyEnv: "ANTHROPIC_API_KEY", defaultModel: "claude-sonnet-5-5" },
+  deepseek: {
+    baseUrl: process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek.com/anthropic",
+    keyEnv: "DEEPSEEK_API_KEY",
+    defaultModel: "deepseek-v4-flash",
+  },
+} as const;
+export type Provider = keyof typeof PROVIDERS;
+export function isProvider(v: string): v is Provider {
+  return v in PROVIDERS;
 }

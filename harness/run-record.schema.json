@@ -3,73 +3,206 @@
   "title": "Tersa benchmark run record",
   "description": "One agent run of one task in one arm. One JSON file per run in results/<arm>/<task>/<run>.json.",
   "type": "object",
-  "required": ["arm", "task", "run", "chained", "model", "harness", "usage", "agent", "acceptance", "costUsd"],
+  "required": [
+    "arm",
+    "task",
+    "run",
+    "chained",
+    "model",
+    "harness",
+    "usage",
+    "agent",
+    "acceptance",
+    "costUsd"
+  ],
   "properties": {
-    "arm": { "enum": ["A-ts-baseline", "B-ts-query", "C-tersa-lang"] },
-    "task": { "enum": ["T1", "T2", "T3", "T4", "T5"] },
-    "run": { "type": "integer", "minimum": 1 },
-    "chained": { "type": "boolean", "description": "true if started from the previous task's agent output instead of a reference state" },
-    "startState": { "type": "string", "description": "reference snapshot id or 'scaffold'" },
-    "specSha256": { "type": "string", "description": "hash of the spec file, proves specs were identical" },
-    "model": { "type": "string" },
+    "arm": {
+      "enum": [
+        "A-ts-baseline",
+        "B-ts-query",
+        "C-tersa-lang"
+      ]
+    },
+    "task": {
+      "enum": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5"
+      ]
+    },
+    "run": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "chained": {
+      "type": "boolean",
+      "description": "true if started from the previous task's agent output instead of a reference state"
+    },
+    "startState": {
+      "type": "string",
+      "description": "reference snapshot id or 'scaffold'"
+    },
+    "specSha256": {
+      "type": "string",
+      "description": "hash of the spec file, proves specs were identical"
+    },
+    "model": {
+      "type": "string"
+    },
     "harness": {
       "type": "object",
-      "required": ["name", "version"],
-      "properties": { "name": { "type": "string" }, "version": { "type": "string" } }
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
     },
     "usage": {
       "type": "object",
       "description": "Token totals across the whole run, by billing class",
-      "required": ["inputUncached", "cacheRead", "cacheWrite", "output"],
+      "required": [
+        "inputUncached",
+        "cacheRead",
+        "cacheWrite",
+        "output"
+      ],
       "properties": {
-        "inputUncached": { "type": "integer" },
-        "cacheRead": { "type": "integer" },
-        "cacheWrite": { "type": "integer" },
-        "output": { "type": "integer" },
-        "toolResultTokens": { "type": "integer", "description": "P6: tokens that came from tool output" },
-        "contextOverheadTokens": { "type": "integer", "description": "skills/docs injected for the arm (C: language skill)" }
+        "inputUncached": {
+          "type": "integer"
+        },
+        "cacheRead": {
+          "type": "integer"
+        },
+        "cacheWrite": {
+          "type": "integer"
+        },
+        "output": {
+          "type": "integer"
+        },
+        "toolResultTokens": {
+          "type": "integer",
+          "description": "P6: tokens that came from tool output"
+        },
+        "contextOverheadTokens": {
+          "type": "integer",
+          "description": "skills/docs injected for the arm (C: language skill)"
+        }
       }
     },
     "agent": {
       "type": "object",
-      "required": ["turns", "toolCalls", "wallMs"],
+      "required": [
+        "turns",
+        "toolCalls",
+        "wallMs"
+      ],
       "properties": {
-        "turns": { "type": "integer" },
-        "toolCalls": { "type": "integer" },
-        "toolCallsByName": { "type": "object", "additionalProperties": { "type": "integer" } },
-        "fileReads": { "type": "integer" },
-        "repeatReads": { "type": "integer", "description": "P1/P8: reads of a file or symbol already read in this run" },
-        "failedEdits": { "type": "integer", "description": "P4" },
-        "compileFailures": { "type": "integer", "description": "P2" },
-        "testRuns": { "type": "integer" },
-        "compactions": { "type": "integer", "description": "P8" },
-        "wallMs": { "type": "integer" },
-        "completed": { "type": "boolean", "description": "false if the agent hit a turn/token cap" }
+        "turns": {
+          "type": "integer"
+        },
+        "toolCalls": {
+          "type": "integer"
+        },
+        "toolCallsByName": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "fileReads": {
+          "type": "integer"
+        },
+        "repeatReads": {
+          "type": "integer",
+          "description": "P1/P8: reads of a file or symbol already read in this run"
+        },
+        "failedEdits": {
+          "type": "integer",
+          "description": "P4"
+        },
+        "compileFailures": {
+          "type": "integer",
+          "description": "P2"
+        },
+        "testRuns": {
+          "type": "integer"
+        },
+        "compactions": {
+          "type": "integer",
+          "description": "P8"
+        },
+        "wallMs": {
+          "type": "integer"
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "false if the agent hit a turn/token cap"
+        }
       }
     },
     "acceptance": {
       "type": "object",
-      "required": ["passed", "rules"],
+      "required": [
+        "passed",
+        "rules"
+      ],
       "properties": {
-        "passed": { "type": "boolean", "description": "all rules of this task and earlier tasks pass" },
+        "passed": {
+          "type": "boolean",
+          "description": "all rules of this task and earlier tasks pass"
+        },
         "rules": {
           "type": "object",
           "description": "keyed by 'T1 R3' etc.",
-          "additionalProperties": { "type": "boolean" }
+          "additionalProperties": {
+            "type": "boolean"
+          }
         }
       }
     },
     "perf": {
       "type": "object",
       "properties": {
-        "passed": { "type": "boolean" },
-        "p50Ms": { "type": "number" },
-        "p95Ms": { "type": "number" },
-        "p99Ms": { "type": "number" },
-        "rps": { "type": "number" },
-        "errorRate": { "type": "number" }
+        "passed": {
+          "type": "boolean"
+        },
+        "p50Ms": {
+          "type": "number"
+        },
+        "p95Ms": {
+          "type": "number"
+        },
+        "p99Ms": {
+          "type": "number"
+        },
+        "rps": {
+          "type": "number"
+        },
+        "errorRate": {
+          "type": "number"
+        }
       }
     },
-    "costUsd": { "type": "number", "description": "computed from usage and the model's price table at run time" }
+    "costUsd": {
+      "type": "number",
+      "description": "computed from usage and the model's price table at run time"
+    },
+    "provider": {
+      "type": "string",
+      "description": "anthropic | deepseek | fake"
+    },
+    "costSource": {
+      "type": "string",
+      "description": "sdk, or harness/prices.json for third-party models"
+    }
   }
 }

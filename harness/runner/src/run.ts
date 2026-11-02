@@ -18,7 +18,7 @@ import { parseArgs } from "node:util";
 import { spawnSync } from "node:child_process";
 import { Ajv2020 } from "ajv/dist/2020.js";
 import { fakeAgent, runAgent } from "./agent.ts";
-import { isArm, isTask, loadArm, paths, START_STATE } from "./config.ts";
+import { isArm, isProvider, isTask, loadArm, paths, PROVIDERS, START_STATE } from "./config.ts";
 import { runAcceptance, runPerf } from "./evaluate.ts";
 import type { AgentMetrics, Usage } from "./metrics.ts";
 
@@ -27,7 +27,8 @@ const { values: a } = parseArgs({
     arm: { type: "string" },
     task: { type: "string" },
     run: { type: "string", default: "1" },
-    model: { type: "string", default: process.env.TERSA_MODEL ?? "claude-sonnet-5-5" },
+    provider: { type: "string", default: process.env.TERSA_PROVIDER ?? "anthropic" },
+    model: { type: "string", default: process.env.TERSA_MODEL },
     "max-turns": { type: "string", default: "150" },
     chained: { type: "boolean", default: false },
     "fake-agent": { type: "string" },
@@ -48,6 +49,10 @@ const task = a.task ?? fail("--task required");
 if (!isArm(arm)) fail(`unknown arm ${arm}`);
 if (!isTask(task)) fail(`unknown task ${task}`);
 if (!isArm(arm) || !isTask(task)) process.exit(2);
+const provider = a.provider!;
+if (!isProvider(provider)) fail(`unknown provider ${provider} (expected: ${Object.keys(PROVIDERS).join(", ")})`);
+if (!isProvider(provider)) process.exit(2);
+const model = a.model || PROVIDERS[provider].defaultModel;
 const phase = a.phase!;
 if (!["all", "prepare", "agent", "eval"].includes(phase)) fail(`unknown phase ${phase}`);
 const does = (p: string) => phase === "all" || phase === p;
@@ -99,7 +104,21 @@ if (does("prepare")) {
 // ---- agent ----
 if (does("agent")) {
   if (!existsSync(statePath)) fail(`no prepared workspace at ${rawDir}; run --phase prepare first`);
-  console.log(`${label} agent starting`);
+  const prov = PROVIDERS[provider];
+  if (!a["fake-agent"]) {
+    const key = process.env[prov.keyEnv];
+    if (!key) fail(`${prov.keyEnv} is not set (provider ${provider})`);
+    if (prov.baseUrl) {
+      // Point Claude Code at the Anthropic-compatible endpoint, and route its
+      // background model calls to the same model so nothing goes to Anthropic.
+      process.env.ANTHROPIC_BASE_URL = prov.baseUrl;
+      process.env.ANTHROPIC_API_KEY = key;
+      process.env.ANTHROPIC_DEFAULT_HAIKU_MODEL = model;
+      process.env.ANTHROPIC_SMALL_FAST_MODEL = model;
+      process.env.CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1";
+    }
+  }
+  console.log(`${label} agent starting (${provider}/${model})`);
   const metrics = a["fake-agent"]
     ? fakeAgent(workspace, resolve(a["fake-agent"]))
     : await runAgent({
@@ -108,7 +127,7 @@ if (does("agent")) {
         armConfig,
         workspace,
         rawDir,
-        model: a.model!,
+        model,
         maxTurns: Number(a["max-turns"]),
       });
 
@@ -119,7 +138,8 @@ if (does("agent")) {
   writeFileSync(
     metricsPath,
     JSON.stringify({
-      model: a["fake-agent"] ? "fake" : a.model!,
+      model: a["fake-agent"] ? "fake" : model,
+      provider: a["fake-agent"] ? "fake" : provider,
       harness: a["fake-agent"]
         ? { name: "fake-agent", version: "0" }
         : { name: "claude-agent-sdk", version: sdkVersion },
@@ -137,6 +157,7 @@ if (does("eval")) {
   const { startState } = JSON.parse(readFileSync(statePath, "utf8")) as { startState: string };
   const am = JSON.parse(readFileSync(metricsPath, "utf8")) as {
     model: string;
+    provider: string;
     harness: { name: string; version: string };
     agent: AgentMetrics;
     usage: Usage;
@@ -150,6 +171,21 @@ if (does("eval")) {
   const perf = acceptance.passed && !a["skip-perf"] ? await runPerf(workspace, rawDir) : null;
   if (perf) console.log(`perf: ${perf.passed ? "PASS" : "FAIL"} p95=${perf.p95Ms.toFixed(1)}ms`);
 
+  // Third-party models: the SDK prices them with Claude rates, so recompute.
+  const prices = JSON.parse(readFileSync(paths.prices, "utf8"));
+  const p = prices[am.model];
+  let costUsd = am.costUsd;
+  let costSource = "sdk";
+  if (p) {
+    const u = am.usage;
+    costUsd =
+      ((u.inputUncached + u.cacheWrite) * p.inputMiss + u.cacheRead * p.inputHit + u.output * p.output) / 1e6;
+    costSource = "harness/prices.json";
+  } else if (am.provider !== "anthropic" && am.provider !== "fake") {
+    console.warn(`warning: no price for ${am.model} in harness/prices.json; costUsd uses Claude rates`);
+    costSource = "sdk (wrong rates)";
+  }
+
   const record = {
     arm,
     task,
@@ -158,12 +194,14 @@ if (does("eval")) {
     startState,
     specSha256: createHash("sha256").update(readFileSync(paths.spec(task))).digest("hex"),
     model: am.model,
+    provider: am.provider,
     harness: am.harness,
     usage: am.usage,
     agent: am.agent,
     acceptance,
     ...(perf ? { perf } : {}),
-    costUsd: am.costUsd,
+    costUsd,
+    costSource,
   };
 
   const ajv = new Ajv2020({ strict: false });

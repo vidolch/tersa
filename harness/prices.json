@@ -1,0 +1,6 @@
+{
+  "_comment": "USD per 1M tokens. Used to recompute costUsd for models the SDK cannot price (third-party providers). Claude models are priced by the SDK itself.",
+  "_source": "DeepSeek pricing via api-docs.deepseek.com/quick_start/pricing, as reported 2026-07; re-check before large runs",
+  "deepseek-v4-flash": { "inputMiss": 0.14, "inputHit": 0.0028, "output": 0.28 },
+  "deepseek-v4-pro": { "inputMiss": 0.435, "inputHit": 0.003625, "output": 0.87 }
+}
