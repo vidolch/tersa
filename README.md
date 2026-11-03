@@ -5,14 +5,14 @@ R&D on making coding agents cheaper without making them worse. Two ideas, kept s
 1. **A query layer** (`query/`): batched, symbol-level code queries over an existing codebase, served to the agent as an MCP server. Works on plain TypeScript today; no new language needed.
 2. **An LLM-first language** (later): a strict TypeScript dialect with verified contracts and effects, transpiled to TypeScript.
 
-Everything is measured by the benchmark in this repo, so each idea has to prove it reduces **cost per passing task**.
+Everything is measured by the benchmark in this repo, so each idea has to prove it reduces **cost per passing task**. Every iteration (hypothesis, change, results, conclusion) is logged in [`docs/iterations.md`](docs/iterations.md).
 
 ## Arms
 
 | Arm | Language | Agent tooling | Status |
 |---|---|---|---|
 | **A** `A-ts-baseline` | TypeScript | Claude Code's standard tools (Read, Edit, Write, Grep, Glob, Bash) | baseline measured |
-| **B** `B-ts-query` | TypeScript | standard tools + the tersa query layer (`query/`), steered: usage note in the system prompt, code-reading shell/Grep/Glob calls redirected to the query tools | pilot |
+| **B** `B-ts-query` | TypeScript | standard tools + the tersa query layer (`query/`), steered: usage note in the system prompt; code-reading shell/Grep/Glob calls and whole-file Reads of large source files redirected to the query tools or ranged Reads | iterating (see `docs/iterations.md`) |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
 **B vs A** isolates the query layer. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
@@ -134,7 +134,9 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Arm B pilot with steering: adoption 12–25 query calls per run, but cost up (1 run per task, archived)
 - [x] Per-tool token accounting (calls, output tokens, carried tokens) in run records
 - [x] Query layer v1.1: leaner defaults
-- [ ] Arm B v1.1 pilot with a same-period arm A run
+- [x] Arm B v1.1 pilot with a same-period arm A run: whole-file Reads are 50–85% of carried input in both arms
+- [x] Iteration log with regenerable tables (`docs/iterations.md`, `harness/runner/src/compare.ts`)
+- [ ] Iteration 6: steering v1.2 (no whole-file Reads of large source files), pilot with same-period A
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model

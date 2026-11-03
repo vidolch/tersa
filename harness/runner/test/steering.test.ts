@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { classify } from "../src/steering.ts";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { classify, READ_MAX_RANGE, READ_MAX_WHOLE, redirectHooks } from "../src/steering.ts";
 
 const bash = (command: string) => classify("Bash", { command });
 
@@ -51,7 +54,33 @@ test("Grep and Glob tools: code redirected, other files allowed", () => {
   assert.equal(classify("Glob", { pattern: "*.md" }).deny, false);
 });
 
-test("Read and Edit are never redirected", () => {
-  assert.equal(classify("Read", { file_path: "/w/packages/x.ts" }).deny, false);
-  assert.equal(classify("Edit", { file_path: "/w/packages/x.ts" }).deny, false);
+test("Read: whole large source files redirected; ranges, small files and non-code allowed", () => {
+  const dir = mkdtempSync(join(tmpdir(), "steer-"));
+  const big = join(dir, "packages/core/src/big.ts");
+  const small = join(dir, "small.ts");
+  const json = join(dir, "big.json");
+  for (const [p, n] of [[big, READ_MAX_WHOLE + 50], [small, 40], [json, 5000]] as const) {
+    mkdirSync(dirname(p), { recursive: true });
+    writeFileSync(p, "x\n".repeat(n));
+  }
+  const whole = classify("Read", { file_path: big });
+  assert.equal(whole.deny, true);
+  assert.match(whole.reason!, /packages\/core\/src\/big\.ts has 201 lines/);
+  assert.match(whole.reason!, /code_outline \{"paths": \["packages\/core\/src\/big\.ts"\]\}/);
+  assert.equal(classify("Read", { file_path: big, offset: 10, limit: 80 }).deny, false);
+  assert.equal(classify("Read", { file_path: big, limit: READ_MAX_RANGE + 1 }).deny, true);
+  assert.equal(classify("Read", { file_path: small }).deny, false);
+  assert.equal(classify("Read", { file_path: json }).deny, false);
+  assert.equal(classify("Edit", { file_path: big }).deny, false);
+});
+
+test("the first redirect of a run explains all rules, later ones don't", async () => {
+  const counter = { redirects: 0, byTool: {} };
+  const hook = redirectHooks(counter).PreToolUse[0].hooks[0];
+  const call = (command: string) => hook({ tool_name: "Bash", tool_input: { command } } as any) as Promise<any>;
+  const first = await call("grep -rn foo packages/x");
+  const second = await call("grep -rn bar packages/x");
+  assert.match(first.hookSpecificOutput.permissionDecisionReason, /How code reading works in this setup/);
+  assert.doesNotMatch(second.hookSpecificOutput.permissionDecisionReason, /How code reading works/);
+  assert.equal(counter.redirects, 2);
 });

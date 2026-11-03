@@ -4,7 +4,7 @@ import ts from "typescript";
 import { join } from "node:path";
 import { CAPABILITIES, Index, type FileEntry, type Sym } from "./indexer.ts";
 
-export const CONTRACT_VERSION = "v1.1";
+export const CONTRACT_VERSION = "v1.2";
 const MAX_RESPONSE = 60_000;
 const MAX_DEPS = 40;
 
@@ -147,7 +147,7 @@ export class Engine {
   // ---- rendering helpers ----
 
   private header(s: Sym): string {
-    return `### ${s.qualifiedName} · ${s.kind} · ${s.path}:${s.start}-${s.end} · #${s.hash}${s.isTest ? " · test" : ""}`;
+    return `### ${s.qualifiedName} · ${s.kind} · ${s.path}:${s.start}-${s.end} · #${s.hash}${s.isTest ? " · test" : ""} · to edit: Read offset ${s.start} limit ${s.end - s.start + 1}`;
   }
 
   private body(s: Sym, maxLines: number): string {

@@ -26,7 +26,7 @@ test("indexes functions, arrow consts, classes with members, and string handlers
 test("code_get: line-numbered body, doc comment, uses with signatures, callers", () => {
   const { engine } = fresh();
   const out = engine.get({ symbols: ["add"] });
-  assert.match(out, /^### add · function · src\/lib\/math\.ts:1-4 · #[0-9a-f]{6}/);
+  assert.match(out, /^### add · function · src\/lib\/math\.ts:1-4 · #[0-9a-f]{6} · to edit: Read offset 1 limit 4$/m);
   assert.match(out, /1│\/\*\* Adds two numbers\. \*\//);
   assert.match(out, /2│export function add\(a: number, b: number\): number \{/);
   assert.match(out, /used by \(\d+\):/);

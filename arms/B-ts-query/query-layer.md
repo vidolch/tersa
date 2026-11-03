@@ -7,4 +7,4 @@ Besides the usual tools you have four code query tools (MCP server `tersa`). The
 - `code_refs { symbols: [...] }` — compiler-resolved references to symbols.
 - `code_outline { paths: [...] }` — signatures of every symbol in a file, or the files and top-level symbols of a directory.
 
-Use them to locate and understand code; keep using Edit/Write to change files and Bash to run tests.
+Use them to locate and understand code. To change code: `code_get` the symbol, then Read exactly the range its header gives (`to edit: Read offset … limit …`), then Edit. Large source files can't be read whole; read ranges. Keep using Bash for tests and builds.

@@ -7,9 +7,33 @@
 //   Grep tool                                  → denied, suggest code_find
 //   Glob tool for source files                 → denied, suggest code_outline
 //   Bash grep/rg/ag/cat/sed/head/tail/nl/awk/less/find on source code → denied, suggest code_find/code_get/code_outline
-//   everything else (tests, builds, git, package managers, non-source files) → allowed
+//   Read of a whole source file over READ_MAX_WHOLE lines (no limit, or limit > READ_MAX_RANGE) → denied,
+//     suggest code_outline/code_get or a ranged Read (v1.2)
+//   everything else (ranged Reads, small files, tests, builds, git, package managers, non-source files) → allowed
+// The first redirect of a run also explains all the rules, so the agent learns them once.
+
+import { readFileSync } from "node:fs";
 
 const SOURCE = /\.(tsx?|jsx?|mts|cts|mjs|cjs)\b/;
+export const READ_MAX_WHOLE = 150;
+export const READ_MAX_RANGE = 300;
+
+export const RULES_SUMMARY =
+  "How code reading works in this setup: use mcp__tersa__code_find to search, mcp__tersa__code_get to read symbols (it shows the exact Read range to use before editing), " +
+  "mcp__tersa__code_outline for a file's or directory's structure. Shell grep/cat/sed and the Grep/Glob tools on code are redirected. " +
+  `The Read tool works for ranges (offset + limit, up to ${READ_MAX_RANGE} lines) and for files up to ${READ_MAX_WHOLE} lines; read the range you are about to edit, then Edit. ` +
+  "Tests, builds, git and non-code files are not affected.";
+
+function lineCount(path: string): number {
+  try {
+    const text = readFileSync(path, "utf8");
+    let n = 1;
+    for (let i = 0; i < text.length; i++) if (text.charCodeAt(i) === 10) n++;
+    return n;
+  } catch {
+    return 0;
+  }
+}
 const SOURCE_GLOB = /\*\*|\*\.(tsx?|jsx?|mts|cts|mjs|cjs)\b|\{[^}]*\b(ts|tsx|js|jsx)\b[^}]*\}/;
 const CODE_DIR = /(^|[\s'"=/])(packages|src|lib|app|server|client|shared)(\/|\b)/;
 const SEARCH_CMD = /(^|[|;&(]\s*|\bcd\s+\S+\s*&&\s*|\bxargs\s+)(grep|egrep|rg|ag|git\s+grep)\b/;
@@ -41,6 +65,22 @@ function suggestFind(pattern: string | undefined, paths: string[]): string {
 }
 
 export function classify(toolName: string, input: any): Redirect {
+  if (toolName === "Read") {
+    const path = String(input?.file_path ?? "");
+    if (!SOURCE.test(path)) return { deny: false };
+    const limit = typeof input?.limit === "number" ? input.limit : undefined;
+    if (limit !== undefined && limit <= READ_MAX_RANGE) return { deny: false };
+    const lines = lineCount(path);
+    if (lines <= READ_MAX_WHOLE) return { deny: false };
+    const rel = path.replace(/^.*?\/(packages|src|lib)\//, "$1/");
+    return {
+      deny: true,
+      reason:
+        `${rel} has ${lines} lines; reading it whole puts all of them in context for the rest of the session. ` +
+        `Use mcp__tersa__code_outline {"paths": [${JSON.stringify(rel)}]} to see its symbols with line ranges, mcp__tersa__code_get for the symbols you need, ` +
+        `or Read with offset and limit (up to ${READ_MAX_RANGE} lines) for the part you will edit.`,
+    };
+  }
   if (toolName === "Grep") {
     const pattern = typeof input?.pattern === "string" ? input.pattern : undefined;
     const path = typeof input?.path === "string" ? [input.path] : [];
@@ -100,11 +140,12 @@ export function redirectHooks(counter: { redirects: number; byTool: Record<strin
   return {
     PreToolUse: [
       {
-        matcher: "Bash|Grep|Glob",
+        matcher: "Bash|Grep|Glob|Read",
         hooks: [
           async (input: any) => {
             const r = classify(input.tool_name, input.tool_input);
             if (!r.deny) return { continue: true };
+            const first = counter.redirects === 0;
             counter.redirects += 1;
             counter.byTool[input.tool_name] = (counter.byTool[input.tool_name] ?? 0) + 1;
             return {
@@ -112,7 +153,7 @@ export function redirectHooks(counter: { redirects: number; byTool: Record<strin
                 // shown to the model as a denied tool call; say it is a redirect, not a failure
                 hookEventName: "PreToolUse" as const,
                 permissionDecision: "deny" as const,
-                permissionDecisionReason: `Redirected (not an error). ${r.reason}`,
+                permissionDecisionReason: `Redirected (not an error). ${r.reason}${first ? `\n\n${RULES_SUMMARY}` : ""}`,
               },
             };
           },

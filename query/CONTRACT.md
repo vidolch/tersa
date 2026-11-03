@@ -1,4 +1,4 @@
-# Tersa query layer — interface contract (v1.1)
+# Tersa query layer — interface contract (v1.2)
 
 The query layer gives a coding agent a **batched, symbol-level view** of a codebase instead of file reads. It targets problems P1 (reading cost), P3 (unknown APIs) and P12 (duplication) from the benchmark. It is language-agnostic by design (indexer → engine → view); v1 ships one indexer, for TypeScript/JavaScript, built on the TypeScript compiler API.
 
@@ -55,7 +55,7 @@ Files: every top-level symbol and class member as one signature line with its li
 Plain text, designed to be short and quotable:
 
 ```
-### rankRules · function · packages/loot-core/src/server/rules/rule-utils.ts:87-110 · #3fa2c1
+### rankRules · function · packages/loot-core/src/server/rules/rule-utils.ts:87-110 · #3fa2c1 · to edit: Read offset 87 limit 24
   87│export function rankRules(rules: Iterable<Rule>): Rule[] {
   88│  let pre = [];
      …
@@ -70,6 +70,7 @@ used by (2):
 Rules:
 - **Locations** are repo-relative `path:start-end`. In `uses`/`used by` lists, paths may be shortened to the last two segments when unambiguous within the response.
 - **Line numbers** prefix every body line (`NNN│`), so the agent can cite and edit precisely.
+- **Edit range** (`code_get` headers): `to edit: Read offset S limit N` is the exact Read call that covers the symbol. Claude Code requires a Read before an Edit, and a ranged Read is enough, so the agent never needs to read the whole file to change one symbol.
 - **Content hash** `#xxxxxx` is the first 6 hex chars of SHA-256 of the symbol's source text. It changes when the symbol changes.
 - **Dedupe within a response:** a symbol appears with its body at most once; later mentions refer to it by `#hash`.
 - **Dedupe across a session:** if a body with the same hash was already returned earlier in this server session, it is replaced by `(unchanged since shown earlier, #hash)` — the agent already has it in context. Pass the symbol again after it changed and the new body is shown.
@@ -132,6 +133,8 @@ The engine degrades by capability: without `resolvedRefs`, `code_refs` falls bac
 
 - **v1.1** (2026-11-03): leaner defaults after the first steered arm-B pilot made runs more expensive. `code_get`: `maxLines` 200 → 120, at most 5 callers, `uses` without hashes and with full signatures only for callables (cut at 100 chars). `code_find`: 12 symbols and 3 lines per symbol by default (was 30 and 5), lines cut at 120 chars. `code_refs`: 30 per symbol (was 50).
 
+- **v1.2** (2026-11-03): `code_get` headers carry the Read range for editing the symbol. Paired with arm B steering that redirects whole-file Reads of large source files.
+
 ## 9. Versioning
 
-The contract has a version (`v1.1`). The server reports it in its MCP `serverInfo.version`. Changing a tool's inputs or output rules means a new version, and benchmark records note which version the arm used.
+The contract has a version (`v1.2`). The server reports it in its MCP `serverInfo.version`. Changing a tool's inputs or output rules means a new version, and benchmark records note which version the arm used.
