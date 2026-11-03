@@ -22,6 +22,8 @@ CASES=(
   "T3 T3-start T3 R2,T3 R3,T3 R4"
   "T4 T4 -"
   "T5 T5 -"
+  "T4 fixtures/T4-nullish -"
+  "T4 fixtures/T4-crash-default T1 R1,T1 R10,T1 R11,T1 R2,T1 R3,T1 R4,T1 R5,T1 R6,T1 R7,T1 R8,T1 R9,T2 R1,T2 R10,T2 R11,T2 R2,T2 R3,T2 R4,T2 R5,T2 R6,T2 R7,T2 R8,T2 R9,T3 R1,T3 R2,T3 R3,T3 R4,T4 R1"
 )
 
 status=0
@@ -30,11 +32,11 @@ for c in "${CASES[@]}"; do
   read -r task sol expected <<<"$c"
   [[ "$expected" == "-" ]] && expected="" || expected="${c#* * }"
   n=$((n + 1))
-  echo "== $task with reference/$sol"
+  echo "== $task with $sol"
   for phase in prepare agent eval; do
     (cd "$ROOT/harness/runner" && node --disable-warning=ExperimentalWarning src/run.ts \
       --arm A-ts-baseline --task "$task" --run "$n" --phase "$phase" \
-      --fake-agent "$ROOT/reference/$sol" --skip-perf --force) | grep -v '^$' | sed 's/^/   /'
+      --fake-agent "$( [[ $sol == fixtures/* ]] && echo "$ROOT/harness/$sol" || echo "$ROOT/reference/$sol" )" --skip-perf --force) | grep -v '^$' | sed 's/^/   /'
   done
   rec="$TERSA_RESULTS_DIR/A-ts-baseline/$task/run-$n.json"
   failing=$(node -e "const r=require('$rec');console.log(Object.entries(r.acceptance.rules).filter(([,v])=>!v).map(([k])=>k).sort().join(','))")

@@ -25,3 +25,6 @@
 ## Validity
 - The agent never sees `acceptance/`, `perf/` or `reference/`.
 - If a spec has to change, it gets a new task ID and earlier results stay as they are.
+
+## Invalidated results
+- 2026-11-03, `A-ts-baseline` T4 runs 2–6 (deepseek-v4-flash): deleted and rerun. The harness passed `STORAGE=""` instead of leaving it unset, and the evaluator dropped skipped tests, so the runs were marked failed without a failing rule. Fixed in the acceptance runner and `evaluate.ts`; covered by `harness/fixtures/`.

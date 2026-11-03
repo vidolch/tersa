@@ -30,10 +30,15 @@ function mergeVitestReport(file: string, rules: Record<string, boolean>): boolea
   if (!existsSync(file)) return false;
   const report = JSON.parse(readFileSync(file, "utf8"));
   for (const tr of report.testResults ?? []) {
+    // A file that fails as a whole (e.g. the service never starts) reports its
+    // tests as skipped. Those count as failed, never as absent.
+    const fileFailed = tr.status === "failed";
     for (const a of tr.assertionResults ?? []) {
-      if (a.status !== "passed" && a.status !== "failed") continue;
+      const ok = a.status === "passed";
+      const counts = a.status === "passed" || a.status === "failed" || (fileFailed && a.status !== "todo");
+      if (!counts) continue;
       for (const key of ruleKeys(a.ancestorTitles?.[0] ?? "")) {
-        rules[key] = (rules[key] ?? true) && a.status === "passed";
+        rules[key] = (rules[key] ?? true) && ok;
       }
     }
   }

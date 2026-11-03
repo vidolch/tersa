@@ -35,7 +35,7 @@ export interface StartOptions {
 const SERVICE_DIR = process.env.SERVICE_DIR;
 const START_CMD = process.env.START_CMD ?? "npm start";
 
-export const storageMode = process.env.STORAGE_MODE;
+export const storageMode = process.env.STORAGE_MODE || undefined;
 
 async function freePort(): Promise<number> {
   return new Promise((resolve, reject) => {
@@ -73,9 +73,11 @@ export async function startService(opts: StartOptions = {}): Promise<Service> {
       ...process.env,
       PORT: String(port),
       DATA_DIR: dataDir,
-      STORAGE: storageMode,
       ...opts.env,
     };
+    // Default storage means STORAGE is unset, not empty (spec T4).
+    if (storageMode && !("STORAGE" in (opts.env ?? {}))) env.STORAGE = storageMode;
+    else if (!("STORAGE" in (opts.env ?? {}))) delete env.STORAGE;
     // vitest sets NODE_ENV=test; don't leak test-runner env into the service.
     delete env.NODE_ENV;
     delete env.VITEST;
