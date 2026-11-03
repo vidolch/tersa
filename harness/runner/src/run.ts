@@ -18,12 +18,13 @@ import { parseArgs } from "node:util";
 import { spawnSync } from "node:child_process";
 import { Ajv2020 } from "ajv/dist/2020.js";
 import { fakeAgent, runAgent } from "./agent.ts";
-import { isArm, isProvider, isTask, loadArm, paths, PROVIDERS, START_STATE } from "./config.ts";
-import { runAcceptance, runPerf } from "./evaluate.ts";
+import { isArm, isProvider, isSuite, isTask, loadArm, paths, PROVIDERS, START_STATE } from "./config.ts";
+import { readingStats, runAcceptance, runPerf, runSuiteAcceptance } from "./evaluate.ts";
 import type { AgentMetrics, Usage } from "./metrics.ts";
 
 const { values: a } = parseArgs({
   options: {
+    suite: { type: "string", default: "urlshort" },
     arm: { type: "string" },
     task: { type: "string" },
     run: { type: "string", default: "1" },
@@ -45,11 +46,14 @@ const fail = (msg: string): never => {
   process.exit(2);
 };
 
+const suite = a.suite!;
+if (!isSuite(suite)) fail(`unknown suite ${suite}`);
+if (!isSuite(suite)) process.exit(2);
 const arm = a.arm ?? fail("--arm required");
 const task = a.task ?? fail("--task required");
 if (!isArm(arm)) fail(`unknown arm ${arm}`);
-if (!isTask(task)) fail(`unknown task ${task}`);
-if (!isArm(arm) || !isTask(task)) process.exit(2);
+if (!isTask(task, suite)) fail(`unknown task ${task} in suite ${suite}`);
+if (!isArm(arm)) process.exit(2);
 const provider = a.provider!;
 if (!isProvider(provider)) fail(`unknown provider ${provider} (expected: ${Object.keys(PROVIDERS).join(", ")})`);
 if (!isProvider(provider)) process.exit(2);
@@ -80,7 +84,12 @@ if (does("prepare")) {
 
   const noModules = (src: string) => !src.includes("/node_modules");
   let startState: string;
-  if (a.chained && task !== "T1") {
+  if (suite !== "urlshort") {
+    if (a.chained) fail("chained runs are only defined for the urlshort suite");
+    const r = spawnSync(join(paths.suite(suite), "scripts", "prepare.sh"), [task, workspace], { stdio: "inherit" });
+    if (r.status !== 0) fail(`${suite} prepare failed`);
+    startState = `${suite}/${task}`;
+  } else if (a.chained && task !== "T1") {
     if (!existsSync(workspace)) fail("chained workspace missing; run T1 with --chained first");
     startState = "chain";
   } else {
@@ -123,6 +132,7 @@ if (does("agent")) {
   const metrics = a["fake-agent"]
     ? fakeAgent(workspace, resolve(a["fake-agent"]))
     : await runAgent({
+        suite,
         arm,
         task,
         armConfig,
@@ -150,6 +160,7 @@ if (does("agent")) {
       usage: metrics.usage,
       costUsd: metrics.costUsd,
       stopReason: metrics.resultSubtype,
+      reads: metrics.reads,
     }),
   );
   console.log(`agent done: ${metrics.m.turns} turns, ${metrics.m.toolCalls} tool calls, $${metrics.costUsd.toFixed(4)}`);
@@ -167,13 +178,19 @@ if (does("eval")) {
     usage: Usage;
     costUsd: number;
     stopReason?: string | null;
+    reads?: Record<string, number>;
   };
 
-  const acceptance = runAcceptance(task, workspace, arm, rawDir);
+  const acceptance =
+    suite === "urlshort"
+      ? runAcceptance(task as Parameters<typeof runAcceptance>[0], workspace, arm, rawDir)
+      : runSuiteAcceptance(suite, task, workspace, rawDir);
+  const reading = readingStats(suite, task, workspace, am.reads ?? {});
+  if (reading) console.log(`reading: ${reading.filesRead} files, precision ${(reading.precision * 100).toFixed(0)}%, core recall ${(reading.coreRecall * 100).toFixed(0)}%`);
   console.log(
     `acceptance: ${acceptance.passed ? "PASS" : "FAIL"} (${Object.values(acceptance.rules).filter(Boolean).length}/${Object.keys(acceptance.rules).length} rules)`,
   );
-  const perf = acceptance.passed && !a["skip-perf"] ? await runPerf(workspace, rawDir) : null;
+  const perf = acceptance.passed && !a["skip-perf"] && suite === "urlshort" ? await runPerf(workspace, rawDir) : null;
   if (perf) console.log(`perf: ${perf.passed ? "PASS" : "FAIL"} p95=${perf.p95Ms.toFixed(1)}ms`);
 
   // Third-party models: the SDK prices them with Claude rates, so recompute.
@@ -192,18 +209,20 @@ if (does("eval")) {
   }
 
   const record = {
+    suite,
     arm,
     task,
     run: a.chained ? 1 : run,
     chained: a.chained,
     startState,
-    specSha256: createHash("sha256").update(readFileSync(paths.spec(task))).digest("hex"),
+    specSha256: createHash("sha256").update(readFileSync(paths.spec(suite, task))).digest("hex"),
     model: am.model,
     provider: am.provider,
     harness: am.harness,
     usage: am.usage,
     agent: am.agent,
     acceptance,
+    ...(reading ? { reading } : {}),
     ...(perf ? { perf } : {}),
     costUsd,
     costSource,

@@ -1,0 +1,29 @@
+{
+  "id": "AB1",
+  "type": "bugfix",
+  "startPatch": "start.patch",
+  "referencePatch": "reference.patch",
+  "relevant": {
+    "core": [
+      "packages/loot-core/src/server/rules/rule-utils.ts"
+    ],
+    "supporting": [
+      "packages/loot-core/src/server/transactions/transaction-rules.ts",
+      "packages/loot-core/src/server/rules/rule.ts",
+      "packages/loot-core/src/server/rules/index.ts"
+    ]
+  },
+  "regression": {
+    "loot-core": [
+      "src/server/rules",
+      "src/server/transactions",
+      "src/server/accounts"
+    ]
+  },
+  "expectStartFailing": [
+    "AB1 R1",
+    "AB1 R2",
+    "AB1 R3",
+    "AB1 regression"
+  ]
+}

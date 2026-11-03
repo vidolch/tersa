@@ -3,7 +3,7 @@ import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { paths, type Arm, type Task } from "./config.ts";
+import { paths, type Arm, type Suite, type Task } from "./config.ts";
 
 export interface AcceptanceResult {
   passed: boolean;
@@ -19,9 +19,9 @@ export interface PerfResult {
   errorRate: number;
 }
 
-/** "T2 R8 + R9" → ["T2 R8", "T2 R9"] */
+/** "T2 R8 + R9" → ["T2 R8", "T2 R9"]; works for any task id like AB3. */
 function ruleKeys(title: string): string[] {
-  const m = title.match(/^(T\d)\s+(.+)$/);
+  const m = title.match(/^([A-Z]+\d+)\s+(R\d+(?:\s*\+\s*R\d+)*)$/);
   if (!m) return [];
   return m[2].split("+").map((r) => `${m[1]} ${r.trim()}`);
 }
@@ -123,4 +123,65 @@ export async function runPerf(workspace: string, outDir: string): Promise<PerfRe
       process.kill(-child.pid!, "SIGKILL");
     } catch {}
   }
+}
+
+/** Actual Budget suite: suites/actual/scripts/evaluate.sh (regression + black-box acceptance). */
+export function runSuiteAcceptance(suite: Suite, task: Task, workspace: string, outDir: string): AcceptanceResult {
+  const script = join(paths.suite(suite), "scripts", "evaluate.sh");
+  const r = spawnSync(script, [task, workspace, outDir], { encoding: "utf8", timeout: 30 * 60_000 });
+  writeFileSync(join(outDir, "evaluate.log"), (r.stdout ?? "") + (r.stderr ?? ""));
+  const rules: Record<string, boolean> = {};
+  const haveAcceptance = mergeVitestReport(join(outDir, "acceptance-default.json"), rules);
+  const regFile = join(outDir, "regression.json");
+  rules[`${task} regression`] = existsSync(regFile) && JSON.parse(readFileSync(regFile, "utf8")).passed === true;
+  const passed = r.status === 0 && haveAcceptance && Object.values(rules).every(Boolean);
+  return { passed, rules };
+}
+
+export interface ReadingStats {
+  filesRead: number;
+  readChars: number;
+  relevantChars: number;
+  coreChars: number;
+  /** Share of Read output that came from ground-truth relevant files. */
+  precision: number;
+  /** Share of core files the agent read at least once. */
+  coreRecall: number;
+  /** Total Read output chars ÷ 4, an estimate. */
+  readTokens: number;
+}
+
+/** P1 metric: how much of what the agent read was relevant (suites with task.json ground truth). */
+export function readingStats(
+  suite: Suite,
+  task: Task,
+  workspace: string,
+  reads: Record<string, number>,
+): ReadingStats | null {
+  const tj = join(paths.suite(suite), "tasks", task, "task.json");
+  if (!existsSync(tj)) return null;
+  const { relevant } = JSON.parse(readFileSync(tj, "utf8"));
+  const core = new Set<string>(relevant.core);
+  const all = new Set<string>([...relevant.core, ...relevant.supporting]);
+  const rel = (p: string) => (p.startsWith(workspace + "/") ? p.slice(workspace.length + 1) : p);
+  let readChars = 0, relevantChars = 0, coreChars = 0;
+  const coreSeen = new Set<string>();
+  for (const [abs, chars] of Object.entries(reads)) {
+    const p = rel(abs);
+    readChars += chars;
+    if (all.has(p)) relevantChars += chars;
+    if (core.has(p)) {
+      coreChars += chars;
+      coreSeen.add(p);
+    }
+  }
+  return {
+    filesRead: Object.keys(reads).length,
+    readChars,
+    relevantChars,
+    coreChars,
+    precision: readChars ? relevantChars / readChars : 0,
+    coreRecall: core.size ? coreSeen.size / core.size : 0,
+    readTokens: Math.round(readChars / 4),
+  };
 }

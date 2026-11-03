@@ -1,0 +1,52 @@
+name: validate-actual
+
+# Self-check of the Actual Budget suite: for every task, the start state must
+# fail exactly the expected rules and the reference fix must pass everything.
+# No API calls. Runs when the suite or the harness changes, or manually.
+on:
+  push:
+    paths:
+      - suites/actual/**
+      - harness/runner/**
+      - harness/validate-actual.sh
+      - .github/workflows/validate-actual.yml
+  workflow_dispatch:
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      tasks: ${{ steps.t.outputs.tasks }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: t
+        run: echo "tasks=$(node -p 'JSON.stringify(require("./suites/actual/suite.json").tasks)')" >> "$GITHUB_OUTPUT"
+
+  validate:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        task: ${{ fromJSON(needs.plan.outputs.tasks) }}
+    env:
+      ACTUAL_CACHE: ${{ github.workspace }}/../actual-cache
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            harness/runner/package-lock.json
+            suites/actual/acceptance/package-lock.json
+      - uses: actions/cache@v4
+        with:
+          path: ~/.yarn/berry/cache
+          key: yarn-actual-${{ hashFiles('suites/actual/suite.json') }}
+      - run: npm ci --no-audit --no-fund
+        working-directory: harness/runner
+      - run: npm ci --no-audit --no-fund
+        working-directory: suites/actual/acceptance
+      - run: harness/validate-actual.sh ${{ matrix.task }}

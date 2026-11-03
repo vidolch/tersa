@@ -10,6 +10,9 @@ export ANTHROPIC_API_KEY=...        # used by the Claude Agent SDK
 
 ## Commands
 ```
+# Actual Budget suite (tasks AB1..AB4)
+npm run run -- --suite actual --arm A-ts-baseline --task AB2 --run 1 --provider deepseek
+
 # one independent run (fresh workspace from the task's start state)
 npm run run -- --arm A-ts-baseline --task T2 --run 1 --model claude-sonnet-5-5
 

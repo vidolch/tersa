@@ -1,0 +1,27 @@
+{
+  "id": "AB4",
+  "type": "bugfix",
+  "startPatch": "start.patch",
+  "referencePatch": "reference.patch",
+  "relevant": {
+    "core": [
+      "packages/loot-core/src/server/budget/envelope.ts"
+    ],
+    "supporting": [
+      "packages/loot-core/src/server/budget/base.ts",
+      "packages/loot-core/src/server/api.ts"
+    ]
+  },
+  "regression": {
+    "loot-core": [
+      "src/server/budget",
+      "src/server/api"
+    ]
+  },
+  "expectStartFailing": [
+    "AB4 R1",
+    "AB4 R3",
+    "AB4 R4",
+    "AB4 regression"
+  ]
+}

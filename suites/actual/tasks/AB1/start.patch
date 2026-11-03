@@ -1,0 +1,65 @@
+diff --git a/packages/loot-core/src/server/rules/index.test.ts b/packages/loot-core/src/server/rules/index.test.ts
+index 10fb601..d6ae707 100644
+--- a/packages/loot-core/src/server/rules/index.test.ts
++++ b/packages/loot-core/src/server/rules/index.test.ts
+@@ -996,44 +996,6 @@ describe('Rule', () => {
+     });
+   });
+ 
+-  test('rules are deterministically ranked', () => {
+-    const rule = (id, conditions) =>
+-      new Rule({
+-        id,
+-        conditionsOp: 'and',
+-        conditions,
+-        actions: [],
+-      });
+-    const expectOrder = (rules, ids) =>
+-      expect(rules.map(r => r.getId())).toEqual(ids);
+-
+-    let rules = [
+-      rule('id1', [{ op: 'contains', field: 'notes', value: 'sar' }]),
+-      rule('id2', [{ op: 'contains', field: 'notes', value: 'jim' }]),
+-      rule('id3', [{ op: 'is', field: 'notes', value: 'James' }]),
+-    ];
+-
+-    expectOrder(rankRules(rules), ['id1', 'id2', 'id3']);
+-
+-    rules = [
+-      rule('id1', [{ op: 'contains', field: 'notes', value: 'sar' }]),
+-      rule('id2', [
+-        { op: 'oneOf', field: 'imported_payee', value: ['jim', 'sar'] },
+-      ]),
+-      rule('id3', [{ op: 'is', field: 'notes', value: 'James' }]),
+-      rule('id4', [
+-        { op: 'is', field: 'notes', value: 'James' },
+-        { op: 'gt', field: 'amount', value: 5 },
+-      ]),
+-      rule('id5', [
+-        { op: 'is', field: 'notes', value: 'James' },
+-        { op: 'gt', field: 'amount', value: 5 },
+-        { op: 'lt', field: 'amount', value: 10 },
+-      ]),
+-    ];
+-    expectOrder(rankRules(rules), ['id1', 'id4', 'id5', 'id2', 'id3']);
+-  });
+-
+   test('iterateIds finds all the ids', () => {
+     const rule = (id, conditions, actions = []) =>
+       new Rule({ id, conditionsOp: 'and', conditions, actions });
+diff --git a/packages/loot-core/src/server/rules/rule-utils.ts b/packages/loot-core/src/server/rules/rule-utils.ts
+index 8531f3b..b3dc624 100644
+--- a/packages/loot-core/src/server/rules/rule-utils.ts
++++ b/packages/loot-core/src/server/rules/rule-utils.ts
+@@ -72,9 +72,9 @@ function _rankRules(rules: Rule[]): Rule[] {
+   return [...rules].sort((r1, r2) => {
+     const score1 = scores.get(r1);
+     const score2 = scores.get(r2);
+-    if (score1 < score2) {
++    if (score1 > score2) {
+       return -1;
+-    } else if (score1 > score2) {
++    } else if (score1 < score2) {
+       return 1;
+     } else {
+       const id1 = r1.getId();

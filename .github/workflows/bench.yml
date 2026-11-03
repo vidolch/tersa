@@ -7,14 +7,19 @@ name: bench
 on:
   workflow_dispatch:
     inputs:
+      suite:
+        description: Suite (urlshort = small control, actual = Actual Budget)
+        type: choice
+        options: [urlshort, actual]
+        default: urlshort
       arm:
         description: Arm
         type: choice
         options: [A-ts-baseline, B-ts-query, C-tersa-lang]
         default: A-ts-baseline
       tasks:
-        description: Tasks (comma-separated)
-        default: T1,T2,T3,T4,T5
+        description: Tasks, comma-separated (empty = all tasks of the suite)
+        default: ""
       runs:
         description: Runs per task
         default: "5"
@@ -49,14 +54,21 @@ jobs:
     outputs:
       matrix: ${{ steps.m.outputs.matrix }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - id: m
         env:
+          SUITE: ${{ inputs.suite }}
           TASKS: ${{ inputs.tasks }}
           RUNS: ${{ inputs.runs }}
           FIRST: ${{ inputs.first_run }}
         run: |
           node -e '
-            const tasks = process.env.TASKS.split(",").map(s => s.trim()).filter(Boolean);
+            let tasks = process.env.TASKS.split(",").map(s => s.trim()).filter(Boolean);
+            if (!tasks.length) tasks = process.env.SUITE === "urlshort"
+              ? ["T1", "T2", "T3", "T4", "T5"]
+              : require(`./suites/${process.env.SUITE}/suite.json`).tasks;
             const n = Number(process.env.RUNS), f = Number(process.env.FIRST);
             const include = [];
             for (const task of tasks) for (let r = f; r < f + n; r++) include.push({ task, run: r });
@@ -72,7 +84,8 @@ jobs:
       max-parallel: ${{ fromJSON(inputs.max_parallel) }}
       matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     env:
-      ARGS: --arm ${{ inputs.arm }} --task ${{ matrix.task }} --run ${{ matrix.run }} --force
+      ARGS: --suite ${{ inputs.suite }} --arm ${{ inputs.arm }} --task ${{ matrix.task }} --run ${{ matrix.run }} --force
+      ACTUAL_CACHE: ${{ github.workspace }}/../actual-cache
     steps:
       - uses: actions/checkout@v4
         with:
@@ -85,12 +98,25 @@ jobs:
         working-directory: bench/harness/runner
         run: npm ci --no-audit --no-fund
 
+      - name: Cache Yarn packages (actual suite)
+        if: inputs.suite == 'actual'
+        uses: actions/cache@v4
+        with:
+          path: ~/.yarn/berry/cache
+          key: yarn-actual-${{ hashFiles('bench/suites/actual/suite.json') }}
+
       - name: Prepare workspace
         working-directory: bench/harness/runner
         run: node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RUNNER_TEMP/raw" --phase prepare
 
-      - name: Hide tests and solutions from the agent
-        run: rm -rf bench/acceptance bench/reference bench/perf bench/results bench/.git
+      - name: Hide tests, solutions and upstream source from the agent
+        run: |
+          rm -rf bench/acceptance bench/reference bench/perf bench/results bench/.git "$ACTUAL_CACHE"
+          for d in bench/suites/*/; do
+            rm -rf "$d/acceptance" "$d/scripts" "$d"/tasks/*/task.json "$d"/tasks/*/*.patch
+            node -e 'const f=process.argv[1], s=require(f); require("fs").writeFileSync(f, JSON.stringify({ tasks: s.tasks }))' "$PWD/$d/suite.json"
+          done
+          find bench -name '*.test.ts' -path '*acceptance*' | grep . && exit 1 || true
 
       - name: Run agent
         working-directory: bench/harness/runner
@@ -111,6 +137,7 @@ jobs:
         run: |
           (cd eval/acceptance && npm ci --no-audit --no-fund)
           (cd eval/harness/runner && npm ci --no-audit --no-fund)
+          if [ "${{ inputs.suite }}" = actual ]; then (cd eval/suites/actual/acceptance && npm ci --no-audit --no-fund); fi
       - name: Evaluate
         working-directory: eval/harness/runner
         run: node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RUNNER_TEMP/raw" --phase eval --skip-perf
@@ -164,6 +191,6 @@ jobs:
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
           git add results
           git diff --cached --quiet && { echo "no records"; exit 0; }
-          git commit -m "Bench results: ${{ inputs.arm }} ${{ inputs.tasks }} x${{ inputs.runs }} (${{ inputs.provider }} ${{ inputs.model }})"
+          git commit -m "Bench results: ${{ inputs.suite }} ${{ inputs.arm }} ${{ inputs.tasks }} x${{ inputs.runs }} (${{ inputs.provider }} ${{ inputs.model }})"
           git pull --rebase
           git push

@@ -1,10 +1,12 @@
+import { spawnSync } from "node:child_process";
 import { cpSync, createWriteStream, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { query } from "@anthropic-ai/claude-agent-sdk";
-import { paths, type Arm, type ArmConfig, type Task } from "./config.ts";
+import { paths, type Arm, type ArmConfig, type Suite, type Task } from "./config.ts";
 import { MetricsCollector } from "./metrics.ts";
 
 export interface AgentRunInput {
+  suite: Suite;
   arm: Arm;
   task: Task;
   armConfig: ArmConfig;
@@ -19,9 +21,14 @@ export interface AgentRunInput {
 }
 
 /** Identical across arms except the profile and the arm's context files. */
-export function buildPrompt(arm: Arm, task: Task, armConfig: ArmConfig): { prompt: string; overheadChars: number } {
-  const spec = readFileSync(paths.spec(task), "utf8");
-  const profile = readFileSync(join(paths.arm(arm), "profile.md"), "utf8");
+export function buildPrompt(
+  suite: Suite,
+  arm: Arm,
+  task: Task,
+  armConfig: ArmConfig,
+): { prompt: string; overheadChars: number } {
+  const spec = readFileSync(paths.spec(suite, task), "utf8");
+  const profile = readFileSync(paths.profile(suite, arm), "utf8");
   const extras = armConfig.contextFiles.map((f) => readFileSync(join(paths.arm(arm), f), "utf8"));
   const prompt = [
     "Implement the task below in the current directory. The service must satisfy every rule in the spec.",
@@ -40,7 +47,7 @@ export function buildPrompt(arm: Arm, task: Task, armConfig: ArmConfig): { promp
 }
 
 export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> {
-  const { prompt, overheadChars } = buildPrompt(input.arm, input.task, input.armConfig);
+  const { prompt, overheadChars } = buildPrompt(input.suite, input.arm, input.task, input.armConfig);
   const metrics = new MetricsCollector();
   const transcript = createWriteStream(join(input.rawDir, "transcript.jsonl"));
 
@@ -82,8 +89,19 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
  * Pipeline check without an API call: copies a known solution's src/ into the
  * workspace as if an agent had produced it. Usage and agent metrics are zero.
  */
-export function fakeAgent(workspace: string, solutionDir: string): MetricsCollector {
-  cpSync(join(solutionDir, "src"), join(workspace, "src"), { recursive: true, force: true });
+export function fakeAgent(workspace: string, solution: string): MetricsCollector {
+  if (solution.endsWith(".patch")) {
+    // An empty patch is a fake agent that changes nothing (validation of start states).
+    if (readFileSync(solution, "utf8").trim() === "") return finishFake();
+    const r = spawnSync("git", ["apply", solution], { cwd: workspace, encoding: "utf8" });
+    if (r.status !== 0) throw new Error(`fake agent: git apply failed: ${r.stderr}`);
+  } else {
+    cpSync(join(solution, "src"), join(workspace, "src"), { recursive: true, force: true });
+  }
+  return finishFake();
+}
+
+function finishFake(): MetricsCollector {
   const metrics = new MetricsCollector();
   metrics.m.completed = true;
   metrics.finish(0);

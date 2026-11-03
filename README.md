@@ -28,7 +28,8 @@ P0 (intent) is out of scope. Specs are written to be unambiguous so it doesn't a
 ## Layout
 
 ```
-specs/        shared, tech-neutral task specs (frozen before first run)
+suites/actual/  Actual Budget suite: real large codebase (see its README)
+specs/        shared, tech-neutral task specs for the urlshort suite (frozen before first run)
 acceptance/   shared hidden black-box tests (HTTP), one suite for all arms
 perf/         shared load profile (k6)
 arms/         per-arm profile + starter scaffold (tech-specific)
@@ -61,6 +62,6 @@ See `harness/PROTOCOL.md`.
 - [x] Run-record contract
 - [x] Reference solution for T5 (passes all 70 acceptance tests, both storage modes)
 - [x] Reference snapshots T1, T2, T3-start, T3, T4 (each validated at its task level)
-- [ ] Larger seeded codebase (15–30k LOC) where P1 effects are visible
+- [x] Large real codebase: `suites/actual` (Actual Budget, 4 tasks, reading-precision metric)
 - [x] Harness runner (Claude Agent SDK, usage + metrics, acceptance, perf, report)
 - [x] GitHub Actions: `ci` self-check on every push, `bench` manual benchmark runs

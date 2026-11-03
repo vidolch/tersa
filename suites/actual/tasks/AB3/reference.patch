@@ -1,0 +1,88 @@
+diff --git a/packages/api/methods.ts b/packages/api/methods.ts
+index e008627..f5117be 100644
+--- a/packages/api/methods.ts
++++ b/packages/api/methods.ts
+@@ -446,6 +446,10 @@ export function getScheduleDates(
+   return send('api/schedule-dates-get', { date, ...options });
+ }
+ 
++export function getUpcomingSchedules(range: { start: string; end: string }) {
++  return send('api/schedules-upcoming-get', range);
++}
++
+ export function getIDByName(
+   type: 'accounts' | 'schedules' | 'categories' | 'payees',
+   name: string,
+diff --git a/packages/loot-core/src/server/api.ts b/packages/loot-core/src/server/api.ts
+index d9f62fc..28b059e 100644
+--- a/packages/loot-core/src/server/api.ts
++++ b/packages/loot-core/src/server/api.ts
+@@ -1020,6 +1020,42 @@ handlers['api/schedule-dates-get'] = async function ({
+   }
+ };
+ 
++const MAX_UPCOMING_RANGE_DAYS = 366;
++
++handlers['api/schedules-upcoming-get'] = async function ({ start, end }) {
++  checkFileOpen();
++  validateDay('start date', start);
++  validateDay('end date', end);
++  if (end < start) {
++    throw APIError(`end (${end}) is before start (${start})`);
++  }
++  if (monthUtils.differenceInCalendarDays(end, start) + 1 > MAX_UPCOMING_RANGE_DAYS) {
++    throw APIError(`range is longer than ${MAX_UPCOMING_RANGE_DAYS} days`);
++  }
++
++  const schedules = await handlers['api/schedules-get']();
++  const upcoming = schedules
++    .filter(schedule => !schedule.completed)
++    .flatMap(schedule =>
++      getScheduleDates(schedule.date, { start, end }).map(date => ({
++        scheduleId: schedule.id,
++        name: schedule.name,
++        date,
++        amount: schedule.amount,
++        amountOp: schedule.amountOp,
++        payee: schedule.payee ?? null,
++        account: schedule.account ?? null,
++      })),
++    );
++
++  return upcoming.sort(
++    (a, b) =>
++      a.date.localeCompare(b.date) ||
++      String(a.name ?? '').localeCompare(String(b.name ?? '')) ||
++      a.scheduleId.localeCompare(b.scheduleId),
++  );
++};
++
+ handlers['api/schedule-create'] = withMutation(async function (
+   schedule: Omit<APIScheduleEntity, 'id'>,
+ ) {
+diff --git a/packages/loot-core/src/types/api-handlers.ts b/packages/loot-core/src/types/api-handlers.ts
+index 5441cb3..90cc97a 100644
+--- a/packages/loot-core/src/types/api-handlers.ts
++++ b/packages/loot-core/src/types/api-handlers.ts
+@@ -315,6 +315,21 @@ export type ApiHandlers = {
+     count?: number;
+   }) => Promise<string[]>;
+ 
++  'api/schedules-upcoming-get': (arg: {
++    start: string;
++    end: string;
++  }) => Promise<
++    Array<{
++      scheduleId: APIScheduleEntity['id'];
++      name: APIScheduleEntity['name'];
++      date: string;
++      amount: APIScheduleEntity['amount'];
++      amountOp: APIScheduleEntity['amountOp'];
++      payee: APIScheduleEntity['payee'] | null;
++      account: APIScheduleEntity['account'] | null;
++    }>
++  >;
++
+   'api/get-id-by-name': (arg: {
+     type: string;
+     name: string;

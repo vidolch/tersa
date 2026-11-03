@@ -4,12 +4,15 @@ import { fileURLToPath } from "node:url";
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 export const TASKS = ["T1", "T2", "T3", "T4", "T5"] as const;
-export type Task = (typeof TASKS)[number];
+/** Task ids are unique across suites (T* = urlshort, AB* = actual). */
+export type Task = string;
+export const SUITES = ["urlshort", "actual"] as const;
+export type Suite = (typeof SUITES)[number];
 export const ARMS = ["A-ts-baseline", "B-ts-query", "C-tersa-lang"] as const;
 export type Arm = (typeof ARMS)[number];
 
 /** Reference snapshot each task starts from; null = arm scaffold only. */
-export const START_STATE: Record<Task, string | null> = {
+export const START_STATE: Record<string, string | null> = {
   T1: null,
   T2: "T1",
   T3: "T3-start",
@@ -17,7 +20,7 @@ export const START_STATE: Record<Task, string | null> = {
   T5: "T4",
 };
 
-export const SPEC_FILE: Record<Task, string> = {
+export const SPEC_FILE: Record<string, string> = {
   T1: "T1-initial.md",
   T2: "T2-feature-alias-expiry.md",
   T3: "T3-bugfix-click-count.md",
@@ -41,7 +44,12 @@ export const paths = {
   arm: (arm: Arm) => join(ROOT, "arms", arm),
   scaffold: (arm: Arm) => join(ROOT, "arms", arm, "scaffold"),
   reference: (snapshot: string) => join(ROOT, "reference", snapshot),
-  spec: (task: Task) => join(ROOT, "specs", SPEC_FILE[task]),
+  suite: (suite: Suite) => join(ROOT, "suites", suite),
+  spec: (suite: Suite, task: Task) =>
+    suite === "urlshort" ? join(ROOT, "specs", SPEC_FILE[task]) : join(ROOT, "suites", suite, "tasks", task, "spec.md"),
+  /** Environment description given to the agent: per arm for urlshort, per suite otherwise. */
+  profile: (suite: Suite, arm: Arm) =>
+    suite === "urlshort" ? join(ROOT, "arms", arm, "profile.md") : join(ROOT, "suites", suite, "profile.md"),
   acceptance: join(ROOT, "acceptance"),
   perf: join(ROOT, "perf", "load.js"),
   schema: join(ROOT, "harness", "run-record.schema.json"),
@@ -53,8 +61,15 @@ export function loadArm(arm: Arm): ArmConfig {
   return JSON.parse(readFileSync(join(paths.arm(arm), "agent.json"), "utf8"));
 }
 
-export function isTask(v: string): v is Task {
-  return (TASKS as readonly string[]).includes(v);
+export function suiteTasks(suite: Suite): string[] {
+  if (suite === "urlshort") return [...TASKS];
+  return JSON.parse(readFileSync(join(ROOT, "suites", suite, "suite.json"), "utf8")).tasks;
+}
+export function isSuite(v: string): v is Suite {
+  return (SUITES as readonly string[]).includes(v);
+}
+export function isTask(v: string, suite: Suite = "urlshort"): v is Task {
+  return suiteTasks(suite).includes(v);
 }
 export function isArm(v: string): v is Arm {
   return (ARMS as readonly string[]).includes(v);

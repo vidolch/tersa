@@ -1,0 +1,33 @@
+{
+  "id": "AB3",
+  "type": "feature",
+  "startPatch": null,
+  "referencePatch": "reference.patch",
+  "relevant": {
+    "core": [
+      "packages/api/methods.ts",
+      "packages/loot-core/src/server/api.ts",
+      "packages/loot-core/src/server/schedules/occurrences.ts"
+    ],
+    "supporting": [
+      "packages/loot-core/src/types/api-handlers.ts",
+      "packages/loot-core/src/server/api-models.ts",
+      "packages/loot-core/src/shared/schedules.ts"
+    ]
+  },
+  "regression": {
+    "loot-core": [
+      "src/server/schedules",
+      "src/server/api"
+    ],
+    "api": true
+  },
+  "expectStartFailing": [
+    "AB3 R1",
+    "AB3 R2",
+    "AB3 R3",
+    "AB3 R4",
+    "AB3 R5",
+    "AB3 R6"
+  ]
+}

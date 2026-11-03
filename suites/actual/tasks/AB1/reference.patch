@@ -1,0 +1,16 @@
+diff --git a/packages/loot-core/src/server/rules/rule-utils.ts b/packages/loot-core/src/server/rules/rule-utils.ts
+index b3dc624..8531f3b 100644
+--- a/packages/loot-core/src/server/rules/rule-utils.ts
++++ b/packages/loot-core/src/server/rules/rule-utils.ts
+@@ -72,9 +72,9 @@ function _rankRules(rules: Rule[]): Rule[] {
+   return [...rules].sort((r1, r2) => {
+     const score1 = scores.get(r1);
+     const score2 = scores.get(r2);
+-    if (score1 > score2) {
++    if (score1 < score2) {
+       return -1;
+-    } else if (score1 < score2) {
++    } else if (score1 > score2) {
+       return 1;
+     } else {
+       const id1 = r1.getId();

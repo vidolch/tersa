@@ -1,0 +1,12 @@
+# Environment: Actual Budget monorepo
+
+| Field | Value |
+|---|---|
+| Repository | Actual Budget (local-first personal finance app), TypeScript, Yarn 4 workspaces |
+| Runtime | Node 22 |
+| Dependencies | already installed; do not add new ones |
+| Package manager | `node .yarn/releases/yarn-4.17.1.cjs` (or `yarn` if available), always from the repo root |
+| Tests | `yarn workspace @actual-app/core run test:node <path>` for loot-core; `yarn workspace @actual-app/api run test` for the API |
+| Network | not needed; no servers are involved |
+
+The task is checked through the public Node API package `@actual-app/api` (`packages/api`), built from your workspace, plus the repository's existing tests.

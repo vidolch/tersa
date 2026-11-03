@@ -1,0 +1,34 @@
+{
+  "id": "AB2",
+  "type": "feature",
+  "startPatch": null,
+  "referencePatch": "reference.patch",
+  "relevant": {
+    "core": [
+      "packages/loot-core/src/server/rules/condition.ts",
+      "packages/loot-core/src/shared/rules.ts",
+      "packages/loot-core/src/server/transactions/transaction-rules.ts"
+    ],
+    "supporting": [
+      "packages/loot-core/src/types/models/rule.ts",
+      "packages/loot-core/src/server/rules/rule-utils.ts",
+      "packages/loot-core/src/platform/server/sqlite/unicodeLike.ts"
+    ]
+  },
+  "regression": {
+    "loot-core": [
+      "src/server/rules",
+      "src/server/transactions",
+      "src/server/accounts",
+      "src/server/forecast",
+      "src/shared"
+    ]
+  },
+  "expectStartFailing": [
+    "AB2 R1",
+    "AB2 R2",
+    "AB2 R3",
+    "AB2 R4",
+    "AB2 R5"
+  ]
+}

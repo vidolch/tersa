@@ -11,6 +11,8 @@ export interface AgentMetrics {
   compileFailures: number;
   testRuns: number;
   compactions: number;
+  /** Bash commands that reach the network (git clone/fetch, curl, wget, npm view…). Should be 0. */
+  networkCommands: number;
   wallMs: number;
   completed: boolean;
 }
@@ -30,6 +32,7 @@ const EDIT_TOOLS = new Set(["Edit", "Write", "MultiEdit", "NotebookEdit"]);
 // A Bash command counts as a compile step if it runs the type checker or a build.
 const COMPILE_CMD = /\btsc\b|\btypecheck\b|npm run build|\btersa (build|check)\b/;
 // A Bash command counts as a test run if it runs a test runner.
+const NETWORK_CMD = /\bgit\s+(clone|fetch|pull|ls-remote)\b|\bcurl\b|\bwget\b|github\.com|\bnpm\s+(view|info)\b/;
 const TEST_CMD = /\bvitest\b|\bnpm (run )?test\b|\bnode --test\b|\bjest\b/;
 
 const est = (chars: number) => Math.round(chars / 4);
@@ -49,6 +52,8 @@ export class MetricsCollector {
   private toolUses = new Map<string, { name: string; input: any }>();
   private readKeys = new Set<string>();
   private toolResultChars = 0;
+  /** Characters returned by Read, per file path (P1 reading precision). */
+  reads: Record<string, number> = {};
   m: AgentMetrics = {
     turns: 0,
     toolCalls: 0,
@@ -59,6 +64,7 @@ export class MetricsCollector {
     compileFailures: 0,
     testRuns: 0,
     compactions: 0,
+    networkCommands: 0,
     wallMs: 0,
     completed: false,
   };
@@ -110,6 +116,7 @@ export class MetricsCollector {
             else this.readKeys.add(key);
           }
           if (b.name === "Bash" && TEST_CMD.test(String(b.input?.command ?? ""))) this.m.testRuns += 1;
+          if (b.name === "Bash" && NETWORK_CMD.test(String(b.input?.command ?? ""))) this.m.networkCommands += 1;
         }
         break;
       }
@@ -120,6 +127,9 @@ export class MetricsCollector {
           if (b?.type !== "tool_result") continue;
           this.toolResultChars += contentChars(b.content);
           const use = this.toolUses.get(b.tool_use_id);
+          if (use?.name === "Read" && !b.is_error && typeof use.input?.file_path === "string") {
+            this.reads[use.input.file_path] = (this.reads[use.input.file_path] ?? 0) + contentChars(b.content);
+          }
           if (!use || !b.is_error) continue;
           if (EDIT_TOOLS.has(use.name)) this.m.failedEdits += 1;
           if (use.name === "Bash" && COMPILE_CMD.test(String(use.input?.command ?? ""))) {

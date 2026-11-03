@@ -1,0 +1,8 @@
+{
+  "name": "actual",
+  "repo": "https://github.com/actualbudget/actual",
+  "commit": "0b1eec8",
+  "commitFull": "0b1eec8cced8365f82f7d0fa30336e6a3a97c868",
+  "tasks": ["AB1", "AB2", "AB3", "AB4"],
+  "note": "Black-box acceptance through @actual-app/api built from the workspace; regression = the repo's own tests at the pinned commit, copied over the workspace before running."
+}

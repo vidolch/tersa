@@ -24,13 +24,9 @@
       ]
     },
     "task": {
-      "enum": [
-        "T1",
-        "T2",
-        "T3",
-        "T4",
-        "T5"
-      ]
+      "type": "string",
+      "pattern": "^[A-Z]+\\d+$",
+      "description": "task id, unique across suites (T* urlshort, AB* actual)"
     },
     "run": {
       "type": "integer",
@@ -146,6 +142,10 @@
         "completed": {
           "type": "boolean",
           "description": "false if the agent hit a turn/token cap"
+        },
+        "networkCommands": {
+          "type": "integer",
+          "description": "Bash commands reaching the network; nonzero runs need review"
         }
       }
     },
@@ -162,7 +162,7 @@
         },
         "rules": {
           "type": "object",
-          "description": "keyed by 'T1 R3' etc.",
+          "description": "keyed by 'T1 R3', 'AB2 R4', 'AB2 regression' etc.",
           "additionalProperties": {
             "type": "boolean"
           }
@@ -210,6 +210,39 @@
         "null"
       ],
       "description": "SDK result subtype, e.g. success, error_max_turns, error_max_budget_usd"
+    },
+    "suite": {
+      "enum": [
+        "urlshort",
+        "actual"
+      ]
+    },
+    "reading": {
+      "type": "object",
+      "description": "P1 reading precision vs the task's ground-truth relevant files",
+      "properties": {
+        "filesRead": {
+          "type": "integer"
+        },
+        "readChars": {
+          "type": "integer"
+        },
+        "relevantChars": {
+          "type": "integer"
+        },
+        "coreChars": {
+          "type": "integer"
+        },
+        "precision": {
+          "type": "number"
+        },
+        "coreRecall": {
+          "type": "number"
+        },
+        "readTokens": {
+          "type": "integer"
+        }
+      }
     }
   }
 }
