@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { cpSync, createWriteStream, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { query } from "@anthropic-ai/claude-agent-sdk";
-import { paths, type Arm, type ArmConfig, type Suite, type Task } from "./config.ts";
+import { paths, ROOT as ROOT_DIR, type Arm, type ArmConfig, type Suite, type Task } from "./config.ts";
 import { MetricsCollector } from "./metrics.ts";
 
 export interface AgentRunInput {
@@ -18,6 +18,13 @@ export interface AgentRunInput {
   maxBudgetUsd: number;
   /** Real prices for models the SDK cannot price; enables the cap for them. */
   prices?: { inputMiss: number; inputHit: number; output: number };
+}
+
+/** Replaces {{ROOT}} (this repo) and {{WORKSPACE}} (the agent's workspace) in an arm's MCP config. */
+export function resolvePlaceholders<T>(value: T, workspace: string): T {
+  return JSON.parse(
+    JSON.stringify(value).replaceAll("{{ROOT}}", ROOT_DIR).replaceAll("{{WORKSPACE}}", workspace),
+  );
 }
 
 /** Identical across arms except the profile and the arm's context files. */
@@ -60,8 +67,8 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
       model: input.model,
       maxTurns: input.maxTurns,
       tools: input.armConfig.tools,
-      allowedTools: input.armConfig.tools,
-      mcpServers: input.armConfig.mcpServers as any,
+      allowedTools: [...input.armConfig.tools, ...(input.armConfig.allowedTools ?? [])],
+      mcpServers: resolvePlaceholders(input.armConfig.mcpServers, input.workspace) as any,
       permissionMode: "bypassPermissions",
       allowDangerouslySkipPermissions: true,
       // Isolation: no user/project settings or CLAUDE.md leak into runs.

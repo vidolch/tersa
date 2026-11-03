@@ -38,6 +38,8 @@ export interface ArmConfig {
   mcpServers: Record<string, unknown>;
   /** Files under arms/<arm>/ appended to the prompt; their tokens count as context overhead. */
   contextFiles: string[];
+  /** Extra tools to allow without prompting (e.g. MCP tools: mcp__<server>__<tool>). */
+  allowedTools?: string[];
 }
 
 export const paths = {

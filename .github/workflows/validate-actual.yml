@@ -9,6 +9,7 @@ on:
       - suites/actual/**
       - harness/runner/**
       - harness/validate-actual.sh
+      - query/**
       - .github/workflows/validate-actual.yml
   workflow_dispatch:
 
@@ -50,3 +51,22 @@ jobs:
       - run: npm ci --no-audit --no-fund
         working-directory: suites/actual/acceptance
       - run: harness/validate-actual.sh ${{ matrix.task }}
+
+  query-coverage:
+    # For every task, one or two plausible queries must reach all core files.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ACTUAL_CACHE: ${{ github.workspace }}/../actual-cache
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: query/package-lock.json
+      - run: npm ci --no-audit --no-fund
+        working-directory: query
+      - name: Coverage on the pinned Actual commit
+        working-directory: query
+        run: ACTUAL_ROOT="$(../suites/actual/scripts/pristine.sh)" node --test test/actual.test.ts

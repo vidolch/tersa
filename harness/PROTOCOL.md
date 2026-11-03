@@ -32,3 +32,9 @@
 
 ## Network policy
 The agent phase runs as a separate user whose only egress is a local proxy that tunnels to the model provider's API (`harness/sandbox/egress-proxy.mjs`); a CI step proves github.com is unreachable before the agent starts. Identical for every arm. Records carry `network.policy`; runs that used the network without `provider-only` are reported as invalid and not scored.
+
+## Arms in the same period
+Providers can change a model behind the same name. Compare arms only on batches run close together (same day if possible): when arm B runs, rerun arm A alongside it.
+
+## Query-layer output counts as reading
+For reading precision, output of the query tools (`mcp__tersa__*`) is attributed to the files it shows, the same way Read, Grep and shell output are, so precision means the same thing in every arm.

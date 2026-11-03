@@ -1,51 +1,29 @@
-name: bench
+name: _bench
 
-# Real benchmark runs. Manual trigger only; costs API credits.
+# Shared definition of a benchmark batch, called by bench-baseline (arm A) and
+# bench-query (arm B) so both arms run exactly the same steps. Costs API credits.
 # Each matrix job: prepare workspace -> delete hidden tests and .git ->
 # run agent -> fresh checkout -> evaluate. Records are committed to results/.
 # Perf is skipped: shared runners are too noisy for latency numbers.
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
-      suite:
-        description: Suite (urlshort = small control, actual = Actual Budget)
-        type: choice
-        options: [urlshort, actual]
-        default: urlshort
-      arm:
-        description: Arm
-        type: choice
-        options: [A-ts-baseline, B-ts-query, C-tersa-lang]
-        default: A-ts-baseline
-      tasks:
-        description: Tasks, comma-separated (empty = all tasks of the suite)
-        default: ""
-      runs:
-        description: Runs per task
-        default: "5"
-      first_run:
-        description: Number of the first run (records are results/<arm>/<task>/run-<n>.json)
-        default: "1"
-      provider:
-        description: Provider (secret ANTHROPIC_API_KEY or DEEPSEEK_API_KEY)
-        type: choice
-        options: [anthropic, deepseek]
-        default: anthropic
-      model:
-        description: Model id (empty = provider default; deepseek-v4-flash / claude-sonnet-5-5)
-        default: ""
-      max_turns:
-        description: Max agent turns per run
-        default: "150"
-      max_budget_usd:
-        description: Hard spending cap per run, USD (run stops and is recorded as failed)
-        default: "0.5"
-      max_parallel:
-        description: Max concurrent runs (keep low to avoid rate limits)
-        default: "4"
+      arm: { type: string, required: true }
+      suite: { type: string, required: true }
+      tasks: { type: string, default: "" }
+      runs: { type: string, default: "6" }
+      first_run: { type: string, default: "1" }
+      provider: { type: string, default: deepseek }
+      model: { type: string, default: "" }
+      max_turns: { type: string, default: "150" }
+      max_budget_usd: { type: string, default: "0.5" }
+      max_parallel: { type: string, default: "3" }
+    secrets:
+      ANTHROPIC_API_KEY: { required: false }
+      DEEPSEEK_API_KEY: { required: false }
 
 concurrency:
-  group: bench
+  group: bench-${{ inputs.arm }}
   cancel-in-progress: false
 
 jobs:
@@ -98,6 +76,10 @@ jobs:
           node-version: 22
       - name: Install runner
         working-directory: bench/harness/runner
+        run: npm ci --no-audit --no-fund
+      - name: Install query layer (arm B)
+        if: inputs.arm == 'B-ts-query'
+        working-directory: bench/query
         run: npm ci --no-audit --no-fund
 
       - name: Cache Yarn packages (actual suite)
@@ -233,11 +215,12 @@ jobs:
           ' "${{ runner.temp }}/records"
           if [ -d results ]; then node harness/runner/src/report.ts; fi
       - name: Commit
+        env:
+          ARM: ${{ inputs.arm }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
           git add results
           git diff --cached --quiet && { echo "no records"; exit 0; }
           git commit -m "Bench results: ${{ inputs.suite }} ${{ inputs.arm }} ${{ inputs.tasks }} x${{ inputs.runs }} (${{ inputs.provider }} ${{ inputs.model }})"
-          git pull --rebase
-          git push
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep $((RANDOM % 10 + 5)); done

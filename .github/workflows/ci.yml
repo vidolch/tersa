@@ -19,8 +19,26 @@ jobs:
           cache-dependency-path: |
             acceptance/package-lock.json
             harness/runner/package-lock.json
+            query/package-lock.json
       - run: npm ci --no-audit --no-fund
         working-directory: acceptance
       - run: npm ci --no-audit --no-fund
         working-directory: harness/runner
       - run: harness/validate.sh
+
+  query:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: query/package-lock.json
+      - run: npm ci --no-audit --no-fund
+        working-directory: query
+      - run: npx tsc --noEmit
+        working-directory: query
+      - run: node --test test/engine.test.ts test/server.test.ts
+        working-directory: query

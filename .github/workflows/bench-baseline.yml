@@ -1,0 +1,57 @@
+name: bench-baseline
+
+# Arm A: standard agent tools only (the baseline).
+# Same steps as the other arm (see _bench.yml). Run both arms in the same
+# period so a silent model update can't explain a difference.
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Suite (urlshort = small control, actual = Actual Budget)
+        type: choice
+        options: [actual, urlshort]
+        default: actual
+      tasks:
+        description: Tasks, comma-separated (empty = all tasks of the suite)
+        default: ""
+      runs:
+        description: Runs per task
+        default: "6"
+      first_run:
+        description: Number of the first run (records are results/<arm>/<task>/run-<n>.json)
+        default: "1"
+      provider:
+        description: Provider (secret ANTHROPIC_API_KEY or DEEPSEEK_API_KEY)
+        type: choice
+        options: [deepseek, anthropic]
+        default: deepseek
+      model:
+        description: Model id (empty = provider default)
+        default: ""
+      max_turns:
+        description: Max agent turns per run
+        default: "150"
+      max_budget_usd:
+        description: Hard spending cap per run, USD
+        default: "0.5"
+      max_parallel:
+        description: Max concurrent runs
+        default: "3"
+
+jobs:
+  bench:
+    uses: ./.github/workflows/_bench.yml
+    with:
+      arm: A-ts-baseline
+      suite: ${{ inputs.suite }}
+      tasks: ${{ inputs.tasks }}
+      runs: ${{ inputs.runs }}
+      first_run: ${{ inputs.first_run }}
+      provider: ${{ inputs.provider }}
+      model: ${{ inputs.model }}
+      max_turns: ${{ inputs.max_turns }}
+      max_budget_usd: ${{ inputs.max_budget_usd }}
+      max_parallel: ${{ inputs.max_parallel }}
+    secrets: inherit
+    permissions:
+      contents: write

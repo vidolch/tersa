@@ -1,0 +1,22 @@
+{
+  "name": "tersa-query",
+  "version": "1.0.0",
+  "description": "Batched, symbol-level code queries for coding agents (MCP server). Contract: CONTRACT.md",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.18" },
+  "bin": { "tersa-query": "src/server.ts" },
+  "scripts": {
+    "start": "node src/server.ts",
+    "test": "node --test test/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "typescript": "5.9.3",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0"
+  }
+}

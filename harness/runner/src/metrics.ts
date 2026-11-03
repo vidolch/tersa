@@ -44,6 +44,8 @@ const SOURCE_FILE = /(?:^|\s|['"=])((?:\.{0,2}\/)?[\w@.\-/]*\.(?:tsx?|jsx?|mts|c
 // "path:line:" or "path:line-" or "path:" prefixes, as printed by grep -n / rg / Grep.
 const LINE_PREFIX = /^((?:\.{0,2}\/)?[\w@.\-/]+\.(?:tsx?|jsx?|mts|cts|mjs|cjs|json|md|pegjs|sql))[:-](?:\d+[:-])?/;
 export const UNATTRIBUTED = "(unattributed)";
+// "path/file.ts:12" or "path/file.ts:12-30" inside query-layer output (see query/CONTRACT.md section 3).
+const QUERY_LOCATION = /([\w@.\-/]+\.(?:tsx?|jsx?|mts|cts|mjs|cjs)):\d+(?:-\d+)?/;
 
 function resultText(content: unknown): string {
   if (typeof content === "string") return content;
@@ -192,6 +194,19 @@ export class MetricsCollector {
   private attributeReading(use: { name: string; input: any }, content: unknown) {
     if (use.name === "Read" && typeof use.input?.file_path === "string") {
       this.addRead(use.input.file_path, contentChars(content));
+      return;
+    }
+    if (use.name.startsWith("mcp__tersa__")) {
+      // Query-layer output counts as reading, attributed like the rest: a line
+      // naming a location belongs to that file; body lines belong to the file
+      // of the most recent header.
+      let current: string = UNATTRIBUTED;
+      for (const line of resultText(content).split("\n")) {
+        if (!line) continue;
+        const loc = line.match(QUERY_LOCATION);
+        if (loc && /^(###|  \S)/.test(line)) current = loc[1];
+        this.addRead(loc ? loc[1] : current, line.length + 1);
+      }
       return;
     }
     let fallback: string | null = null;

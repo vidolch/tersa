@@ -1,67 +1,131 @@
-# tersa-bench
+# Tersa
 
-Benchmark for measuring **cost per passing task** of coding agents across three arms:
+R&D on making coding agents cheaper without making them worse. Two ideas, kept separable so each can be adopted on its own:
 
-| Arm | Language | Agent tooling |
-|---|---|---|
-| **A** `A-ts-baseline` | TypeScript | Standard agent tools (read, grep, edit, bash) |
-| **B** `B-ts-query` | TypeScript | Standard tools + Tersa query layer |
-| **C** `C-tersa-lang` | Tersa (transpiles to TS) | Standard tools + Tersa query layer |
+1. **A query layer** (`query/`): batched, symbol-level code queries over an existing codebase, served to the agent as an MCP server. Works on plain TypeScript today; no new language needed.
+2. **An LLM-first language** (later): a strict TypeScript dialect with verified contracts and effects, transpiled to TypeScript.
 
-- **B vs A** isolates the query/read-optimization layer.
-- **C vs B** isolates the language.
-- All arms run on the same runtime (Node 22), so performance numbers are directly comparable.
+Everything is measured by the benchmark in this repo, so each idea has to prove it reduces **cost per passing task**.
+
+## Arms
+
+| Arm | Language | Agent tooling | Status |
+|---|---|---|---|
+| **A** `A-ts-baseline` | TypeScript | Claude Code's standard tools (Read, Edit, Write, Grep, Glob, Bash) | baseline measured |
+| **B** `B-ts-query` | TypeScript | standard tools + the tersa query layer (`query/`) | ready to run |
+| **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
+
+**B vs A** isolates the query layer. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. The only differences are the extra tools and a short usage note, whose tokens count as overhead.
 
 ## Problems tracked
 
 | ID | Problem | Measured by |
 |---|---|---|
-| P1 | Reading cost: re-reads, whole files, round trips | input tokens, tool calls |
-| P2 | Wrong code → retries | compile/test failures per task |
-| P3 | Hallucinated or unknown APIs | compile errors on unknown symbols |
-| P4 | Fragile edits | failed edit tool calls |
+| P1 | Reading cost: irrelevant reads, re-reads, round trips | input tokens, turns, reading precision |
+| P2 | Wrong code → retries | compile/test failures per run |
+| P3 | Unknown or hallucinated APIs | compile errors on unknown symbols |
+| P4 | Fragile edits | failed edit calls |
 | P6 | Noisy tool output | tokens in tool results |
-| P8 | Context decay in long sessions | chained-run pass rate, re-reads |
+| P8 | Context decay in long sessions | chained-run pass rate, compactions |
 
-P0 (intent) is out of scope. Specs are written to be unambiguous so it doesn't add noise.
+P0 (building the wrong thing) is out of scope; specs are written to be unambiguous so it doesn't add noise.
+
+## Suites
+
+| Suite | Codebase | Tasks | Purpose |
+|---|---|---|---|
+| `urlshort` | URL shortener written for the benchmark (~500 lines) | T1–T5: build, feature, bugfix, refactor, fresh-session change | small control; validates the pipeline |
+| `actual` | [Actual Budget](https://github.com/actualbudget/actual) (MIT), ~49k lines in `loot-core`, pinned commit | AB1–AB4: two seeded bugs, two cross-module features | where reading cost shows; see `suites/actual/README.md` |
+
+Every run is evaluated by hidden tests the agent never sees: black-box HTTP tests for `urlshort`, and tests through the public `@actual-app/api` package for `actual`. Both suites also run the project's own tests, restored from the original before checking.
+
+## Metrics
+
+- **Primary:** cost per passing task = total USD ÷ runs that pass every rule (regression included).
+- **Secondary:** tokens by billing class, turns, tool calls by tool, reading precision and core recall (`actual`), repeat reads, failed edits, compile failures, wall time, per-rule pass rates.
+- **Reading precision:** of everything the agent read (Read, Grep, code-reading shell commands, and query-tool output), the share that came from the task's ground-truth relevant files.
+
+## Running it
+
+Everything runs in GitHub Actions; no local machine is needed.
+
+| Workflow | Trigger | What it does | Cost |
+|---|---|---|---|
+| `ci` | every push | self-check of the urlshort suite through the real pipeline; query-layer typecheck and tests | free |
+| `validate-actual` | push to the Actual suite, harness or query layer | every Actual task: the start state fails exactly as expected and the reference fix passes; the query layer reaches every task's core files | free |
+| `bench-baseline` | manual | arm A batch: suite × tasks × runs | API credits |
+| `bench-query` | manual | arm B batch, same steps (`_bench.yml` is shared) | API credits |
+
+Run **both arms in the same period**: providers can update a model behind the same name, and a same-day baseline rules that out as an explanation.
+
+Batch results are committed to `results/<arm>/<task>/run-<n>.json` and summarized in `results/summary.md`. Transcripts and logs are kept as workflow artifacts for 30 days.
+
+Secrets: `DEEPSEEK_API_KEY` (currently used) or `ANTHROPIC_API_KEY`. Each run has a hard spending cap (`max_budget_usd`, default $0.50).
+
+## How a run is kept honest
+
+- **Hidden tests and answers:** the agent's workspace is built from the start state only. Tests, reference solutions, ground truth and the pristine upstream copy are deleted from the runner before the agent starts, and evaluation uses a fresh checkout afterwards.
+- **Tests can't be gamed:** the project's original tests are copied back over the agent's versions before scoring.
+- **Provider-only network:** the agent runs as a separate Linux user whose only network path is a local proxy that tunnels to the model API. A CI step proves github.com is unreachable before each run. Runs that used the network without this policy are reported as invalid.
+- **Crashes aren't failures:** a provider error mid-run is recorded as a crash and listed, not scored.
+- **Self-checks:** every suite has a fake-agent check (the known-good solution plays the agent), so a harness bug shows up in CI instead of in the results.
+
+Details: `harness/PROTOCOL.md`.
+
+## Findings so far
+
+Arm A, `deepseek-v4-flash`, provider-only network, 6 runs per task (2026-11-03):
+
+| Task | Pass | Median cost | Turns | Input tokens | Reading tokens | Files read | Read precision |
+|---|---|---|---|---|---|---|---|
+| AB1 ranking bug | 6/6 | $0.019 | 58 | 2.0M | 44k | 39 | 30% |
+| AB2 `startsWith` | 6/6 | $0.023 | 98 | 3.0M | 40k | 98 | 35% |
+| AB3 upcoming API | 6/6 | $0.017 | 65 | 1.8M | 28k | 41 | 25% |
+| AB4 budget bug | 6/6 | $0.009 | 35 | 0.6M | 20k | 28 | 35% |
+
+- **Most reading is irrelevant:** 65–75% of what the agent reads is outside the task's relevant files.
+- **Context is re-sent every turn:** a run reads 20–44k tokens, but total input is 0.6–3M, because everything read stays in context and is paid for again on each later turn. Reading less and taking fewer turns both compound.
+- **Quality is at the ceiling** (24/24): arm B has to win on cost, turns and reading without losing passes.
+- **Run-to-run variance** in cost is 12–27%, so 6 runs per arm can detect a difference of roughly 25–30%.
+- **The query layer reaches every task's core files in one or two queries** (200–600 tokens of output, `query/test/actual.test.ts`).
+- The `urlshort` control: 26/26 runs passed at about $0.01 each, with almost no reading. It's too small to separate the arms, which is why the `actual` suite exists.
+
+## Incident log
+
+What went wrong, how it was caught, and what changed. Invalidated records are kept under `results/archive/`.
+
+| Date | What happened | Caught by | Fix |
+|---|---|---|---|
+| 2026-11-03 | T4 failed 5/5 with no failing rule: the harness set `STORAGE=""` instead of leaving it unset, and the evaluator dropped tests that were skipped because the service never started | a failure without a reason | unset in harness; skipped-because-crashed counts as failed; fixtures in `harness/fixtures/` |
+| 2026-11-03 | First bench run crashed at the summary step when no records came back | run log | report creates `results/` |
+| 2026-11-03 | Seeded bug for AB1 (rule indexer) had no visible effect through the API: every rule also lands in a catch-all index | hidden test passed on seeded code | AB1 moved to the rule-ranking comparator |
+| 2026-11-03 | Two runs crashed at the same moment on a DeepSeek connection drop; the runner died and no record was written | missing records | crashes recorded (`error_agent_crash`) and listed, not scored; SDK stderr saved |
+| 2026-11-03 | **An agent downloaded the upstream file with `curl` and diffed it against the seeded workspace** (AB1 run 5; run 1 likely the same). It found the repo URL in `AGENTS.md` and the version in `package.json` | network-command flag | provider-only network per run; profile says no network; contaminated runs invalid; Actual baseline archived and rerun |
+| 2026-11-03 | Reading metric counted only the Read tool, but agents read mostly via `sed`/`cat`/`grep`: one run showed 0 tokens read | implausible numbers | shell, Grep and query-tool output attributed to files |
 
 ## Layout
 
 ```
-suites/actual/  Actual Budget suite: real large codebase (see its README)
-specs/        shared, tech-neutral task specs for the urlshort suite (frozen before first run)
-acceptance/   shared hidden black-box tests (HTTP), one suite for all arms
-perf/         shared load profile (k6)
-arms/         per-arm profile + starter scaffold (tech-specific)
-harness/      run-record contract and run protocol
-reference/    reference solutions = start states for later tasks (never shown to agents)
+query/          the query layer: CONTRACT.md (interface contract), src/, tests
+suites/actual/  Actual Budget suite: specs, hidden tests, seeded patches, ground truth, scripts
+specs/          urlshort task specs (frozen)
+acceptance/     urlshort hidden HTTP tests
+perf/           urlshort load profile (k6)
+reference/      urlshort reference solutions = start states (hidden)
+arms/           per-arm agent config (tools, MCP servers, usage notes) and urlshort profiles/scaffold
+harness/        runner, run-record schema, protocol, self-checks, sandbox (egress proxy), fixtures
+results/        run records, summary.md, archive/ of invalidated batches
 ```
-
-**Isolation rule:** an agent workspace is built only from `arms/<arm>/scaffold/` (or a reference snapshot) plus `specs/<task>.md`. `acceptance/`, `perf/` and `reference/` are never visible to the agent.
-
-## Primary metric
-
-**Cost per passing task** = total USD across runs ÷ runs passing all acceptance rules and perf thresholds.
-
-Secondary: tokens by class (uncached input, cache read, cache write, output), tool calls, wall time, compile/test failures, per-rule pass rate, p50/p95/p99 latency.
-
-## Protocol (summary)
-
-- Same model, harness version and settings across arms.
-- ≥5 runs per task per arm.
-- Each task starts from a fixed reference state, so one failure doesn't poison the next. One fully chained run per arm is recorded separately (P8).
-- Specs are byte-identical across arms.
-
-See `harness/PROTOCOL.md`.
 
 ## Status
 
-- [x] Spec template and conventions
-- [x] URL shortener tasks T1–T5 (small control codebase)
-- [x] Acceptance suite skeleton
-- [x] Run-record contract
-- [x] Reference solution for T5 (passes all 70 acceptance tests, both storage modes)
-- [x] Reference snapshots T1, T2, T3-start, T3, T4 (each validated at its task level)
-- [x] Large real codebase: `suites/actual` (Actual Budget, 4 tasks, reading-precision metric)
-- [x] Harness runner (Claude Agent SDK, usage + metrics, acceptance, perf, report)
-- [x] GitHub Actions: `ci` self-check on every push, `bench` manual benchmark runs
+- [x] Benchmark harness: runner, run records, spending cap, crash handling, report
+- [x] `urlshort` suite with reference solutions and self-check
+- [x] `actual` suite: 4 tasks, hidden tests, ground truth, self-check
+- [x] Honest runs: hidden material removed, tests restored, provider-only network
+- [x] Arm A baseline on `actual` (DeepSeek Flash, 24 runs)
+- [x] Query layer v1: contract, TypeScript indexer, MCP server, tests
+- [ ] Arm B batch on `actual`, with a same-day arm A rerun
+- [ ] Compare B vs A; decide what the query layer needs next
+- [ ] Headline run on a Claude model
+- [ ] Arm C (language)
