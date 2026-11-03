@@ -1,0 +1,97 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 12,
+  "chained": false,
+  "startState": "actual/AB2",
+  "specSha256": "a1b6c9a3316e43536a51ccfb90a60f6b8ee8767276240d41aca119b2672982b3",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 63924,
+    "cacheRead": 2806912,
+    "cacheWrite": 0,
+    "output": 20271,
+    "toolResultTokens": 46361,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 75,
+    "toolCalls": 74,
+    "toolCallsByName": {
+      "Bash": 49,
+      "Grep": 4,
+      "Read": 10,
+      "Edit": 9,
+      "Write": 2
+    },
+    "fileReads": 10,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 1,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 228203,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB2 R1": true,
+      "AB2 R2": true,
+      "AB2 R3": true,
+      "AB2 R4": true,
+      "AB2 R5": true,
+      "AB2 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 133,
+    "readChars": 182666,
+    "relevantChars": 78183,
+    "coreChars": 64839,
+    "precision": 0.42801068617038746,
+    "coreRecall": 1,
+    "readTokens": 45667
+  },
+  "costUsd": 0.022484593600000005,
+  "costSource": "harness/prices.json",
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Grep": {
+      "calls": 4,
+      "outTokens": 4307,
+      "carriedTokens": 222585
+    },
+    "Bash": {
+      "calls": 49,
+      "outTokens": 18802,
+      "carriedTokens": 542941
+    },
+    "Read": {
+      "calls": 10,
+      "outTokens": 22693,
+      "carriedTokens": 1163517
+    },
+    "Edit": {
+      "calls": 9,
+      "outTokens": 463,
+      "carriedTokens": 14399
+    },
+    "Write": {
+      "calls": 2,
+      "outTokens": 107,
+      "carriedTokens": 1863
+    }
+  }
+}

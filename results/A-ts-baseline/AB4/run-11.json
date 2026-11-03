@@ -1,0 +1,97 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 11,
+  "chained": false,
+  "startState": "actual/AB4",
+  "specSha256": "ad84b917a1fa928bb20b220ef396e0a3f8cc28c28535b7786c2e408807abae54",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 42496,
+    "cacheRead": 1968512,
+    "cacheWrite": 0,
+    "output": 17676,
+    "toolResultTokens": 25848,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 75,
+    "toolCalls": 74,
+    "toolCallsByName": {
+      "Bash": 42,
+      "Grep": 3,
+      "Read": 20,
+      "Edit": 8,
+      "Write": 1
+    },
+    "fileReads": 20,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 12,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 256543,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB4 R1": true,
+      "AB4 R2": true,
+      "AB4 R3": true,
+      "AB4 R4": true,
+      "AB4 R5": true,
+      "AB4 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 35,
+    "readChars": 101129,
+    "relevantChars": 32003,
+    "coreChars": 16716,
+    "precision": 0.31645719823196117,
+    "coreRecall": 1,
+    "readTokens": 25282
+  },
+  "costUsd": 0.0164105536,
+  "costSource": "harness/prices.json",
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 42,
+      "outTokens": 9017,
+      "carriedTokens": 318481
+    },
+    "Grep": {
+      "calls": 3,
+      "outTokens": 3202,
+      "carriedTokens": 148553
+    },
+    "Read": {
+      "calls": 20,
+      "outTokens": 13308,
+      "carriedTokens": 574186
+    },
+    "Edit": {
+      "calls": 8,
+      "outTokens": 285,
+      "carriedTokens": 6704
+    },
+    "Write": {
+      "calls": 1,
+      "outTokens": 45,
+      "carriedTokens": 1665
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 12,
+  "chained": false,
+  "startState": "actual/AB1",
+  "specSha256": "3ed4a82cf3927a943b3086ced320b193ae91463d7a5e760a67aa3f4de5276f1c",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 48343,
+    "cacheRead": 1108096,
+    "cacheWrite": 0,
+    "output": 13180,
+    "toolResultTokens": 37022,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 44,
+    "toolCalls": 43,
+    "toolCallsByName": {
+      "Bash": 27,
+      "Grep": 4,
+      "Read": 10,
+      "Edit": 1,
+      "Write": 1
+    },
+    "fileReads": 10,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 2,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 116818,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB1 R1": true,
+      "AB1 R2": true,
+      "AB1 R3": true,
+      "AB1 R4": true,
+      "AB1 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 32,
+    "readChars": 146490,
+    "relevantChars": 63995,
+    "coreChars": 12108,
+    "precision": 0.4368557580722234,
+    "coreRecall": 1,
+    "readTokens": 36623
+  },
+  "costUsd": 0.013561088800000001,
+  "costSource": "harness/prices.json",
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Grep": {
+      "calls": 4,
+      "outTokens": 2391,
+      "carriedTokens": 59749
+    },
+    "Bash": {
+      "calls": 27,
+      "outTokens": 12715,
+      "carriedTokens": 201678
+    },
+    "Read": {
+      "calls": 10,
+      "outTokens": 21826,
+      "carriedTokens": 513448
+    },
+    "Edit": {
+      "calls": 1,
+      "outTokens": 51,
+      "carriedTokens": 969
+    },
+    "Write": {
+      "calls": 1,
+      "outTokens": 45,
+      "carriedTokens": 360
+    }
+  }
+}

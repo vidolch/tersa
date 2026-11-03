@@ -1,0 +1,97 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 11,
+  "chained": false,
+  "startState": "actual/AB2",
+  "specSha256": "a1b6c9a3316e43536a51ccfb90a60f6b8ee8767276240d41aca119b2672982b3",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 52657,
+    "cacheRead": 2745728,
+    "cacheWrite": 0,
+    "output": 20511,
+    "toolResultTokens": 35628,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 88,
+    "toolCalls": 87,
+    "toolCallsByName": {
+      "Bash": 47,
+      "Grep": 6,
+      "Read": 21,
+      "Edit": 10,
+      "Write": 3
+    },
+    "fileReads": 21,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 230322,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB2 R1": true,
+      "AB2 R2": true,
+      "AB2 R3": true,
+      "AB2 R4": true,
+      "AB2 R5": true,
+      "AB2 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 93,
+    "readChars": 140011,
+    "relevantChars": 52122,
+    "coreChars": 43775,
+    "precision": 0.37227075015534494,
+    "coreRecall": 1,
+    "readTokens": 35003
+  },
+  "costUsd": 0.0208030984,
+  "costSource": "harness/prices.json",
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Grep": {
+      "calls": 6,
+      "outTokens": 2921,
+      "carriedTokens": 199204
+    },
+    "Bash": {
+      "calls": 47,
+      "outTokens": 15955,
+      "carriedTokens": 517613
+    },
+    "Read": {
+      "calls": 21,
+      "outTokens": 16149,
+      "carriedTokens": 882513
+    },
+    "Edit": {
+      "calls": 10,
+      "outTokens": 460,
+      "carriedTokens": 17310
+    },
+    "Write": {
+      "calls": 3,
+      "outTokens": 152,
+      "carriedTokens": 2816
+    }
+  }
+}
