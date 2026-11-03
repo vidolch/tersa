@@ -1,0 +1,110 @@
+{
+  "suite": "actual",
+  "arm": "B-ts-query",
+  "task": "AB2",
+  "run": 2,
+  "chained": false,
+  "startState": "actual/AB2",
+  "specSha256": "a1b6c9a3316e43536a51ccfb90a60f6b8ee8767276240d41aca119b2672982b3",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 59662,
+    "cacheRead": 3344896,
+    "cacheWrite": 0,
+    "output": 21537,
+    "toolResultTokens": 38339,
+    "contextOverheadTokens": 320
+  },
+  "agent": {
+    "turns": 102,
+    "toolCalls": 101,
+    "toolCallsByName": {
+      "Bash": 20,
+      "mcp__tersa__code_find": 28,
+      "mcp__tersa__code_get": 8,
+      "Read": 33,
+      "Edit": 10,
+      "Write": 2
+    },
+    "fileReads": 33,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 3,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 267255,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB2 R1": true,
+      "AB2 R2": true,
+      "AB2 R3": true,
+      "AB2 R4": true,
+      "AB2 R5": true,
+      "AB2 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 115,
+    "readChars": 148193,
+    "relevantChars": 49148,
+    "coreChars": 38571,
+    "precision": 0.3316485933883517,
+    "coreRecall": 1,
+    "readTokens": 37048
+  },
+  "costUsd": 0.0237487488,
+  "costSource": "harness/prices.json",
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "steering": {
+    "redirects": 4,
+    "byTool": {
+      "Read": 1,
+      "Bash": 3
+    }
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 20,
+      "outTokens": 5908,
+      "carriedTokens": 121441
+    },
+    "mcp__tersa__code_find": {
+      "calls": 28,
+      "outTokens": 10087,
+      "carriedTokens": 605486
+    },
+    "mcp__tersa__code_get": {
+      "calls": 8,
+      "outTokens": 6017,
+      "carriedTokens": 399827
+    },
+    "Read": {
+      "calls": 33,
+      "outTokens": 15894,
+      "carriedTokens": 726404
+    },
+    "Edit": {
+      "calls": 10,
+      "outTokens": 352,
+      "carriedTokens": 15942
+    },
+    "Write": {
+      "calls": 2,
+      "outTokens": 96,
+      "carriedTokens": 2800
+    }
+  }
+}

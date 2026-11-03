@@ -1,0 +1,109 @@
+{
+  "suite": "actual",
+  "arm": "B-ts-query",
+  "task": "AB4",
+  "run": 3,
+  "chained": false,
+  "startState": "actual/AB4",
+  "specSha256": "ad84b917a1fa928bb20b220ef396e0a3f8cc28c28535b7786c2e408807abae54",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 33847,
+    "cacheRead": 692608,
+    "cacheWrite": 0,
+    "output": 12141,
+    "toolResultTokens": 20901,
+    "contextOverheadTokens": 320
+  },
+  "agent": {
+    "turns": 45,
+    "toolCalls": 44,
+    "toolCallsByName": {
+      "Bash": 17,
+      "mcp__tersa__code_find": 6,
+      "mcp__tersa__code_outline": 2,
+      "Read": 13,
+      "Edit": 5,
+      "Write": 1
+    },
+    "fileReads": 13,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 132177,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB4 R1": true,
+      "AB4 R2": true,
+      "AB4 R3": true,
+      "AB4 R4": true,
+      "AB4 R5": true,
+      "AB4 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 45,
+    "readChars": 79540,
+    "relevantChars": 25819,
+    "coreChars": 16056,
+    "precision": 0.3246039728438522,
+    "coreRecall": 1,
+    "readTokens": 19885
+  },
+  "costUsd": 0.010077362400000001,
+  "costSource": "harness/prices.json",
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "steering": {
+    "redirects": 4,
+    "byTool": {
+      "Bash": 4
+    }
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 17,
+      "outTokens": 4183,
+      "carriedTokens": 57049
+    },
+    "mcp__tersa__code_find": {
+      "calls": 6,
+      "outTokens": 5039,
+      "carriedTokens": 77622
+    },
+    "mcp__tersa__code_outline": {
+      "calls": 2,
+      "outTokens": 1120,
+      "carriedTokens": 26251
+    },
+    "Read": {
+      "calls": 13,
+      "outTokens": 10296,
+      "carriedTokens": 186968
+    },
+    "Edit": {
+      "calls": 5,
+      "outTokens": 222,
+      "carriedTokens": 1774
+    },
+    "Write": {
+      "calls": 1,
+      "outTokens": 45,
+      "carriedTokens": 360
+    }
+  }
+}
