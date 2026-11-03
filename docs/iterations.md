@@ -186,7 +186,41 @@ Per tool (B v1.2): Read output fell to 8–18k per run (v1.1: 10–40k); redirec
 
 ---
 
-## Iteration 7 — First full comparison (planned)
-**Date** 2026-11-03 · **Arms** A runs 9–14 and B v1.2 runs 2–7, 6 runs per task each, started together (3 concurrent runs per arm) · **Status** running
+## Iteration 7 — First full comparison: B v1.2 vs A
+**Date** 2026-11-03 · **Arms** A runs 9–14 and B v1.2 runs 2–7, 6 runs per task each, started together (3 concurrent runs per arm) · **Records** `results/A-ts-baseline/AB*/run-9..14`, `results/B-ts-query/AB*/run-2..7`
 
-**Hypothesis.** B v1.2 costs less than A on the Actual suite at equal pass rate; with 12–27% run-to-run variance, 6 runs per arm can show a difference of about 25–30%.
+**Hypothesis.** B v1.2 costs less than A at equal pass rate (iteration 6 pilot: −13% on AB2, −35% on AB3).
+
+**Result.**
+| Task | Group | Runs | Pass | Median cost | Median turns | Median input | Median reading | Read precision | Query calls | Redirects | Read share of carried |
+|------|-------|------|------|-------------|--------------|--------------|----------------|----------------|-------------|-----------|-----------------------|
+| AB1 | A (it.7) | 6 | 6/6 | $0.015 | 44.5 | 1.37M | 35k | 31% | 0 | 0 | 67% |
+| AB1 | B v1.2 (it.7) | 6 | 6/6 | $0.013 | 55.5 | 1.33M | 23k | 25% | 16.5 | 4 | 40% |
+| AB2 | A (it.7) | 6 | 6/6 | $0.022 | 90 | 2.83M | 38k | 37% | 0 | 0 | 58% |
+| AB2 | B v1.2 (it.7) | 6 | 6/6 | $0.027 | 96 | 3.83M | 40k | 33% | 26 | 4 | 40% |
+| AB3 | A (it.7) | 6 | 6/6 | $0.013 | 59.5 | 1.10M | 26k | 25% | 0 | 0 | 23% |
+| AB3 | B v1.2 (it.7) | 6 | 6/6 | $0.017 | 74 | 1.94M | 27k | 28% | 16 | 4 | 37% |
+| AB4 | A (it.7) | 6 | 6/6 | $0.011 | 47 | 0.84M | 23k | 29% | 0 | 0 | 42% |
+| AB4 | B v1.2 (it.7) | 6 | 6/6 | $0.010 | 41 | 0.84M | 19k | 31% | 10 | 2.5 | 35% |
+
+`node src/compare.ts "A (it.7)=results/A-ts-baseline@9-14" "B v1.2 (it.7)=results/B-ts-query@2-7" --suite actual`
+
+Mean cost and a two-sided permutation test on the difference of means (20,000 shuffles):
+
+| Task | A mean | B mean | Difference | p |
+|---|---|---|---|---|
+| AB1 | $0.0154 | $0.0133 | −14% | 0.46 |
+| AB2 | $0.0224 | $0.0255 | +14% | 0.12 |
+| AB3 | $0.0135 | $0.0172 | +28% | 0.09 |
+| AB4 | $0.0120 | $0.0104 | −14% | 0.28 |
+
+All 48 runs passed, no network attempts, no crashes. Totals: A $0.380 for 24 passes ($0.0158 per pass), B $0.398 ($0.0166 per pass, +5%).
+
+**Conclusion.** Hypothesis rejected: no significant difference on any task, and the signs disagree. The pilot's gains were noise (AB3 went from −35% in the pilot to +28%). Why:
+- Query output replaced Read output roughly one-for-one: Read's share of carried input fell (35–40% vs 23–67%), total reading stayed about the same.
+- Read precision did not improve (25–33% vs 25–37%): the agent reads as broadly as before, through a different interface.
+- B takes more turns on three of four tasks (redirects plus extra query calls), and every turn re-sends the context.
+
+A better reading interface alone does not lower cost for this model. Cost is driven by turns × context size, and the tools change neither. Candidate directions: give the agent a task-scoped slice of the code up front (fewer orientation turns); test on a Claude model (DeepSeek rarely batched queries); keep context from growing (drop tool output once used).
+
+**Statistics note.** Single-run pilots were misleading twice (iteration 6 vs 7). From now on a pilot only checks that a change works; claims about cost need 6+ runs per arm in the same period, reported with a test.
