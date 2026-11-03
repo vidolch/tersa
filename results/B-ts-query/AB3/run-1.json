@@ -1,0 +1,79 @@
+{
+  "suite": "actual",
+  "arm": "B-ts-query",
+  "task": "AB3",
+  "run": 1,
+  "chained": false,
+  "startState": "actual/AB3",
+  "specSha256": "7e0fb28c9b577e2011238b1249121d7e61af14d7e381c0bdd5642cc2d45043b9",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 46745,
+    "cacheRead": 1978112,
+    "cacheWrite": 0,
+    "output": 18452,
+    "toolResultTokens": 29804,
+    "contextOverheadTokens": 280
+  },
+  "agent": {
+    "turns": 76,
+    "toolCalls": 75,
+    "toolCallsByName": {
+      "Bash": 28,
+      "mcp__tersa__code_find": 6,
+      "mcp__tersa__code_outline": 1,
+      "mcp__tersa__code_get": 5,
+      "Read": 26,
+      "Edit": 8,
+      "Write": 1
+    },
+    "fileReads": 26,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 223325,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB3 R1": true,
+      "AB3 R2": true,
+      "AB3 R3": true,
+      "AB3 R4": true,
+      "AB3 R5": true,
+      "AB3 R6": true,
+      "AB3 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 88,
+    "readChars": 113962,
+    "relevantChars": 29048,
+    "coreChars": 20604,
+    "precision": 0.25489198153770554,
+    "coreRecall": 1,
+    "readTokens": 28491
+  },
+  "costUsd": 0.0172495736,
+  "costSource": "harness/prices.json",
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "steering": {
+    "redirects": 7,
+    "byTool": {
+      "Bash": 7
+    }
+  }
+}
