@@ -254,6 +254,24 @@
         "type": "string"
       },
       "description": "flagged Bash commands, first 300 chars each"
+    },
+    "network": {
+      "type": "object",
+      "properties": {
+        "policy": {
+          "type": "string",
+          "description": "provider-only = agent egress limited to the model API; none = unrestricted"
+        },
+        "deniedConnections": {
+          "type": "integer"
+        },
+        "denied": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     }
   }
 }

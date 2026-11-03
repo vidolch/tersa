@@ -10,3 +10,5 @@
 | Network | not needed; no servers are involved |
 
 The task is checked through the public Node API package `@actual-app/api` (`packages/api`), built from your workspace, plus the repository's existing tests.
+
+**Network:** work only from the code in this workspace. There is no network access apart from the model API; do not fetch the upstream project, other copies of it, or packages.

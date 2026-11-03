@@ -162,6 +162,7 @@ if (does("agent")) {
       stopReason: metrics.resultSubtype,
       crash: metrics.crash,
       networkCommandLog: metrics.networkCommandLog,
+      networkPolicy: process.env.TERSA_NETWORK_POLICY ?? "none",
       reads: metrics.reads,
     }),
   );
@@ -184,6 +185,7 @@ if (does("eval")) {
     reads?: Record<string, number>;
     crash?: string | null;
     networkCommandLog?: string[];
+    networkPolicy?: string;
   };
 
   const acceptance =
@@ -213,6 +215,18 @@ if (does("eval")) {
     costSource = "sdk (wrong rates)";
   }
 
+  // Egress the proxy refused during the agent phase (CI only).
+  const egressLog = process.env.TERSA_EGRESS_LOG;
+  const denied =
+    egressLog && existsSync(egressLog)
+      ? readFileSync(egressLog, "utf8").split("\n").filter((l) => l.includes(" DENY "))
+      : [];
+  const network = {
+    policy: am.networkPolicy ?? "none",
+    deniedConnections: denied.length,
+    ...(denied.length ? { denied: denied.slice(0, 50).map((l) => l.split(" DENY ")[1]) } : {}),
+  };
+
   const record = {
     suite,
     arm,
@@ -234,6 +248,7 @@ if (does("eval")) {
     stopReason: am.stopReason ?? null,
     ...(am.crash ? { crash: am.crash } : {}),
     ...(am.networkCommandLog?.length ? { networkCommandLog: am.networkCommandLog } : {}),
+    network,
   };
 
   const ajv = new Ajv2020({ strict: false });

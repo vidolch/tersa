@@ -28,3 +28,7 @@
 
 ## Invalidated results
 - 2026-11-03, `A-ts-baseline` T4 runs 2–6 (deepseek-v4-flash): deleted and rerun. The harness passed `STORAGE=""` instead of leaving it unset, and the evaluator dropped skipped tests, so the runs were marked failed without a failing rule. Fixed in the acceptance runner and `evaluate.ts`; covered by `harness/fixtures/`.
+- 2026-11-03, `A-ts-baseline` AB1–AB4 runs 1–6 (deepseek-v4-flash): archived to `results/archive/2026-11-03-actual-pre-isolation/`. AB1 runs 1 and 5 downloaded the upstream source with `curl` and diffed it against the seeded workspace. All runs predate the provider-only network policy and the profile's network line, and their reading metric counted only the Read tool. Rerun under the new setup.
+
+## Network policy
+The agent phase runs as a separate user whose only egress is a local proxy that tunnels to the model provider's API (`harness/sandbox/egress-proxy.mjs`); a CI step proves github.com is unreachable before the agent starts. Identical for every arm. Records carry `network.policy`; runs that used the network without `provider-only` are reported as invalid and not scored.

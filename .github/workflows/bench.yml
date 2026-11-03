@@ -86,6 +86,8 @@ jobs:
     env:
       ARGS: --suite ${{ inputs.suite }} --arm ${{ inputs.arm }} --task ${{ matrix.task }} --run ${{ matrix.run }} --force
       ACTUAL_CACHE: ${{ github.workspace }}/../actual-cache
+      RAW: /tmp/tersa-raw
+      PROXY: http://127.0.0.1:8899
     steps:
       - uses: actions/checkout@v4
         with:
@@ -106,8 +108,10 @@ jobs:
           key: yarn-actual-${{ hashFiles('bench/suites/actual/suite.json') }}
 
       - name: Prepare workspace
+        env:
+          RAW: /tmp/tersa-raw
         working-directory: bench/harness/runner
-        run: node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RUNNER_TEMP/raw" --phase prepare
+        run: node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RAW" --phase prepare
 
       - name: Hide tests, solutions and upstream source from the agent
         run: |
@@ -118,16 +122,55 @@ jobs:
           done
           find bench -name '*.test.ts' -path '*acceptance*' | grep . && exit 1 || true
 
+      # The agent runs as user "agent". A firewall rejects all of that user's
+      # traffic except to a local proxy, which only tunnels to the provider API.
+      # Same policy for every arm. The next step proves it before the agent starts.
+      - name: Isolate the agent's network
+        env:
+          PROVIDER: ${{ inputs.provider }}
+        run: |
+          case "$PROVIDER" in deepseek) HOSTS=api.deepseek.com ;; anthropic) HOSTS=api.anthropic.com ;; esac
+          echo "PROVIDER_HOST=$HOSTS" >> "$GITHUB_ENV"
+          sudo useradd -m agent
+          cp -r bench "$RUNNER_TEMP/agent-bench"
+          sudo chown -R agent "$RUNNER_TEMP/agent-bench" "$RAW"
+          sudo chmod o+x "$RUNNER_TEMP" /home/runner /home/runner/work
+          nohup node bench/harness/sandbox/egress-proxy.mjs 8899 "$HOSTS" "$RUNNER_TEMP/egress.log" > /dev/null 2>&1 &
+          for ipt in iptables ip6tables; do
+            sudo $ipt -A OUTPUT -o lo -m owner --uid-owner agent -j ACCEPT
+            sudo $ipt -A OUTPUT -m owner --uid-owner agent -j REJECT
+          done
+          sleep 1
+
+      - name: Verify the isolation
+        run: |
+          as_agent() { sudo -u agent -H env HTTPS_PROXY="$PROXY" HTTP_PROXY="$PROXY" NO_PROXY= "$@"; }
+          if as_agent curl -sS --max-time 10 -o /dev/null https://github.com; then echo "github.com reachable via proxy"; exit 1; fi
+          if as_agent curl -sS --max-time 10 --noproxy '*' -o /dev/null https://github.com; then echo "github.com reachable directly"; exit 1; fi
+          if as_agent curl -sS --max-time 10 --noproxy '*' -o /dev/null "https://$PROVIDER_HOST"; then echo "provider reachable without proxy"; exit 1; fi
+          code=$(as_agent curl -s --max-time 15 -o /dev/null -w '%{http_code}' "https://$PROVIDER_HOST" || true)
+          [ "$code" != "000" ] || { echo "provider not reachable through proxy"; exit 1; }
+          echo "isolation ok: only $PROVIDER_HOST reachable (HTTP $code)"
+
       - name: Run agent
-        working-directory: bench/harness/runner
+        working-directory: ${{ runner.temp }}/agent-bench/harness/runner
         env:
           ANTHROPIC_API_KEY: ${{ inputs.provider == 'anthropic' && secrets.ANTHROPIC_API_KEY || '' }}
           DEEPSEEK_API_KEY: ${{ inputs.provider == 'deepseek' && secrets.DEEPSEEK_API_KEY || '' }}
           TERSA_MODEL: ${{ inputs.model }}
         run: |
-          node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RUNNER_TEMP/raw" --phase agent \
+          sudo -u agent -H env PATH="$PATH" HTTPS_PROXY="$PROXY" HTTP_PROXY="$PROXY" NO_PROXY= \
+            ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" DEEPSEEK_API_KEY="$DEEPSEEK_API_KEY" TERSA_MODEL="$TERSA_MODEL" \
+            CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 TERSA_NETWORK_POLICY=provider-only \
+            node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RAW" --phase agent \
             --provider "${{ inputs.provider }}" --max-turns "${{ inputs.max_turns }}" \
             --max-budget-usd "${{ inputs.max_budget_usd }}"
+
+      - name: Restore ownership
+        if: always()
+        run: |
+          sudo chown -R "$(id -u)" "$RAW"
+          cp "$RUNNER_TEMP/egress.log" "$RAW/egress.log" 2>/dev/null || true
 
       - uses: actions/checkout@v4
         with:
@@ -140,7 +183,9 @@ jobs:
           if [ "${{ inputs.suite }}" = actual ]; then (cd eval/suites/actual/acceptance && npm ci --no-audit --no-fund); fi
       - name: Evaluate
         working-directory: eval/harness/runner
-        run: node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RUNNER_TEMP/raw" --phase eval --skip-perf
+        env:
+          TERSA_EGRESS_LOG: /tmp/tersa-raw/egress.log
+        run: node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RAW" --phase eval --skip-perf
 
       - uses: actions/upload-artifact@v4
         with:
@@ -151,8 +196,9 @@ jobs:
         with:
           name: logs-${{ matrix.task }}-${{ matrix.run }}
           path: |
-            ${{ runner.temp }}/raw/${{ inputs.arm }}/${{ matrix.task }}/run-${{ matrix.run }}
-            !${{ runner.temp }}/raw/**/node_modules/**
+            /tmp/tersa-raw/${{ inputs.arm }}/${{ matrix.task }}/run-${{ matrix.run }}
+            /tmp/tersa-raw/egress.log
+            !/tmp/tersa-raw/**/node_modules/**
           retention-days: 30
 
   commit:

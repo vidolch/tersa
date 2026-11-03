@@ -37,6 +37,20 @@ const TEST_CMD = /\bvitest\b|\bnpm (run )?test\b|\bnode --test\b|\bjest\b/;
 
 const est = (chars: number) => Math.round(chars / 4);
 
+// Shell commands that read code (as opposed to running tests or builds, whose
+// output is P6 noise, not reading).
+const READ_CMD = /(^|[|;&]\s*|\bcd\s+\S+\s*&&\s*)(cat|sed|head|tail|nl|awk|less|more|grep|rg|ag|git\s+(show|grep|diff|log\s+-p))\b/;
+const SOURCE_FILE = /(?:^|\s|['"=])((?:\.{0,2}\/)?[\w@.\-/]*\.(?:tsx?|jsx?|mts|cts|mjs|cjs|json|md|pegjs|sql))\b/g;
+// "path:line:" or "path:line-" or "path:" prefixes, as printed by grep -n / rg / Grep.
+const LINE_PREFIX = /^((?:\.{0,2}\/)?[\w@.\-/]+\.(?:tsx?|jsx?|mts|cts|mjs|cjs|json|md|pegjs|sql))[:-](?:\d+[:-])?/;
+export const UNATTRIBUTED = "(unattributed)";
+
+function resultText(content: unknown): string {
+  if (typeof content === "string") return content;
+  if (Array.isArray(content)) return content.map((b: any) => (typeof b?.text === "string" ? b.text : "")).join("\n");
+  return "";
+}
+
 function contentChars(content: unknown): number {
   if (typeof content === "string") return content.length;
   if (Array.isArray(content)) {
@@ -134,9 +148,7 @@ export class MetricsCollector {
           if (b?.type !== "tool_result") continue;
           this.toolResultChars += contentChars(b.content);
           const use = this.toolUses.get(b.tool_use_id);
-          if (use?.name === "Read" && !b.is_error && typeof use.input?.file_path === "string") {
-            this.reads[use.input.file_path] = (this.reads[use.input.file_path] ?? 0) + contentChars(b.content);
-          }
+          if (use && !b.is_error) this.attributeReading(use, b.content);
           if (!use || !b.is_error) continue;
           if (EDIT_TOOLS.has(use.name)) this.m.failedEdits += 1;
           if (use.name === "Bash" && COMPILE_CMD.test(String(use.input?.command ?? ""))) {
@@ -165,6 +177,39 @@ export class MetricsCollector {
         Object.assign(this.usage, u);
         break;
       }
+    }
+  }
+
+  private addRead(path: string, chars: number) {
+    if (chars > 0) this.reads[path] = (this.reads[path] ?? 0) + chars;
+  }
+
+  /**
+   * Reading = output of Read, Grep and code-reading shell commands, attributed
+   * to the file it came from. Output that can't be tied to one file is kept
+   * under UNATTRIBUTED, so it still counts against precision.
+   */
+  private attributeReading(use: { name: string; input: any }, content: unknown) {
+    if (use.name === "Read" && typeof use.input?.file_path === "string") {
+      this.addRead(use.input.file_path, contentChars(content));
+      return;
+    }
+    let fallback: string | null = null;
+    if (use.name === "Grep") {
+      fallback = typeof use.input?.path === "string" && SOURCE_FILE.test(" " + use.input.path) ? use.input.path : null;
+      SOURCE_FILE.lastIndex = 0;
+    } else if (use.name === "Bash") {
+      const cmd = String(use.input?.command ?? "");
+      if (!READ_CMD.test(cmd)) return;
+      const files = [...cmd.matchAll(SOURCE_FILE)].map((m) => m[1]);
+      fallback = new Set(files).size === 1 ? files[0] : null;
+    } else {
+      return;
+    }
+    for (const line of resultText(content).split("\n")) {
+      if (!line) continue;
+      const m = line.match(LINE_PREFIX);
+      this.addRead(m ? m[1] : fallback ?? UNATTRIBUTED, line.length + 1);
     }
   }
 

@@ -147,7 +147,7 @@ export interface ReadingStats {
   precision: number;
   /** Share of core files the agent read at least once. */
   coreRecall: number;
-  /** Total Read output chars ÷ 4, an estimate. */
+  /** Total reading output chars ÷ 4, an estimate (Read, Grep, code-reading shell commands). */
   readTokens: number;
 }
 
@@ -163,16 +163,24 @@ export function readingStats(
   const { relevant } = JSON.parse(readFileSync(tj, "utf8"));
   const core = new Set<string>(relevant.core);
   const all = new Set<string>([...relevant.core, ...relevant.supporting]);
-  const rel = (p: string) => (p.startsWith(workspace + "/") ? p.slice(workspace.length + 1) : p);
+  // Paths may be absolute, relative to the repo root, or relative to a
+  // package the agent cd'ed into: match a ground-truth file by path suffix.
+  const norm = (p: string) =>
+    (p.startsWith(workspace + "/") ? p.slice(workspace.length + 1) : p).replace(/^(\.\/)+/, "");
+  const match = (p: string, set: Set<string>) => {
+    for (const f of set) if (f === p || f.endsWith("/" + p)) return f;
+    return null;
+  };
   let readChars = 0, relevantChars = 0, coreChars = 0;
   const coreSeen = new Set<string>();
-  for (const [abs, chars] of Object.entries(reads)) {
-    const p = rel(abs);
+  for (const [raw, chars] of Object.entries(reads)) {
+    const p = norm(raw);
     readChars += chars;
-    if (all.has(p)) relevantChars += chars;
-    if (core.has(p)) {
+    if (match(p, all)) relevantChars += chars;
+    const c = match(p, core);
+    if (c) {
       coreChars += chars;
-      coreSeen.add(p);
+      coreSeen.add(c);
     }
   }
   return {

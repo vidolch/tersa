@@ -11,3 +11,5 @@
 | Structural check | `checks/T4-structure.sh` (TODO: written against Tersa source, same rule as A/B) |
 
 Status: blocked on the language prototype.
+
+**Network:** work only from the code in this workspace. There is no network access apart from the model API; do not fetch the upstream project, other copies of it, or packages.

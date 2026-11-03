@@ -13,3 +13,5 @@
 | Structural check | `checks/T4-structure.sh` |
 
 Scaffold: `scaffold/` (empty `src/`, `package.json` with the start script, `tsconfig.json`).
+
+**Network:** work only from the code in this workspace. There is no network access apart from the model API; do not fetch the upstream project, other copies of it, or packages.

@@ -30,6 +30,10 @@ for (const arm of ARMS) {
     // Infrastructure crashes (provider errors) are not agent failures: shown, not scored.
     const crashed = recs.filter((r) => r.stopReason === "error_agent_crash").length;
     recs = recs.filter((r) => r.stopReason !== "error_agent_crash");
+    // Network use without the provider-only policy may have leaked the answer: shown, not scored.
+    const contaminated = (r: any) => (r.agent.networkCommands ?? 0) > 0 && r.network?.policy !== "provider-only";
+    const invalid = recs.filter(contaminated).length;
+    recs = recs.filter((r) => !contaminated(r));
     if (!recs.length) {
       rows.push(`| ${arm} | ${task} | ${model} | 0 (+${crashed} crashed) | – | – | – | – | – | – | – | – | – |`);
       continue;
@@ -38,13 +42,13 @@ for (const arm of ARMS) {
     const cost = recs.reduce((n, r) => n + r.costUsd, 0);
     const input = recs.map((r) => r.usage.inputUncached + r.usage.cacheRead + r.usage.cacheWrite);
     rows.push(
-      `| ${arm} | ${task} | ${model} | ${recs.length}${crashed ? ` (+${crashed} crashed)` : ""} | ${pass.length} | ${pass.length ? fmt(cost / pass.length, 3) : "∞"} | ${fmt(median(recs.map((r) => r.costUsd)), 3)} | ${fmt(median(input))} | ${fmt(median(recs.map((r) => r.usage.output)))} | ${fmt(median(recs.map((r) => r.agent.toolCalls)))} | ${fmt(median(recs.map((r) => r.agent.repeatReads ?? 0)))} | ${recs[0].reading ? fmt(median(recs.map((r) => r.reading.precision * 100))) + "%" : "–"} | ${recs[0].reading ? fmt(median(recs.map((r) => r.reading.readTokens))) : "–"} |`,
+      `| ${arm} | ${task} | ${model} | ${recs.length}${crashed ? ` (+${crashed} crashed)` : ""}${invalid ? ` (+${invalid} invalid)` : ""} | ${pass.length} | ${pass.length ? fmt(cost / pass.length, 3) : "∞"} | ${fmt(median(recs.map((r) => r.costUsd)), 3)} | ${fmt(median(input))} | ${fmt(median(recs.map((r) => r.usage.output)))} | ${fmt(median(recs.map((r) => r.agent.toolCalls)))} | ${fmt(median(recs.map((r) => r.agent.repeatReads ?? 0)))} | ${recs[0].reading ? fmt(median(recs.map((r) => r.reading.precision * 100))) + "%" : "–"} | ${recs[0].reading ? fmt(median(recs.map((r) => r.reading.readTokens))) : "–"} |`,
     );
     }
   }
 }
 
-const out = `# Results\n\nGenerated ${new Date().toISOString()}. Independent runs only (chained runs excluded). Runs that crashed on a provider error are listed as "+N crashed" and not scored.\n\n${rows.join("\n")}\n`;
+const out = `# Results\n\nGenerated ${new Date().toISOString()}. Independent runs only (chained runs excluded). Runs that crashed on a provider error ("+N crashed") and runs that used the network without the provider-only policy ("+N invalid") are listed but not scored.\n\n${rows.join("\n")}\n`;
 mkdirSync(paths.results, { recursive: true });
 writeFileSync(join(paths.results, "summary.md"), out);
 console.log(out);
