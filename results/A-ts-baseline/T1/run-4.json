@@ -1,0 +1,58 @@
+{
+  "arm": "A-ts-baseline",
+  "task": "T1",
+  "run": 4,
+  "chained": false,
+  "startState": "scaffold",
+  "specSha256": "4678c3560693c231a305d9b1feca407b76aa9f12a9e4af878ddd4447578eba53",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 19320,
+    "cacheRead": 721152,
+    "cacheWrite": 0,
+    "output": 24465,
+    "toolResultTokens": 5231,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 40,
+    "toolCalls": 39,
+    "toolCallsByName": {
+      "Bash": 21,
+      "Read": 4,
+      "Write": 4,
+      "Edit": 10
+    },
+    "fileReads": 4,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 4,
+    "compactions": 0,
+    "wallMs": 288690,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "T1 R1": true,
+      "T1 R2": true,
+      "T1 R3": true,
+      "T1 R4": true,
+      "T1 R5": true,
+      "T1 R6": true,
+      "T1 R7": true,
+      "T1 R8": true,
+      "T1 R9": true,
+      "T1 R10": true,
+      "T1 R11": true
+    }
+  },
+  "costUsd": 0.011574225600000002,
+  "costSource": "harness/prices.json"
+}
