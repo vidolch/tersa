@@ -1,0 +1,70 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 5,
+  "chained": false,
+  "startState": "actual/AB1",
+  "specSha256": "3ed4a82cf3927a943b3086ced320b193ae91463d7a5e760a67aa3f4de5276f1c",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 56030,
+    "cacheRead": 1821440,
+    "cacheWrite": 0,
+    "output": 12619,
+    "toolResultTokens": 41831,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 44,
+    "toolCalls": 43,
+    "toolCallsByName": {
+      "Bash": 32,
+      "Grep": 2,
+      "Read": 4,
+      "Edit": 4,
+      "Write": 1
+    },
+    "fileReads": 4,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "networkCommands": 3,
+    "wallMs": 280092,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB1 R1": true,
+      "AB1 R2": true,
+      "AB1 R3": true,
+      "AB1 R4": true,
+      "AB1 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 4,
+    "readChars": 98535,
+    "relevantChars": 52146,
+    "coreChars": 8260,
+    "precision": 0.5292129700106561,
+    "coreRecall": 1,
+    "readTokens": 24634
+  },
+  "costUsd": 0.016477552,
+  "costSource": "harness/prices.json",
+  "stopReason": "success",
+  "networkCommandLog": [
+    "timeout 15 curl -sL https://raw.githubusercontent.com/actualbudget/actual/master/packages/loot-core/src/server/rules/rule-utils.ts | head -120 || echo \"NO NETWORK\"",
+    "cd /tmp && timeout 20 curl -sL https://raw.githubusercontent.com/actualbudget/actual/v26.11.0/packages/loot-core/src/server/rules/rule-utils.ts -o up_rule_utils.ts && diff -u /home/runner/work/_temp/raw/A-ts-baseline/AB1/run-5/workspace/packages/loot-core/src/server/rules/rule-utils.ts up_rule_utils",
+    "cd /tmp && timeout 20 curl -sL https://raw.githubusercontent.com/actualbudget/actual/v26.11.0/packages/loot-core/src/server/transactions/transaction-rules.ts -o up_tr.ts && diff -u /home/runner/work/_temp/raw/A-ts-baseline/AB1/run-5/workspace/packages/loot-core/src/server/transactions/transaction-ru"
+  ]
+}
