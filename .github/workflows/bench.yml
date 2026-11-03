@@ -151,6 +151,7 @@ jobs:
           code=$(as_agent curl -s --max-time 15 -o /dev/null -w '%{http_code}' "https://$PROVIDER_HOST" || true)
           [ "$code" != "000" ] || { echo "provider not reachable through proxy"; exit 1; }
           echo "isolation ok: only $PROVIDER_HOST reachable (HTTP $code)"
+          : > "$RUNNER_TEMP/egress.log"   # count only the agent's own connections
 
       - name: Run agent
         working-directory: ${{ runner.temp }}/agent-bench/harness/runner
