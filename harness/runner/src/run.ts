@@ -30,6 +30,7 @@ const { values: a } = parseArgs({
     provider: { type: "string", default: process.env.TERSA_PROVIDER ?? "anthropic" },
     model: { type: "string", default: process.env.TERSA_MODEL },
     "max-turns": { type: "string", default: "150" },
+    "max-budget-usd": { type: "string", default: process.env.TERSA_MAX_BUDGET_USD ?? "1" },
     chained: { type: "boolean", default: false },
     "fake-agent": { type: "string" },
     "skip-perf": { type: "boolean", default: false },
@@ -129,6 +130,8 @@ if (does("agent")) {
         rawDir,
         model,
         maxTurns: Number(a["max-turns"]),
+        maxBudgetUsd: Number(a["max-budget-usd"]),
+        prices: JSON.parse(readFileSync(paths.prices, "utf8"))[model],
       });
 
   const require = createRequire(import.meta.url);
@@ -146,6 +149,7 @@ if (does("agent")) {
       agent: metrics.m,
       usage: metrics.usage,
       costUsd: metrics.costUsd,
+      stopReason: metrics.resultSubtype,
     }),
   );
   console.log(`agent done: ${metrics.m.turns} turns, ${metrics.m.toolCalls} tool calls, $${metrics.costUsd.toFixed(4)}`);
@@ -162,6 +166,7 @@ if (does("eval")) {
     agent: AgentMetrics;
     usage: Usage;
     costUsd: number;
+    stopReason?: string | null;
   };
 
   const acceptance = runAcceptance(task, workspace, arm, rawDir);
@@ -202,6 +207,7 @@ if (does("eval")) {
     ...(perf ? { perf } : {}),
     costUsd,
     costSource,
+    stopReason: am.stopReason ?? null,
   };
 
   const ajv = new Ajv2020({ strict: false });

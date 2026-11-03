@@ -203,6 +203,13 @@
     "costSource": {
       "type": "string",
       "description": "sdk, or harness/prices.json for third-party models"
+    },
+    "stopReason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "SDK result subtype, e.g. success, error_max_turns, error_max_budget_usd"
     }
   }
 }

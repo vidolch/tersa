@@ -32,6 +32,9 @@ on:
       max_turns:
         description: Max agent turns per run
         default: "150"
+      max_budget_usd:
+        description: Hard spending cap per run, USD (run stops and is recorded as failed)
+        default: "0.5"
       max_parallel:
         description: Max concurrent runs (keep low to avoid rate limits)
         default: "4"
@@ -97,7 +100,8 @@ jobs:
           TERSA_MODEL: ${{ inputs.model }}
         run: |
           node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RUNNER_TEMP/raw" --phase agent \
-            --provider "${{ inputs.provider }}" --max-turns "${{ inputs.max_turns }}"
+            --provider "${{ inputs.provider }}" --max-turns "${{ inputs.max_turns }}" \
+            --max-budget-usd "${{ inputs.max_budget_usd }}"
 
       - uses: actions/checkout@v4
         with:

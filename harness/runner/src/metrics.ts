@@ -72,11 +72,31 @@ export class MetricsCollector {
   };
   costUsd = 0;
   resultSubtype: string | null = null;
+  /** Latest usage per API message id, for a running cost estimate. */
+  private liveUsage = new Map<string, { i: number; r: number; w: number; o: number }>();
+
+  /** Running cost from per-message usage at the given prices (USD per 1M tokens). */
+  liveCost(p: { inputMiss: number; inputHit: number; output: number }): number {
+    let c = 0;
+    for (const u of this.liveUsage.values()) c += ((u.i + u.w) * p.inputMiss + u.r * p.inputHit + u.o * p.output) / 1e6;
+    return c;
+  }
 
   /** Feed every message from the SDK stream. Subagent messages are counted too. */
   observe(msg: any): void {
     switch (msg.type) {
-      case "assistant":
+      case "assistant": {
+        const id = msg.message?.id;
+        const u = msg.message?.usage;
+        if (id && u) {
+          const prev = this.liveUsage.get(id) ?? { i: 0, r: 0, w: 0, o: 0 };
+          this.liveUsage.set(id, {
+            i: Math.max(prev.i, u.input_tokens ?? 0),
+            r: Math.max(prev.r, u.cache_read_input_tokens ?? 0),
+            w: Math.max(prev.w, u.cache_creation_input_tokens ?? 0),
+            o: Math.max(prev.o, u.output_tokens ?? 0),
+          });
+        }
         for (const b of msg.message?.content ?? []) {
           if (b?.type !== "tool_use" || this.toolUses.has(b.id)) continue;
           this.toolUses.set(b.id, { name: b.name, input: b.input ?? {} });
@@ -92,6 +112,7 @@ export class MetricsCollector {
           if (b.name === "Bash" && TEST_CMD.test(String(b.input?.command ?? ""))) this.m.testRuns += 1;
         }
         break;
+      }
       case "user": {
         const content = msg.message?.content;
         if (!Array.isArray(content)) break;
@@ -131,6 +152,16 @@ export class MetricsCollector {
   }
 
   finish(contextOverheadChars: number): void {
+    // Stopped before a result message (e.g. budget cap): use per-message usage.
+    if (this.m.turns === 0 && this.liveUsage.size > 0) {
+      for (const u of this.liveUsage.values()) {
+        this.usage.inputUncached += u.i;
+        this.usage.cacheRead += u.r;
+        this.usage.cacheWrite += u.w;
+        this.usage.output += u.o;
+      }
+      this.m.turns = this.liveUsage.size;
+    }
     this.usage.toolResultTokens = est(this.toolResultChars);
     this.usage.contextOverheadTokens = est(contextOverheadChars);
   }

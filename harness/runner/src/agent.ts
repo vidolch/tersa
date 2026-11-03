@@ -12,6 +12,10 @@ export interface AgentRunInput {
   rawDir: string;
   model: string;
   maxTurns: number;
+  /** Hard spending cap for this run, in USD. */
+  maxBudgetUsd: number;
+  /** Real prices for models the SDK cannot price; enables the cap for them. */
+  prices?: { inputMiss: number; inputHit: number; output: number };
 }
 
 /** Identical across arms except the profile and the arm's context files. */
@@ -53,12 +57,21 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
       allowDangerouslySkipPermissions: true,
       // Isolation: no user/project settings or CLAUDE.md leak into runs.
       settingSources: [],
+      // Claude models: the SDK enforces the cap with correct prices.
+      ...(input.prices ? {} : { maxBudgetUsd: input.maxBudgetUsd }),
     },
   });
 
   for await (const msg of q) {
     transcript.write(JSON.stringify(msg) + "\n");
     metrics.observe(msg);
+    // Other models: enforce the cap ourselves from per-message usage.
+    if (input.prices && metrics.liveCost(input.prices) > input.maxBudgetUsd) {
+      metrics.resultSubtype = "error_max_budget_usd";
+      transcript.write(JSON.stringify({ type: "harness", event: "budget_exceeded", usd: metrics.liveCost(input.prices) }) + "\n");
+      q.close();
+      break;
+    }
   }
   transcript.end();
   metrics.finish(overheadChars);
