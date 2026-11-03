@@ -38,3 +38,6 @@ Providers can change a model behind the same name. Compare arms only on batches 
 
 ## Query-layer output counts as reading
 For reading precision, output of the query tools (`mcp__tersa__*`) is attributed to the files it shows, the same way Read, Grep and shell output are, so precision means the same thing in every arm.
+
+## Arm B steering
+Arm B is "the query layer as the agent's code-reading interface", not just extra tools: without steering the agent ignored the tools (first pilot, 2026-11-03). The steering is part of the arm's definition and is recorded per run (`steering.redirects`, by tool). The arm-B pilot without steering is archived in `results/archive/2026-11-03-armB-no-steering/`.

@@ -40,6 +40,13 @@ export interface ArmConfig {
   contextFiles: string[];
   /** Extra tools to allow without prompting (e.g. MCP tools: mcp__<server>__<tool>). */
   allowedTools?: string[];
+  /** How the harness steers the agent toward this arm's tools (see src/steering.ts). */
+  steering?: {
+    /** Files under arms/<arm>/ appended to Claude Code's system prompt; counted as overhead. */
+    systemPrompt?: string[];
+    /** Deny code-reading calls the query tools cover, with the equivalent call. */
+    redirect?: boolean;
+  };
 }
 
 export const paths = {

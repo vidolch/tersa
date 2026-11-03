@@ -12,10 +12,10 @@ Everything is measured by the benchmark in this repo, so each idea has to prove 
 | Arm | Language | Agent tooling | Status |
 |---|---|---|---|
 | **A** `A-ts-baseline` | TypeScript | Claude Code's standard tools (Read, Edit, Write, Grep, Glob, Bash) | baseline measured |
-| **B** `B-ts-query` | TypeScript | standard tools + the tersa query layer (`query/`) | ready to run |
+| **B** `B-ts-query` | TypeScript | standard tools + the tersa query layer (`query/`), steered: usage note in the system prompt, code-reading shell/Grep/Glob calls redirected to the query tools | pilot |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
-**B vs A** isolates the query layer. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. The only differences are the extra tools and a short usage note, whose tokens count as overhead.
+**B vs A** isolates the query layer. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
 
 ## Problems tracked
 
@@ -88,6 +88,7 @@ Arm A, `deepseek-v4-flash`, provider-only network, 6 runs per task (2026-11-03):
 - **Quality is at the ceiling** (24/24): arm B has to win on cost, turns and reading without losing passes.
 - **Run-to-run variance** in cost is 12–27%, so 6 runs per arm can detect a difference of roughly 25–30%.
 - **The query layer reaches every task's core files in one or two queries** (200–600 tokens of output, `query/test/actual.test.ts`).
+- **Tools alone weren't adopted:** in the first arm B pilot (usage note in the task prompt only) the agent made 2–4 query calls out of ~50 tool calls and kept using grep/cat/sed. Steering was added to the harness for arm B (system-prompt note plus redirects).
 - The `urlshort` control: 26/26 runs passed at about $0.01 each, with almost no reading. It's too small to separate the arms, which is why the `actual` suite exists.
 
 ## Incident log
@@ -125,6 +126,9 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Honest runs: hidden material removed, tests restored, provider-only network
 - [x] Arm A baseline on `actual` (DeepSeek Flash, 24 runs)
 - [x] Query layer v1: contract, TypeScript indexer, MCP server, tests
+- [x] Arm B pilot without steering: tools barely used
+- [x] Arm B steering: system-prompt note, redirect hook, redirect counts in records
+- [ ] Arm B pilot with steering (adoption check)
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model

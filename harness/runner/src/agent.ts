@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { query } from "@anthropic-ai/claude-agent-sdk";
 import { paths, ROOT as ROOT_DIR, type Arm, type ArmConfig, type Suite, type Task } from "./config.ts";
 import { MetricsCollector } from "./metrics.ts";
+import { redirectHooks } from "./steering.ts";
 
 export interface AgentRunInput {
   suite: Suite;
@@ -54,7 +55,12 @@ export function buildPrompt(
 }
 
 export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> {
-  const { prompt, overheadChars } = buildPrompt(input.suite, input.arm, input.task, input.armConfig);
+  const { prompt, overheadChars: promptOverhead } = buildPrompt(input.suite, input.arm, input.task, input.armConfig);
+  const steering = input.armConfig.steering ?? {};
+  const systemAppend = (steering.systemPrompt ?? [])
+    .map((f) => readFileSync(join(paths.arm(input.arm), f), "utf8").trim())
+    .join("\n\n");
+  const overheadChars = promptOverhead + systemAppend.length;
   const metrics = new MetricsCollector();
   const transcript = createWriteStream(join(input.rawDir, "transcript.jsonl"));
   const stderrLog = createWriteStream(join(input.rawDir, "agent-stderr.log"));
@@ -73,6 +79,8 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
       allowDangerouslySkipPermissions: true,
       // Isolation: no user/project settings or CLAUDE.md leak into runs.
       settingSources: [],
+      ...(systemAppend ? { systemPrompt: { type: "preset" as const, preset: "claude_code" as const, append: systemAppend } } : {}),
+      ...(steering.redirect ? { hooks: redirectHooks(metrics.steering) as any } : {}),
       stderr: (data: string) => {
         stderrLog.write(data);
         stderrTail.push(...data.split("\n").filter(Boolean).map((l) => l.slice(0, 400)));

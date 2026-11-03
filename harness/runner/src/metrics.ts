@@ -98,6 +98,8 @@ export class MetricsCollector {
   resultSubtype: string | null = null;
   /** Error message if the agent process crashed. */
   crash: string | null = null;
+  /** Calls the arm's steering redirected to the query layer. */
+  steering = { redirects: 0, byTool: {} as Record<string, number> };
   /** Latest usage per API message id, for a running cost estimate. */
   private liveUsage = new Map<string, { i: number; r: number; w: number; o: number }>();
 

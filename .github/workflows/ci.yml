@@ -24,6 +24,8 @@ jobs:
         working-directory: acceptance
       - run: npm ci --no-audit --no-fund
         working-directory: harness/runner
+      - run: node --test test/*.test.ts
+        working-directory: harness/runner
       - run: harness/validate.sh
 
   query:

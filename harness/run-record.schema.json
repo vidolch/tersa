@@ -272,6 +272,21 @@
           }
         }
       }
+    },
+    "steering": {
+      "type": "object",
+      "description": "arm steering: calls redirected to the query layer",
+      "properties": {
+        "redirects": {
+          "type": "integer"
+        },
+        "byTool": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        }
+      }
     }
   }
 }

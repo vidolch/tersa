@@ -1,13 +1,36 @@
 {
   "ready": true,
-  "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash"],
+  "tools": [
+    "Read",
+    "Write",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Bash"
+  ],
   "mcpServers": {
     "tersa": {
       "type": "stdio",
       "command": "node",
-      "args": ["--disable-warning=ExperimentalWarning", "{{ROOT}}/query/src/server.ts", "--root", "{{WORKSPACE}}"]
+      "args": [
+        "--disable-warning=ExperimentalWarning",
+        "{{ROOT}}/query/src/server.ts",
+        "--root",
+        "{{WORKSPACE}}"
+      ]
     }
   },
-  "allowedTools": ["mcp__tersa__code_get", "mcp__tersa__code_find", "mcp__tersa__code_refs", "mcp__tersa__code_outline"],
-  "contextFiles": ["query-layer.md"]
+  "allowedTools": [
+    "mcp__tersa__code_get",
+    "mcp__tersa__code_find",
+    "mcp__tersa__code_refs",
+    "mcp__tersa__code_outline"
+  ],
+  "contextFiles": [],
+  "steering": {
+    "systemPrompt": [
+      "query-layer.md"
+    ],
+    "redirect": true
+  }
 }
