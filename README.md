@@ -55,6 +55,7 @@ Everything runs in GitHub Actions; no local machine is needed.
 | `validate-actual` | push to the Actual suite, harness or query layer | every Actual task: the start state fails exactly as expected and the reference fix passes; the query layer reaches every task's core files | free |
 | `bench-baseline` | manual | arm A batch: suite × tasks × runs | API credits |
 | `bench-query` | manual | arm B batch, same steps (`_bench.yml` is shared) | API credits |
+| `summary` | after each batch, or a push to `results/` | rebuilds `results/summary.md` (one at a time, so batches never conflict) | free |
 
 Run **both arms in the same period**: providers can update a model behind the same name, and a same-day baseline rules that out as an explanation.
 
@@ -103,6 +104,7 @@ What went wrong, how it was caught, and what changed. Invalidated records are ke
 | 2026-11-03 | Seeded bug for AB1 (rule indexer) had no visible effect through the API: every rule also lands in a catch-all index | hidden test passed on seeded code | AB1 moved to the rule-ranking comparator |
 | 2026-11-03 | Two runs crashed at the same moment on a DeepSeek connection drop; the runner died and no record was written | missing records | crashes recorded (`error_agent_crash`) and listed, not scored; SDK stderr saved |
 | 2026-11-03 | **An agent downloaded the upstream file with `curl` and diffed it against the seeded workspace** (AB1 run 5; run 1 likely the same). It found the repo URL in `AGENTS.md` and the version in `package.json` | network-command flag | provider-only network per run; profile says no network; contaminated runs invalid; Actual baseline archived and rerun |
+| 2026-11-03 | Arm A and arm B batches finished together; both rewrote `results/summary.md`, arm B's commit hit a merge conflict, and the retry loop still reported success, so B's records were dropped | missing records | batches commit only their own record files; `summary` workflow rebuilds the summary; failed pushes fail the job |
 | 2026-11-03 | Reading metric counted only the Read tool, but agents read mostly via `sed`/`cat`/`grep`: one run showed 0 tokens read | implausible numbers | shell, Grep and query-tool output attributed to files |
 
 ## Layout

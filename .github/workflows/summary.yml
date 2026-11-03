@@ -1,0 +1,48 @@
+name: summary
+
+# Rebuilds results/summary.md whenever run records change. One at a time, so
+# concurrent benchmark batches never fight over the summary.
+on:
+  # Batch commits are made with the workflow token, which doesn't trigger
+  # push workflows, so also run when a batch finishes.
+  workflow_run:
+    workflows: [bench-baseline, bench-query]
+    types: [completed]
+  push:
+    branches: [main]
+    paths:
+      - results/*/**/*.json
+      - harness/runner/src/report.ts
+  workflow_dispatch:
+
+concurrency:
+  group: summary
+  cancel-in-progress: false
+
+jobs:
+  summary:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Rebuild and commit
+        run: |
+          node harness/runner/src/report.ts > /dev/null
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add results/summary.md
+          git diff --cached --quiet && { echo "summary unchanged"; exit 0; }
+          git commit -m "Update results summary"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase && git push; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            git reset --hard origin/main && node harness/runner/src/report.ts > /dev/null && git add results/summary.md && git commit -qm "Update results summary" || exit 0
+            sleep 5
+          done
+          exit 1

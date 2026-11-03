@@ -199,7 +199,7 @@ jobs:
         with:
           pattern: record-*
           path: ${{ runner.temp }}/records
-      - name: Place records and update summary
+      - name: Place records
         run: |
           node -e '
             const fs = require("fs"), path = require("path");
@@ -213,14 +213,20 @@ jobs:
               console.log(out);
             }
           ' "${{ runner.temp }}/records"
-          if [ -d results ]; then node harness/runner/src/report.ts; fi
+      # Only this batch's record files are committed: they never conflict with
+      # another batch. results/summary.md is rebuilt by the summary workflow.
       - name: Commit
         env:
           ARM: ${{ inputs.arm }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add results
+          git add "results/$ARM"
           git diff --cached --quiet && { echo "no records"; exit 0; }
-          git commit -m "Bench results: ${{ inputs.suite }} ${{ inputs.arm }} ${{ inputs.tasks }} x${{ inputs.runs }} (${{ inputs.provider }} ${{ inputs.model }})"
-          for i in 1 2 3; do git pull --rebase && git push && break; sleep $((RANDOM % 10 + 5)); done
+          git commit -m "Bench results: ${{ inputs.suite }} $ARM ${{ inputs.tasks }} x${{ inputs.runs }} (${{ inputs.provider }} ${{ inputs.model }})"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase && git push; then echo "pushed"; exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((RANDOM % 10 + 5))
+          done
+          echo "::error::could not push the run records"; exit 1
