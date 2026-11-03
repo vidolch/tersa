@@ -90,6 +90,7 @@ Arm A, `deepseek-v4-flash`, provider-only network, 6 runs per task (2026-11-03):
 - **Run-to-run variance** in cost is 12–27%, so 6 runs per arm can detect a difference of roughly 25–30%.
 - **The query layer reaches every task's core files in one or two queries** (200–600 tokens of output, `query/test/actual.test.ts`).
 - **Steering made the tools used, but not cheaper (v1):** with the system-prompt note and redirects, the agent made 12–25 query calls per run, yet every task cost the same or more than arm A (AB1 $0.035 vs $0.019, and it broke an existing test). Agents still made 7–34 Read calls: Claude Code requires a Read before an Edit, so changed code is read twice. v1.1 trims query output; an edit tool in the query layer would remove the second read.
+- **v1.2 (no whole-file Reads of large source files) is the first B that isn't more expensive than A:** equal on AB1/AB4, cheaper on AB2 (−13%) and AB3 (−35%) against A's 8-run medians, all passing. One run per task, so not yet conclusive.
 - **Tools alone weren't adopted:** in the first arm B pilot (usage note in the task prompt only) the agent made 2–4 query calls out of ~50 tool calls and kept using grep/cat/sed. Steering was added to the harness for arm B (system-prompt note plus redirects).
 - The `urlshort` control: 26/26 runs passed at about $0.01 each, with almost no reading. It's too small to separate the arms, which is why the `actual` suite exists.
 
@@ -136,7 +137,8 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Query layer v1.1: leaner defaults
 - [x] Arm B v1.1 pilot with a same-period arm A run: whole-file Reads are 50–85% of carried input in both arms
 - [x] Iteration log with regenerable tables (`docs/iterations.md`, `harness/runner/src/compare.ts`)
-- [ ] Iteration 6: steering v1.2 (no whole-file Reads of large source files), pilot with same-period A
+- [x] Iteration 6: steering v1.2 pilot: B no longer more expensive than A; cheaper on AB2/AB3 (1 run each)
+- [ ] Iteration 7: full comparison, B v1.2 vs same-period A, 6 runs per task
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model

@@ -142,12 +142,51 @@ Model in every iteration: `deepseek-v4-flash` through DeepSeek's Anthropic-compa
 ---
 
 ## Iteration 6 — Steering v1.2: no whole-file Reads of large source files
-**Date** 2026-11-03 · **Arms** A run 8 and B (1 run per task each, same period) · **Status** in progress
+**Date** 2026-11-03 · **Arms** A run 8 and B (1 run per task each, same period) · **Records** `results/A-ts-baseline/AB*/run-8`, `results/B-ts-query/AB*/run-1` (B v1.2)
 
 **Hypothesis.** Most of B's carried input is whole-file Reads. If large source files can only be read as ranges, with `code_get` giving exact ranges, B's input and cost fall below A's without losing passes.
 
 **Change.** Steering v1.2 (`harness/runner/src/steering.ts`): a Read of a source file over 150 lines without a range (or with a range over 300 lines) is redirected to `code_outline`/`code_get` or a ranged Read; ranged Reads, small files and non-code files are allowed. The first redirect of a run explains all rules once. Query contract v1.2: `code_get` headers carry the exact Read range for editing the symbol (`to edit: Read offset S limit N`). Usage note updated accordingly.
 
-**Result.** _(pending)_
+**Result.** Same period:
+| Task | Group | Runs | Pass | Median cost | Median turns | Median input | Median reading | Read precision | Query calls | Redirects | Read share of carried |
+|------|-------|------|------|-------------|--------------|--------------|----------------|----------------|-------------|-----------|-----------------------|
+| AB1 | A (same period) | 1 | 1/1 | $0.012 | 48 | 1.14M | 25k | 30% | 0 | 0 | 23% |
+| AB1 | B v1.2 | 1 | 1/1 | $0.017 | 69 | 2.07M | 29k | 17% | 23 | 6 | 61% |
+| AB2 | A (same period) | 1 | 1/1 | $0.027 | 109 | 3.81M | 40k | 33% | 0 | 0 | 71% |
+| AB2 | B v1.2 | 1 | 1/1 | $0.020 | 89 | 2.54M | 33k | 39% | 25 | 4 | 52% |
+| AB3 | A (same period) | 1 | 1/1 | $0.023 | 87 | 3.03M | 39k | 17% | 0 | 0 | 1% |
+| AB3 | B v1.2 | 1 | 1/1 | $0.011 | 50 | 0.81M | 20k | 33% | 9 | 2 | 44% |
+| AB4 | A (same period) | 1 | 1/1 | $0.013 | 52 | 1.13M | 23k | 31% | 0 | 0 | 37% |
+| AB4 | B v1.2 | 1 | 1/1 | $0.010 | 36 | 0.66M | 19k | 18% | 11 | 2 | 32% |
 
-**Conclusion.** _(pending)_
+`node src/compare.ts "A (same period)=results/A-ts-baseline@8" "B v1.2=results/B-ts-query@1" --suite actual`
+
+Against all 8 arm A runs and the previous B version:
+| Task | Group | Runs | Pass | Median cost | Median turns | Median input | Median reading | Read precision | Query calls | Redirects | Read share of carried |
+|------|-------|------|------|-------------|--------------|--------------|----------------|----------------|-------------|-----------|-----------------------|
+| AB1 | A all (8 runs) | 8 | 8/8 | $0.017 | 55 | 1.87M | 44k | 30% | 0 | 0 | 54% |
+| AB1 | B v1.1 (it.5) | 1 | 1/1 | $0.021 | 55 | 2.47M | 50k | 16% | 11 | 5 | 84% |
+| AB1 | B v1.2 | 1 | 1/1 | $0.017 | 69 | 2.07M | 29k | 17% | 23 | 6 | 61% |
+| AB2 | A all (8 runs) | 8 | 7/8 | $0.023 | 98 | 2.99M | 40k | 35% | 0 | 0 | 71% |
+| AB2 | B v1.1 (it.5) | 1 | 1/1 | $0.026 | 103 | 3.94M | 39k | 34% | 19 | 5 | 50% |
+| AB2 | B v1.2 | 1 | 1/1 | $0.020 | 89 | 2.54M | 33k | 39% | 25 | 4 | 52% |
+| AB3 | A all (8 runs) | 8 | 8/8 | $0.017 | 67 | 1.82M | 28k | 25% | 0 | 0 | 1% |
+| AB3 | B v1.1 (it.5) | 1 | 1/1 | $0.029 | 117 | 4.40M | 33k | 24% | 22 | 11 | 38% |
+| AB3 | B v1.2 | 1 | 1/1 | $0.011 | 50 | 0.81M | 20k | 33% | 9 | 2 | 44% |
+| AB4 | A all (8 runs) | 8 | 8/8 | $0.010 | 37.5 | 0.75M | 21k | 35% | 0 | 0 | 52% |
+| AB4 | B v1.1 (it.5) | 1 | 1/1 | $0.010 | 41 | 0.78M | 20k | 34% | 5 | 4 | 51% |
+| AB4 | B v1.2 | 1 | 1/1 | $0.010 | 36 | 0.66M | 19k | 18% | 11 | 2 | 32% |
+
+`node src/compare.ts "A all (8 runs)=results/A-ts-baseline@1-8" "B v1.1 (it.5)=results/archive/2026-11-03-armB-v1.1/B-ts-query" "B v1.2=results/B-ts-query@1" --suite actual`
+
+Per tool (B v1.2): Read output fell to 8–18k per run (v1.1: 10–40k); redirects 2–6 per run (v1.1: 4–11).
+
+**Conclusion.** First version of B that is not more expensive than A: against arm A's 8-run medians it is equal on AB1 and AB4 and cheaper on AB2 (−13%) and AB3 (−35%, 50 turns vs 67), all 4 passing. Against the same-period A run it lost on AB1 (that A run was unusually cheap, $0.012 vs a $0.017 median), which shows why single runs can't decide this. Read is still the largest carried cost (32–61%), but smaller. → Iteration 7: the first real comparison, 6 runs per task for B v1.2 and a same-period A rerun.
+
+---
+
+## Iteration 7 — First full comparison (planned)
+**Arms** A and B v1.2, 6 runs per task each, same period · **Status** planned
+
+**Hypothesis.** B v1.2 costs less than A on the Actual suite at equal pass rate; with 12–27% run-to-run variance, 6 runs per arm can show a difference of about 25–30%.
