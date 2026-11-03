@@ -243,6 +243,10 @@
           "type": "integer"
         }
       }
+    },
+    "crash": {
+      "type": "string",
+      "description": "agent process error message, if it crashed (run counts as failed)"
     }
   }
 }

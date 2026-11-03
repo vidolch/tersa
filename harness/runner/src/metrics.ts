@@ -78,6 +78,8 @@ export class MetricsCollector {
   };
   costUsd = 0;
   resultSubtype: string | null = null;
+  /** Error message if the agent process crashed. */
+  crash: string | null = null;
   /** Latest usage per API message id, for a running cost estimate. */
   private liveUsage = new Map<string, { i: number; r: number; w: number; o: number }>();
 

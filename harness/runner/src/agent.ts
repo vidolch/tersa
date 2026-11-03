@@ -50,6 +50,8 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
   const { prompt, overheadChars } = buildPrompt(input.suite, input.arm, input.task, input.armConfig);
   const metrics = new MetricsCollector();
   const transcript = createWriteStream(join(input.rawDir, "transcript.jsonl"));
+  const stderrLog = createWriteStream(join(input.rawDir, "agent-stderr.log"));
+  const stderrTail: string[] = [];
 
   const q = query({
     prompt,
@@ -64,11 +66,17 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
       allowDangerouslySkipPermissions: true,
       // Isolation: no user/project settings or CLAUDE.md leak into runs.
       settingSources: [],
+      stderr: (data: string) => {
+        stderrLog.write(data);
+        stderrTail.push(...data.split("\n").filter(Boolean).map((l) => l.slice(0, 400)));
+        if (stderrTail.length > 200) stderrTail.splice(0, stderrTail.length - 200);
+      },
       // Claude models: the SDK enforces the cap with correct prices.
       ...(input.prices ? {} : { maxBudgetUsd: input.maxBudgetUsd }),
     },
   });
 
+  try {
   for await (const msg of q) {
     transcript.write(JSON.stringify(msg) + "\n");
     metrics.observe(msg);
@@ -80,7 +88,17 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
       break;
     }
   }
+  } catch (err) {
+    // The run counts as failed but still gets a record: evaluate whatever the agent left.
+    const message = err instanceof Error ? err.message : String(err);
+    metrics.resultSubtype = "error_agent_crash";
+    metrics.crash = message.slice(0, 2000);
+    transcript.write(JSON.stringify({ type: "harness", event: "agent_crash", message: metrics.crash }) + "\n");
+    console.error(`agent crashed: ${metrics.crash.slice(0, 500)}`);
+    console.error(`last stderr lines:\n${stderrTail.slice(-20).join("\n")}`);
+  }
   transcript.end();
+  stderrLog.end();
   metrics.finish(overheadChars);
   return metrics;
 }

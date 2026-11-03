@@ -26,18 +26,25 @@ for (const arm of ARMS) {
       .map((f) => JSON.parse(readFileSync(join(dir, f), "utf8")));
     const byModel = new Map<string, any[]>();
     for (const r of recs) byModel.set(r.model, [...(byModel.get(r.model) ?? []), r]);
-    for (const [model, recs] of byModel) {
+    for (let [model, recs] of byModel) {
+    // Infrastructure crashes (provider errors) are not agent failures: shown, not scored.
+    const crashed = recs.filter((r) => r.stopReason === "error_agent_crash").length;
+    recs = recs.filter((r) => r.stopReason !== "error_agent_crash");
+    if (!recs.length) {
+      rows.push(`| ${arm} | ${task} | ${model} | 0 (+${crashed} crashed) | – | – | – | – | – | – | – | – | – |`);
+      continue;
+    }
     const pass = recs.filter((r) => r.acceptance.passed && (r.perf?.passed ?? true));
     const cost = recs.reduce((n, r) => n + r.costUsd, 0);
     const input = recs.map((r) => r.usage.inputUncached + r.usage.cacheRead + r.usage.cacheWrite);
     rows.push(
-      `| ${arm} | ${task} | ${model} | ${recs.length} | ${pass.length} | ${pass.length ? fmt(cost / pass.length, 3) : "∞"} | ${fmt(median(recs.map((r) => r.costUsd)), 3)} | ${fmt(median(input))} | ${fmt(median(recs.map((r) => r.usage.output)))} | ${fmt(median(recs.map((r) => r.agent.toolCalls)))} | ${fmt(median(recs.map((r) => r.agent.repeatReads ?? 0)))} | ${recs[0].reading ? fmt(median(recs.map((r) => r.reading.precision * 100))) + "%" : "–"} | ${recs[0].reading ? fmt(median(recs.map((r) => r.reading.readTokens))) : "–"} |`,
+      `| ${arm} | ${task} | ${model} | ${recs.length}${crashed ? ` (+${crashed} crashed)` : ""} | ${pass.length} | ${pass.length ? fmt(cost / pass.length, 3) : "∞"} | ${fmt(median(recs.map((r) => r.costUsd)), 3)} | ${fmt(median(input))} | ${fmt(median(recs.map((r) => r.usage.output)))} | ${fmt(median(recs.map((r) => r.agent.toolCalls)))} | ${fmt(median(recs.map((r) => r.agent.repeatReads ?? 0)))} | ${recs[0].reading ? fmt(median(recs.map((r) => r.reading.precision * 100))) + "%" : "–"} | ${recs[0].reading ? fmt(median(recs.map((r) => r.reading.readTokens))) : "–"} |`,
     );
     }
   }
 }
 
-const out = `# Results\n\nGenerated ${new Date().toISOString()}. Independent runs only (chained runs excluded).\n\n${rows.join("\n")}\n`;
+const out = `# Results\n\nGenerated ${new Date().toISOString()}. Independent runs only (chained runs excluded). Runs that crashed on a provider error are listed as "+N crashed" and not scored.\n\n${rows.join("\n")}\n`;
 mkdirSync(paths.results, { recursive: true });
 writeFileSync(join(paths.results, "summary.md"), out);
 console.log(out);

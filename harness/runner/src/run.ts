@@ -160,6 +160,7 @@ if (does("agent")) {
       usage: metrics.usage,
       costUsd: metrics.costUsd,
       stopReason: metrics.resultSubtype,
+      crash: metrics.crash,
       reads: metrics.reads,
     }),
   );
@@ -179,6 +180,7 @@ if (does("eval")) {
     costUsd: number;
     stopReason?: string | null;
     reads?: Record<string, number>;
+    crash?: string | null;
   };
 
   const acceptance =
@@ -227,6 +229,7 @@ if (does("eval")) {
     costUsd,
     costSource,
     stopReason: am.stopReason ?? null,
+    ...(am.crash ? { crash: am.crash } : {}),
   };
 
   const ajv = new Ajv2020({ strict: false });
