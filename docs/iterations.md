@@ -187,6 +187,6 @@ Per tool (B v1.2): Read output fell to 8–18k per run (v1.1: 10–40k); redirec
 ---
 
 ## Iteration 7 — First full comparison (planned)
-**Arms** A and B v1.2, 6 runs per task each, same period · **Status** planned
+**Date** 2026-11-03 · **Arms** A runs 9–14 and B v1.2 runs 2–7, 6 runs per task each, started together (3 concurrent runs per arm) · **Status** running
 
 **Hypothesis.** B v1.2 costs less than A on the Actual suite at equal pass rate; with 12–27% run-to-run variance, 6 runs per arm can show a difference of about 25–30%.
