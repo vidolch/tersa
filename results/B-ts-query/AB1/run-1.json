@@ -1,0 +1,109 @@
+{
+  "suite": "actual",
+  "arm": "B-ts-query",
+  "task": "AB1",
+  "run": 1,
+  "chained": false,
+  "startState": "actual/AB1",
+  "specSha256": "3ed4a82cf3927a943b3086ced320b193ae91463d7a5e760a67aa3f4de5276f1c",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 69907,
+    "cacheRead": 2396288,
+    "cacheWrite": 0,
+    "output": 15527,
+    "toolResultTokens": 50947,
+    "contextOverheadTokens": 280
+  },
+  "agent": {
+    "turns": 55,
+    "toolCalls": 54,
+    "toolCallsByName": {
+      "Bash": 16,
+      "mcp__tersa__code_find": 10,
+      "Read": 22,
+      "mcp__tersa__code_refs": 1,
+      "Glob": 1,
+      "Edit": 4
+    },
+    "fileReads": 22,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 270734,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB1 R1": true,
+      "AB1 R2": true,
+      "AB1 R3": true,
+      "AB1 R4": true,
+      "AB1 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 92,
+    "readChars": 199738,
+    "relevantChars": 32205,
+    "coreChars": 10930,
+    "precision": 0.16123621944747618,
+    "coreRecall": 1,
+    "readTokens": 49935
+  },
+  "costUsd": 0.020844146400000003,
+  "costSource": "harness/prices.json",
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "steering": {
+    "redirects": 5,
+    "byTool": {
+      "Bash": 4,
+      "Glob": 1
+    }
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 16,
+      "outTokens": 3532,
+      "carriedTokens": 43687
+    },
+    "mcp__tersa__code_find": {
+      "calls": 10,
+      "outTokens": 6603,
+      "carriedTokens": 209179
+    },
+    "Read": {
+      "calls": 22,
+      "outTokens": 40421,
+      "carriedTokens": 1387436
+    },
+    "mcp__tersa__code_refs": {
+      "calls": 1,
+      "outTokens": 183,
+      "carriedTokens": 6039
+    },
+    "Glob": {
+      "calls": 1,
+      "outTokens": 51,
+      "carriedTokens": 1479
+    },
+    "Edit": {
+      "calls": 4,
+      "outTokens": 163,
+      "carriedTokens": 2717
+    }
+  }
+}
