@@ -247,6 +247,13 @@
     "crash": {
       "type": "string",
       "description": "agent process error message, if it crashed (run counts as failed)"
+    },
+    "networkCommandLog": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "flagged Bash commands, first 300 chars each"
     }
   }
 }

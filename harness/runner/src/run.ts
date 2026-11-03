@@ -161,9 +161,11 @@ if (does("agent")) {
       costUsd: metrics.costUsd,
       stopReason: metrics.resultSubtype,
       crash: metrics.crash,
+      networkCommandLog: metrics.networkCommandLog,
       reads: metrics.reads,
     }),
   );
+  for (const c of metrics.networkCommandLog) console.log(`network command: ${c}`);
   console.log(`agent done: ${metrics.m.turns} turns, ${metrics.m.toolCalls} tool calls, $${metrics.costUsd.toFixed(4)}`);
 }
 
@@ -181,6 +183,7 @@ if (does("eval")) {
     stopReason?: string | null;
     reads?: Record<string, number>;
     crash?: string | null;
+    networkCommandLog?: string[];
   };
 
   const acceptance =
@@ -230,6 +233,7 @@ if (does("eval")) {
     costSource,
     stopReason: am.stopReason ?? null,
     ...(am.crash ? { crash: am.crash } : {}),
+    ...(am.networkCommandLog?.length ? { networkCommandLog: am.networkCommandLog } : {}),
   };
 
   const ajv = new Ajv2020({ strict: false });

@@ -54,6 +54,8 @@ export class MetricsCollector {
   private toolResultChars = 0;
   /** Characters returned by Read, per file path (P1 reading precision). */
   reads: Record<string, number> = {};
+  /** The flagged commands themselves, for review. */
+  networkCommandLog: string[] = [];
   m: AgentMetrics = {
     turns: 0,
     toolCalls: 0,
@@ -118,7 +120,10 @@ export class MetricsCollector {
             else this.readKeys.add(key);
           }
           if (b.name === "Bash" && TEST_CMD.test(String(b.input?.command ?? ""))) this.m.testRuns += 1;
-          if (b.name === "Bash" && NETWORK_CMD.test(String(b.input?.command ?? ""))) this.m.networkCommands += 1;
+          if (b.name === "Bash" && NETWORK_CMD.test(String(b.input?.command ?? ""))) {
+            this.m.networkCommands += 1;
+            this.networkCommandLog.push(String(b.input.command).slice(0, 300));
+          }
         }
         break;
       }
