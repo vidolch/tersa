@@ -13,30 +13,31 @@
     "version": "0.3.310"
   },
   "usage": {
-    "inputUncached": 58538,
-    "cacheRead": 2318208,
+    "inputUncached": 61380,
+    "cacheRead": 2182784,
     "cacheWrite": 0,
-    "output": 17091,
-    "toolResultTokens": 39927,
+    "output": 18320,
+    "toolResultTokens": 45302,
     "contextOverheadTokens": 0
   },
   "agent": {
-    "turns": 73,
-    "toolCalls": 72,
+    "turns": 68,
+    "toolCalls": 67,
     "toolCallsByName": {
-      "Bash": 59,
-      "Read": 9,
-      "Write": 2,
-      "Edit": 2
+      "Bash": 45,
+      "Grep": 3,
+      "Read": 13,
+      "Edit": 5,
+      "Write": 1
     },
-    "fileReads": 9,
+    "fileReads": 13,
     "repeatReads": 0,
     "failedEdits": 0,
     "compileFailures": 0,
     "testRuns": 0,
     "compactions": 0,
     "networkCommands": 0,
-    "wallMs": 269712,
+    "wallMs": 248333,
     "completed": true
   },
   "acceptance": {
@@ -50,22 +51,19 @@
     }
   },
   "reading": {
-    "filesRead": 47,
-    "readChars": 153470,
-    "relevantChars": 33623,
-    "coreChars": 11575,
-    "precision": 0.2190851632240829,
+    "filesRead": 51,
+    "readChars": 178799,
+    "relevantChars": 39898,
+    "coreChars": 11930,
+    "precision": 0.22314442474510485,
     "coreRecall": 1,
-    "readTokens": 38368
+    "readTokens": 44700
   },
-  "costUsd": 0.0194717824,
+  "costUsd": 0.019834595200000003,
   "costSource": "harness/prices.json",
   "stopReason": "success",
   "network": {
     "policy": "provider-only",
-    "deniedConnections": 1,
-    "denied": [
-      "connect github.com:443"
-    ]
+    "deniedConnections": 0
   }
 }

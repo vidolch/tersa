@@ -1,0 +1,70 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 3,
+  "chained": false,
+  "startState": "actual/AB4",
+  "specSha256": "ad84b917a1fa928bb20b220ef396e0a3f8cc28c28535b7786c2e408807abae54",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 27570,
+    "cacheRead": 529920,
+    "cacheWrite": 0,
+    "output": 12640,
+    "toolResultTokens": 18502,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 34,
+    "toolCalls": 33,
+    "toolCallsByName": {
+      "Bash": 14,
+      "Grep": 7,
+      "Read": 10,
+      "Edit": 1,
+      "Write": 1
+    },
+    "fileReads": 10,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 144198,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB4 R1": true,
+      "AB4 R2": true,
+      "AB4 R3": true,
+      "AB4 R4": true,
+      "AB4 R5": true,
+      "AB4 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 32,
+    "readChars": 72752,
+    "relevantChars": 21320,
+    "coreChars": 14146,
+    "precision": 0.29305036287662195,
+    "coreRecall": 1,
+    "readTokens": 18188
+  },
+  "costUsd": 0.008882776,
+  "costSource": "harness/prices.json",
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  }
+}

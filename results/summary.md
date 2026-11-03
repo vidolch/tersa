@@ -1,6 +1,6 @@
 # Results
 
-Generated 2026-11-03T12:50:16.086Z. Independent runs only (chained runs excluded). Runs that crashed on a provider error ("+N crashed") and runs that used the network without the provider-only policy ("+N invalid") are listed but not scored.
+Generated 2026-11-03T13:44:41.713Z. Independent runs only (chained runs excluded). Runs that crashed on a provider error ("+N crashed") and runs that used the network without the provider-only policy ("+N invalid") are listed but not scored.
 
 | Arm | Task | Model | Runs | Pass | Cost/pass $ | Median $ | Median input tok | Median output tok | Median tool calls | Median repeat reads | Median read precision | Median read tok |
 |-----|------|-------|------|------|-------------|----------|------------------|-------------------|-------------------|---------------------|-----------------------|-----------------|
