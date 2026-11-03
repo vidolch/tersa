@@ -1,0 +1,97 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 7,
+  "chained": false,
+  "startState": "actual/AB4",
+  "specSha256": "ad84b917a1fa928bb20b220ef396e0a3f8cc28c28535b7786c2e408807abae54",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 35548,
+    "cacheRead": 875008,
+    "cacheWrite": 0,
+    "output": 12496,
+    "toolResultTokens": 24679,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 45,
+    "toolCalls": 44,
+    "toolCallsByName": {
+      "Bash": 22,
+      "Grep": 10,
+      "Read": 10,
+      "Edit": 1,
+      "Write": 1
+    },
+    "fileReads": 10,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 145024,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB4 R1": true,
+      "AB4 R2": true,
+      "AB4 R3": true,
+      "AB4 R4": true,
+      "AB4 R5": true,
+      "AB4 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 26,
+    "readChars": 97171,
+    "relevantChars": 39727,
+    "coreChars": 14983,
+    "precision": 0.40883596957940127,
+    "coreRecall": 1,
+    "readTokens": 24293
+  },
+  "costUsd": 0.0109256224,
+  "costSource": "harness/prices.json",
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 22,
+      "outTokens": 7647,
+      "carriedTokens": 110498
+    },
+    "Grep": {
+      "calls": 10,
+      "outTokens": 2841,
+      "carriedTokens": 64925
+    },
+    "Read": {
+      "calls": 10,
+      "outTokens": 14099,
+      "carriedTokens": 353405
+    },
+    "Edit": {
+      "calls": 1,
+      "outTokens": 51,
+      "carriedTokens": 1173
+    },
+    "Write": {
+      "calls": 1,
+      "outTokens": 46,
+      "carriedTokens": 506
+    }
+  }
+}
