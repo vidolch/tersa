@@ -4,7 +4,7 @@ import ts from "typescript";
 import { join } from "node:path";
 import { CAPABILITIES, Index, type FileEntry, type Sym } from "./indexer.ts";
 
-export const CONTRACT_VERSION = "v1";
+export const CONTRACT_VERSION = "v1.1";
 const MAX_RESPONSE = 60_000;
 const MAX_DEPS = 40;
 
@@ -246,7 +246,7 @@ export class Engine {
         total++;
         if (lines.length >= limit) continue;
         const enc = this.index.enclosing(rp, r.textSpan.start);
-        lines.push(`  ${enc ? enc.qualifiedName : "(top level)"} — ${rp}:${line} — ${this.index.lineText(f, line).trim().slice(0, 160)}`);
+        lines.push(`  ${enc ? enc.qualifiedName : "(top level)"} — ${rp}:${line} — ${this.index.lineText(f, line).trim().slice(0, 120)}`);
       }
     }
     return { lines, total, project: svc.project };
@@ -270,7 +270,7 @@ export class Engine {
   get(args: { symbols: string[]; deps?: "signatures" | "none"; callers?: boolean; maxLines?: number }): string {
     this.index.refresh();
     const view = new View();
-    const maxLines = args.maxLines ?? 200;
+    const maxLines = args.maxLines ?? 120;
     for (const raw of args.symbols) {
       const r = this.resolve(raw);
       if (r.kind === "missing") {
@@ -286,18 +286,18 @@ export class Engine {
       if ((args.deps ?? "signatures") === "signatures" && CAPABILITIES.deps) {
         const deps = this.deps(s);
         if (deps.length) {
-          parts.push(
-            "uses:\n" +
-              deps
-                .map((d) => `  ${d.signature} — ${this.short(d.path)}:${d.start} #${d.hash}${d.kind === "class" || d.kind === "interface" || d.kind === "type" ? ` (${d.kind})` : ""}`)
-                .join("\n"),
-          );
+          // Callables keep a short signature (the API you'll call); everything else is name + location.
+          const line = (d: Sym) =>
+            d.kind === "function" || d.kind === "method" || d.kind === "handler"
+              ? `  ${d.signature.length > 100 ? d.signature.slice(0, 99) + "…" : d.signature} — ${this.short(d.path)}:${d.start}`
+              : `  ${d.qualifiedName} (${d.kind}) — ${this.short(d.path)}:${d.start}`;
+          parts.push("uses:\n" + deps.map(line).join("\n"));
         }
       }
       if (args.callers ?? true) {
-        const refs = this.refs(s, 15);
+        const refs = this.refs(s, 5);
         if (refs && refs.total) {
-          parts.push(`used by (${refs.total}${refs.total > refs.lines.length ? `, first ${refs.lines.length}` : ""}):\n${refs.lines.join("\n")}`);
+          parts.push(`used by (${refs.total}${refs.total > refs.lines.length ? `, first ${refs.lines.length}; code_refs for all` : ""}):\n${refs.lines.join("\n")}`);
         } else if (refs) {
           parts.push(`used by: none found in ${refs.project}`);
         }
@@ -321,7 +321,7 @@ export class Engine {
         view.add(this.ambiguousText(raw, r.matches), raw);
         continue;
       }
-      const res = this.refs(r.sym, args.limit ?? 50);
+      const res = this.refs(r.sym, args.limit ?? 30);
       const head = `### references to ${r.sym.qualifiedName} (${r.sym.path}:${r.sym.start})`;
       if (!res) view.add(`${head}\n  (no TypeScript project covers this file)\n`, raw);
       else
@@ -336,7 +336,7 @@ export class Engine {
   find(args: { patterns: string[]; paths?: string[]; limit?: number }): string {
     this.index.refresh();
     const view = new View();
-    const limit = args.limit ?? 30;
+    const limit = args.limit ?? 12;
     const prefixes = (args.paths ?? []).map((p) => p.replace(/^\.?\//, "").replace(/\/$/, ""));
     const files = this.index
       .allFiles()
@@ -367,14 +367,14 @@ export class Engine {
         }
       }
       const list = [...groups.values()];
-      const out = [`### "${pattern}" — ${totalLines} lines in ${list.length} symbols${list.length > limit ? `, first ${limit}` : ""}`];
+      const out = [`### "${pattern}" — ${totalLines} lines in ${list.length} symbols${list.length > limit ? `, first ${limit} (narrow with paths, or raise limit)` : ""}`];
       for (const g of list.slice(0, limit)) {
         const f = this.index.file(g.path)!;
         const where = g.sym
           ? `${g.sym.qualifiedName} · ${g.sym.kind} · ${g.path}:${g.sym.start}-${g.sym.end}${g.sym.isTest ? " · test" : ""}`
           : `${g.path} (top level)`;
-        const shown = g.lines.slice(0, 5).map((n) => `    ${n}│${this.index.lineText(f, n).trim().slice(0, 160)}`);
-        if (g.lines.length > 5) shown.push(`    … ${g.lines.length - 5} more matching lines`);
+        const shown = g.lines.slice(0, 3).map((n) => `    ${n}│${this.index.lineText(f, n).trim().slice(0, 120)}`);
+        if (g.lines.length > 3) shown.push(`    … ${g.lines.length - 3} more matching lines`);
         out.push(`  ${where}\n${shown.join("\n")}`);
       }
       view.add(out.join("\n") + "\n", pattern);

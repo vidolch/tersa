@@ -1,4 +1,4 @@
-# Tersa query layer — interface contract (v1)
+# Tersa query layer — interface contract (v1.1)
 
 The query layer gives a coding agent a **batched, symbol-level view** of a codebase instead of file reads. It targets problems P1 (reading cost), P3 (unknown APIs) and P12 (duplication) from the benchmark. It is language-agnostic by design (indexer → engine → view); v1 ships one indexer, for TypeScript/JavaScript, built on the TypeScript compiler API.
 
@@ -21,24 +21,24 @@ Definitions with their immediate context.
 { symbols: string[],              // 1–20 names, see "Symbol names"
   deps?: "signatures" | "none",   // default "signatures": in-repo symbols the body uses
   callers?: boolean,              // default true: where each symbol is used
-  maxLines?: number }             // default 200 per body; longer bodies are cut with a notice
+  maxLines?: number }             // default 120 per body; longer bodies are cut with a notice
 ```
-For each symbol: kind, location, content hash, full body with line numbers; then the in-repo symbols it uses, as one-line signatures with locations (no bodies); then its callers as enclosing-symbol names with locations.
+For each symbol: kind, location, content hash, full body with line numbers; then the in-repo symbols it uses (callables as a signature cut at 100 chars, everything else as name and kind) with locations; then up to 5 callers as enclosing-symbol names with locations (`code_refs` lists all).
 
 ### `code_find`
 Where something is used or mentioned, grouped by symbol rather than by line.
 ```
 { patterns: string[],             // 1–10 strings or /regex/flags
   paths?: string[],               // optional path prefixes to restrict the search
-  limit?: number }                // default 30 symbols per pattern
+  limit?: number }                // default 12 symbols per pattern
 ```
-For each pattern: the enclosing symbols that contain a match, each with location and the matching lines (line numbers). Matches outside any symbol are grouped under the file.
+For each pattern: the enclosing symbols that contain a match, each with location and up to 3 matching lines (line numbers, cut at 120 chars). Matches outside any symbol are grouped under the file.
 
 ### `code_refs`
 Resolved references (compiler-accurate, not text).
 ```
 { symbols: string[],              // 1–20 names
-  limit?: number }                // default 50 per symbol
+  limit?: number }                // default 30 per symbol
 ```
 For each symbol: every reference outside its own declaration, as `enclosing symbol — path:line — source line`.
 
@@ -60,8 +60,8 @@ Plain text, designed to be short and quotable:
   88│  let pre = [];
      …
 uses:
-  _rankRules(rules: Rule[]): Rule[] — rule-utils.ts:63 #9b01d4
-  Rule (class) — rules/rule.ts:12 #77c0aa
+  function _rankRules(rules: Rule[]): Rule[] — rules/rule-utils.ts:63
+  Rule (class) — rules/rule.ts:126
 used by (2):
   runRules — transactions/transaction-rules.ts:338
   getRulesForPayee — transactions/transaction-rules.ts:402
@@ -128,6 +128,10 @@ The engine degrades by capability: without `resolvedRefs`, `code_refs` falls bac
 - No verified contracts or effects (needs the Tersa language or annotations).
 - No cross-session persistence; the index is built at server start (lazily per package) and kept in memory.
 
-## 8. Versioning
+## 8. Changes
 
-The contract has a version (`v1`). The server reports it in its MCP `serverInfo.version`. Changing a tool's inputs or output rules means a new version, and benchmark records note which version the arm used.
+- **v1.1** (2026-11-03): leaner defaults after the first steered arm-B pilot made runs more expensive. `code_get`: `maxLines` 200 → 120, at most 5 callers, `uses` without hashes and with full signatures only for callables (cut at 100 chars). `code_find`: 12 symbols and 3 lines per symbol by default (was 30 and 5), lines cut at 120 chars. `code_refs`: 30 per symbol (was 50).
+
+## 9. Versioning
+
+The contract has a version (`v1.1`). The server reports it in its MCP `serverInfo.version`. Changing a tool's inputs or output rules means a new version, and benchmark records note which version the arm used.

@@ -98,6 +98,14 @@ export class MetricsCollector {
   resultSubtype: string | null = null;
   /** Error message if the agent process crashed. */
   crash: string | null = null;
+  /**
+   * Per tool: calls, output tokens (chars ÷ 4), and carried tokens = output
+   * tokens × turns remaining after the result, an estimate of how much input
+   * the result cost by being re-sent with every later turn.
+   */
+  toolCost: Record<string, { calls: number; outTokens: number; carriedTokens: number }> = {};
+  private resultTurns: { tool: string; chars: number; turn: number }[] = [];
+  private turnIds = new Set<string>();
   /** Calls the arm's steering redirected to the query layer. */
   steering = { redirects: 0, byTool: {} as Record<string, number> };
   /** Latest usage per API message id, for a running cost estimate. */
@@ -115,6 +123,7 @@ export class MetricsCollector {
     switch (msg.type) {
       case "assistant": {
         const id = msg.message?.id;
+        if (id && !msg.parent_tool_use_id) this.turnIds.add(id);
         const u = msg.message?.usage;
         if (id && u) {
           const prev = this.liveUsage.get(id) ?? { i: 0, r: 0, w: 0, o: 0 };
@@ -152,6 +161,7 @@ export class MetricsCollector {
           if (b?.type !== "tool_result") continue;
           this.toolResultChars += contentChars(b.content);
           const use = this.toolUses.get(b.tool_use_id);
+          this.resultTurns.push({ tool: use?.name ?? "unknown", chars: contentChars(b.content), turn: this.turnIds.size });
           if (use && !b.is_error) this.attributeReading(use, b.content);
           if (!use || !b.is_error) continue;
           if (EDIT_TOOLS.has(use.name)) this.m.failedEdits += 1;
@@ -231,6 +241,14 @@ export class MetricsCollector {
   }
 
   finish(contextOverheadChars: number): void {
+    const total = this.turnIds.size;
+    for (const r of this.resultTurns) {
+      const c = (this.toolCost[r.tool] ??= { calls: 0, outTokens: 0, carriedTokens: 0 });
+      c.calls += 1;
+      const tok = est(r.chars);
+      c.outTokens += tok;
+      c.carriedTokens += tok * Math.max(0, total - r.turn);
+    }
     // Stopped before a result message (e.g. budget cap): use per-message usage.
     if (this.m.turns === 0 && this.liveUsage.size > 0) {
       for (const u of this.liveUsage.values()) {

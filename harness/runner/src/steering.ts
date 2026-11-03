@@ -109,9 +109,10 @@ export function redirectHooks(counter: { redirects: number; byTool: Record<strin
             counter.byTool[input.tool_name] = (counter.byTool[input.tool_name] ?? 0) + 1;
             return {
               hookSpecificOutput: {
+                // shown to the model as a denied tool call; say it is a redirect, not a failure
                 hookEventName: "PreToolUse" as const,
                 permissionDecision: "deny" as const,
-                permissionDecisionReason: r.reason,
+                permissionDecisionReason: `Redirected (not an error). ${r.reason}`,
               },
             };
           },

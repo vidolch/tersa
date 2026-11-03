@@ -287,6 +287,24 @@
           }
         }
       }
+    },
+    "toolCost": {
+      "type": "object",
+      "description": "per tool: calls, output tokens, carried tokens (output x turns remaining)",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "calls": {
+            "type": "integer"
+          },
+          "outTokens": {
+            "type": "integer"
+          },
+          "carriedTokens": {
+            "type": "integer"
+          }
+        }
+      }
     }
   }
 }

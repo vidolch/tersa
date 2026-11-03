@@ -18,7 +18,7 @@ test("stdio server lists the four tools and answers a batched call", async () =>
   await client.connect(transport);
   try {
     assert.equal(client.getServerVersion()?.name, "tersa");
-    assert.equal(client.getServerVersion()?.version, "v1");
+    assert.equal(client.getServerVersion()?.version, "v1.1");
     const tools = (await client.listTools()).tools.map((t) => t.name).sort();
     assert.deepEqual(tools, ["code_find", "code_get", "code_outline", "code_refs"]);
     const res: any = await client.callTool({ name: "code_get", arguments: { symbols: ["add", "Counter.increment"] } });

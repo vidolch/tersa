@@ -36,7 +36,7 @@ test("code_get: line-numbered body, doc comment, uses with signatures, callers",
   assert.doesNotMatch(out, /import \{ add/, "import lines are not uses");
 
   const t = engine.get({ symbols: ["total"], callers: false });
-  assert.match(t, /uses:\n {2}export function add\(a: number, b: number\): number — lib\/math\.ts:1 #/);
+  assert.match(t, /uses:\n {2}export function add\(a: number, b: number\): number — lib\/math\.ts:1$/m);
 });
 
 test("code_get: dedupe within a response and across the session, re-sent after a change", () => {

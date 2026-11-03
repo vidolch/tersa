@@ -163,6 +163,7 @@ if (does("agent")) {
       crash: metrics.crash,
       networkCommandLog: metrics.networkCommandLog,
       steering: metrics.steering,
+      toolCost: metrics.toolCost,
       networkPolicy: process.env.TERSA_NETWORK_POLICY ?? "none",
       reads: metrics.reads,
     }),
@@ -188,6 +189,7 @@ if (does("eval")) {
     networkCommandLog?: string[];
     networkPolicy?: string;
     steering?: { redirects: number; byTool: Record<string, number> };
+    toolCost?: Record<string, { calls: number; outTokens: number; carriedTokens: number }>;
   };
 
   const acceptance =
@@ -252,6 +254,7 @@ if (does("eval")) {
     ...(am.networkCommandLog?.length ? { networkCommandLog: am.networkCommandLog } : {}),
     network,
     ...(am.steering?.redirects ? { steering: am.steering } : {}),
+    ...(am.toolCost ? { toolCost: am.toolCost } : {}),
   };
 
   const ajv = new Ajv2020({ strict: false });
