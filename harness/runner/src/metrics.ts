@@ -42,6 +42,9 @@ const COMPILE_CMD = /\btsc\b|\btypecheck\b|npm run build|\btersa (build|check)\b
 // A Bash command counts as a test run if it runs a test runner.
 const SHELL_QUERY = /(^|[|;&(]\s*|\bcd\s+\S+\s*&&\s*)tersa\s+(find|get|refs|outline)\b/;
 const NETWORK_CMD = /\bgit\s+(clone|fetch|pull|ls-remote)\b|\bcurl\b|\bwget\b|github\.com|\bnpm\s+(view|info)\b/;
+/** Shell commands that write to a source file (Haiku often edits with sed/heredocs instead of Edit). */
+export const SHELL_EDIT =
+  /\bsed\s+(-[a-zA-Z]*i|--in-place)|\bperl\s+-[a-zA-Z]*i|>>?\s*['"]?[\w./-]+\.(m?[jt]sx?|json|css)\b|\btee\s+(-a\s+)?['"]?[\w./-]+\.(m?[jt]sx?|json)\b|\bwrite_?[Ff]ile(Sync)?\(|\.write_text\(|\bgit\s+apply\b|\bpatch\s+-p/;
 const TEST_CMD = /\bvitest\b|\bnpm (run )?test\b|\bnode --test\b|\bjest\b/;
 
 const est = (chars: number) => Math.round(chars / 4);
@@ -215,7 +218,9 @@ export class MetricsCollector {
           }
           if (b.name === "Bash" && TEST_CMD.test(String(b.input?.command ?? ""))) this.m.testRuns += 1;
           if (b.name === "Bash" && SHELL_QUERY.test(String(b.input?.command ?? ""))) this.m.shellQueryCalls += 1;
-          if ((b.name === "Edit" || b.name === "Write" || b.name === "MultiEdit") && this.m.turnsToFirstEdit === null && !msg.parent_tool_use_id) {
+          const isEdit = b.name === "Edit" || b.name === "Write" || b.name === "MultiEdit" ||
+            (b.name === "Bash" && SHELL_EDIT.test(String(b.input?.command ?? "")));
+          if (isEdit && this.m.turnsToFirstEdit === null && !msg.parent_tool_use_id) {
             this.m.turnsToFirstEdit = this.turnIds.size;
           }
           if (b.name === "Bash" && NETWORK_CMD.test(String(b.input?.command ?? ""))) {

@@ -334,17 +334,41 @@ Core-file recall 4/8 → 7/8. All changes are generic rules; none was tuned to a
 
 **Result** (`node src/compare.ts "A haiku (it.10)=results/A-ts-baseline@22-27" "D bundle (it.10)=results/D-ts-bundle@1-6" --suite actual --model claude-haiku-5-5`; means with a two-sided permutation test, 20k shuffles):
 
-| Task | Pass A / D | Cost A → D | p | Turns A → D | p | First edit at turn A → D | p |
-|---|---|---|---|---|---|---|---|
-| AB1 | 0/6 / 0/6 | $0.0184 → $0.0201 (+9%) | 0.66 | 30 → 27 | 0.52 | 16.2 → 22.3 | 0.35 |
-| AB2 | 6/6 / 6/6 | $0.0313 → $0.0321 (+3%) | 0.88 | 38 → 36 | 0.80 | 32.0 → 29.8 | 0.80 |
-| AB3 | 6/6 / 6/6 | $0.0171 → $0.0166 (−3%) | 0.67 | 27 → 22 | 0.10 | 13.5 → 7.0 | 0.09 |
-| AB4 | 6/6 / 6/6 | $0.0114 → $0.0158 (+38%) | 0.51 | 20 → 20 | 1.00 | 5.0 → 3.5 | 0.06 |
+| Task | Pass A / D | Cost A → D | p | Turns A → D | p |
+|---|---|---|---|---|---|
+| AB1 | 0/6 / 0/6 | $0.0184 → $0.0201 (+9%) | 0.66 | 30 → 27 | 0.52 |
+| AB2 | 6/6 / 6/6 | $0.0313 → $0.0321 (+3%) | 0.88 | 38 → 36 | 0.80 |
+| AB3 | 6/6 / 6/6 | $0.0171 → $0.0166 (−3%) | 0.67 | 27 → 22 | 0.10 |
+| AB4 | 6/6 / 6/6 | $0.0114 → $0.0158 (+38%) | 0.51 | 20 → 20 | 1.00 |
+
+Turn of the first edit, per run (`-` = not measured, see the correction below):
+
+| Task | A runs 22–27 | D runs 1–6 |
+|---|---|---|
+| AB1 | 7, 8, 16, -, -, 12 | -, -, 6, -, -, - |
+| AB2 | -, 10, -, -, -, - | -, -, -, -, 10, - |
+| AB3 | -, 11, 9, -, 9, 8 (mean 9.3) | -, 5, 5, 6, 5, 6 (mean 5.4) |
+| AB4 | 4, 7, 5, 6, 3, 5 (mean 5.0) | 3, 4, 4, 3, 3, 4 (mean 3.5) |
+
+**Correction (found while preparing iteration 11).** `turnsToFirstEdit` only counted the Edit/Write tools, but Haiku edits with `sed -i` and heredocs in 20 of 48 runs, which were recorded as "no edit". A first version of this table filled those with the run's total turns and showed AB1 as "first edit later with the bundle"; that was an artifact and is withdrawn. The metric now also counts shell writes to source files (`SHELL_EDIT` in `metrics.ts`, with tests). The AB3 and AB4 values above were measured correctly.
 
 Totals: A $0.0261 per pass, D $0.0282 per pass (+8%); 18/24 passing in both. No crashes, retries or network commands. The AB4 mean is driven by one D run (43 turns, $0.038); medians are $0.010 vs $0.011. Every AB1 failure in both arms is the same regression test (`rules are deterministically ranked`): the agent still patches the symptom.
 
-**Conclusion.** The hypothesis holds only partly. The bundle moves the first edit earlier where it contains the right code (AB3 13.5 → 7, AB4 5 → 3.5, both p < 0.1), and total turns drop slightly on three tasks. But the saving is about the size of the bundle's own cost (about 6k tokens re-sent on every turn as cached input), so cost per pass doesn't move. On AB1, where the core file is only a signature at #24, the bundle delays the first edit. Not significant on any task; arm D is not a win at this bundle size.
+**Conclusion.** The hypothesis holds only partly. The bundle moves the first edit earlier where it contains the right code (AB3 9.3 → 5.4, AB4 5.0 → 3.5, every D run at or below the A minimum), and total turns drop slightly on three tasks. But the saving is about the size of the bundle's own cost (about 6k tokens re-sent on every turn as cached input), so cost per pass doesn't move. Not significant on any task; arm D is not a win at this bundle size.
 
 What it suggests: orientation turns are real and can be shortened, but only by giving the agent less, more precise context (a smaller bundle with higher recall at the top). The cost of a front-loaded bundle is paid every turn, so its break-even is roughly "saves more turns than its size divided by the average per-turn context".
 
 Records: `results/A-ts-baseline/AB*/run-22..27.json`, `results/D-ts-bundle/AB*/run-1..6.json`.
+
+## Iteration 11 — Where Haiku's money goes (analysis only, no runs)
+
+**Question.** Before building "trim old tool output from the context" (the next idea after iteration 10), how much could it save at most?
+
+**Method.** From the 48 records of iteration 10, split cost by token class with `harness/prices.json`; `toolCost.carriedTokens` gives how much of the cached input is old tool output; the rest, divided by turns, is the context present on every turn regardless of tool output (system prompt, tool definitions, the agent's own messages, plus the bundle in arm D).
+
+| Arm | Cache reads | of which old tool output | Cache writes | Output | Non-tool context per turn |
+|---|---|---|---|---|---|
+| A (Haiku, runs 22–27) | 38% | 12% | 23% | 38% | 16.9k tokens |
+| D (Haiku, runs 1–6) | 44% | 9% | 21% | 35% | 26.0k tokens |
+
+**Conclusion.** Old tool output is about 12% of cost on Haiku. Trimming it can save at most that, minus the cache rewrites it causes (changing an earlier message invalidates the cached prefix after it). Not worth an iteration. The bigger shares are the agent's output (38%) and the fixed context re-sent on every turn (about 26%). That confirms D's problem in numbers: the bundle adds ~9k tokens to every turn. With costs this split, the remaining levers are fewer turns (scales every class except output) and less output per turn.
