@@ -331,3 +331,20 @@ Core-file recall 4/8 → 7/8. All changes are generic rules; none was tuned to a
 **Run.** A runs 22–27 (same period, corrected Claude pricing) and D runs 1–6 on `claude-haiku-5-5`, started together.
 
 **Expected if the hypothesis holds.** Fewer turns before the first edit (A on Haiku: about 6–14) and fewer turns overall, at equal pass rate, outweighing the bundle's per-turn cost.
+
+**Result** (`node src/compare.ts "A haiku (it.10)=results/A-ts-baseline@22-27" "D bundle (it.10)=results/D-ts-bundle@1-6" --suite actual --model claude-haiku-5-5`; means with a two-sided permutation test, 20k shuffles):
+
+| Task | Pass A / D | Cost A → D | p | Turns A → D | p | First edit at turn A → D | p |
+|---|---|---|---|---|---|---|---|
+| AB1 | 0/6 / 0/6 | $0.0184 → $0.0201 (+9%) | 0.66 | 30 → 27 | 0.52 | 16.2 → 22.3 | 0.35 |
+| AB2 | 6/6 / 6/6 | $0.0313 → $0.0321 (+3%) | 0.88 | 38 → 36 | 0.80 | 32.0 → 29.8 | 0.80 |
+| AB3 | 6/6 / 6/6 | $0.0171 → $0.0166 (−3%) | 0.67 | 27 → 22 | 0.10 | 13.5 → 7.0 | 0.09 |
+| AB4 | 6/6 / 6/6 | $0.0114 → $0.0158 (+38%) | 0.51 | 20 → 20 | 1.00 | 5.0 → 3.5 | 0.06 |
+
+Totals: A $0.0261 per pass, D $0.0282 per pass (+8%); 18/24 passing in both. No crashes, retries or network commands. The AB4 mean is driven by one D run (43 turns, $0.038); medians are $0.010 vs $0.011. Every AB1 failure in both arms is the same regression test (`rules are deterministically ranked`): the agent still patches the symptom.
+
+**Conclusion.** The hypothesis holds only partly. The bundle moves the first edit earlier where it contains the right code (AB3 13.5 → 7, AB4 5 → 3.5, both p < 0.1), and total turns drop slightly on three tasks. But the saving is about the size of the bundle's own cost (about 6k tokens re-sent on every turn as cached input), so cost per pass doesn't move. On AB1, where the core file is only a signature at #24, the bundle delays the first edit. Not significant on any task; arm D is not a win at this bundle size.
+
+What it suggests: orientation turns are real and can be shortened, but only by giving the agent less, more precise context (a smaller bundle with higher recall at the top). The cost of a front-loaded bundle is paid every turn, so its break-even is roughly "saves more turns than its size divided by the average per-turn context".
+
+Records: `results/A-ts-baseline/AB*/run-22..27.json`, `results/D-ts-bundle/AB*/run-1..6.json`.

@@ -14,7 +14,7 @@ Everything is measured by the benchmark in this repo, so each idea has to prove 
 | **A** `A-ts-baseline` | TypeScript | Claude Code's standard tools (Read, Edit, Write, Grep, Glob, Bash) | baseline measured |
 | **B** `B-ts-query` | TypeScript | standard tools + the tersa query layer (`query/`), steered: usage note in the system prompt; code-reading shell/Grep/Glob calls and whole-file Reads of large source files redirected to the query tools or ranged Reads | measured: no gain with DeepSeek, more expensive with Haiku (see `docs/iterations.md`) |
 | **B2** `B2-ts-query-shell` | TypeScript | standard tools + the query layer as a `tersa` shell command (daemon keeps the index warm), usage note in the system prompt, no redirects, so lookups batch with other shell commands in one turn | piloted: not adopted by Haiku |
-| **D** `D-ts-bundle` | TypeScript | standard tools + a ~6k-token context bundle in the first prompt, built automatically from the spec (`query/src/bundle.ts`) | iteration 10 |
+| **D** `D-ts-bundle` | TypeScript | standard tools + a ~6k-token context bundle in the first prompt, built automatically from the spec (`query/src/bundle.ts`) | iteration 10: no cost gain |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
 **B vs A** isolates the query layer. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
@@ -93,6 +93,7 @@ Arm A, `deepseek-v4-flash`, provider-only network, 6 runs per task (2026-11-03):
 - **Run-to-run variance** in cost is 12–27%, so 6 runs per arm can detect a difference of roughly 25–30%.
 - **The query layer reaches every task's core files in one or two queries** (200–600 tokens of output, `query/test/actual.test.ts`).
 - **Steering made the tools used, but not cheaper (v1):** with the system-prompt note and redirects, the agent made 12–25 query calls per run, yet every task cost the same or more than arm A (AB1 $0.035 vs $0.019, and it broke an existing test). Agents still made 7–34 Read calls: Claude Code requires a Read before an Edit, so changed code is read twice. v1.1 trims query output; an edit tool in the query layer would remove the second read.
+- **A context bundle up front shortens orientation but doesn't lower cost — iteration 10 (arm D, Haiku, 6 runs per task):** first edit earlier on AB3 (turn 13.5 → 7) and AB4 (5 → 3.5), p < 0.1; cost per pass $0.0282 vs A $0.0261 (+8%), no task significant. The ~6k-token bundle is re-sent every turn and eats the turns it saves. AB1 fails 0/6 in both arms on the same regression test.
 - **On Claude Haiku 5.5 the query layer makes the agent significantly more expensive — iteration 8:** +24% to +126% per task (3 of 4 at p ≤ 0.016), turns up to 2× (AB3: 21 → 49), no gain in pass rate. Haiku reads only 7–18k tokens per run, mostly through compound shell commands that already batch lookups; the tools split that into more calls and turns. With DeepSeek (iteration 7) there was no difference. **Conclusion: the lever is turns, not bytes read.**
 - **The query layer (v1.2) does not lower cost with DeepSeek — iteration 7, 6 runs per task per arm:** B $0.0166 per pass vs A $0.0158 (+5%); per task −14% to +28%, none significant (p 0.09–0.46), all 48 runs passing. Query output replaced file reading one-for-one, read precision didn't improve, and B took more turns. The iteration 6 pilot (−35% on AB3) was noise. Cost is driven by turns × context size, which a better reading interface alone doesn't change.
 - **Tools alone weren't adopted:** in the first arm B pilot (usage note in the task prompt only) the agent made 2–4 query calls out of ~50 tool calls and kept using grep/cat/sed. Steering was added to the harness for arm B (system-prompt note plus redirects).
@@ -148,7 +149,7 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 7: full comparison, B v1.2 vs same-period A, 6 runs per task: no significant difference (B +5% per pass)
 - [x] Iteration 8: same comparison on Claude Haiku 5.5: B significantly more expensive (+24% to +126%)
 - [x] Iteration 9: query layer as a shell command (arm B2): not adopted (0–4 calls per run); query-layer line closed
-- [ ] Iteration 10: task-scoped context bundle up front (fewer orientation turns)
+- [x] Iteration 10: task-scoped context bundle up front (arm D): earlier first edit on AB3/AB4, but cost per pass +8%, not significant
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model
