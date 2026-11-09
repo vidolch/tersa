@@ -1,0 +1,101 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 15,
+  "chained": false,
+  "startState": "actual/AB2",
+  "specSha256": "a1b6c9a3316e43536a51ccfb90a60f6b8ee8767276240d41aca119b2672982b3",
+  "model": "claude-haiku-5-5",
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 76,
+    "cacheRead": 1989156,
+    "cacheWrite": 81988,
+    "output": 23003,
+    "toolResultTokens": 26947,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 51,
+    "toolCalls": 50,
+    "toolCallsByName": {
+      "Grep": 4,
+      "Read": 9,
+      "Bash": 28,
+      "Edit": 8,
+      "Write": 1
+    },
+    "fileReads": 9,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 245738,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB2 R1": true,
+      "AB2 R2": true,
+      "AB2 R3": true,
+      "AB2 R4": true,
+      "AB2 R5": true,
+      "AB2 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 43,
+    "readChars": 105512,
+    "relevantChars": 44171,
+    "coreChars": 29720,
+    "precision": 0.41863484722116917,
+    "coreRecall": 1,
+    "readTokens": 26378
+  },
+  "costUsd": 0.030355659999999993,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.041649160000000005,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 1,
+    "denied": [
+      "connect registry.npmjs.org:443"
+    ]
+  },
+  "toolCost": {
+    "Grep": {
+      "calls": 4,
+      "outTokens": 5978,
+      "carriedTokens": 213640
+    },
+    "Read": {
+      "calls": 9,
+      "outTokens": 11085,
+      "carriedTokens": 376177
+    },
+    "Bash": {
+      "calls": 28,
+      "outTokens": 9465,
+      "carriedTokens": 148573
+    },
+    "Edit": {
+      "calls": 8,
+      "outTokens": 373,
+      "carriedTokens": 10071
+    },
+    "Write": {
+      "calls": 1,
+      "outTokens": 53,
+      "carriedTokens": 1272
+    }
+  }
+}
