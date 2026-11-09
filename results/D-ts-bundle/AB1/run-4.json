@@ -1,0 +1,115 @@
+{
+  "suite": "actual",
+  "arm": "D-ts-bundle",
+  "task": "AB1",
+  "run": 4,
+  "chained": false,
+  "startState": "actual/AB1",
+  "specSha256": "3ed4a82cf3927a943b3086ced320b193ae91463d7a5e760a67aa3f4de5276f1c",
+  "model": "claude-haiku-5-5",
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 66,
+    "cacheRead": 1204211,
+    "cacheWrite": 36752,
+    "output": 15989,
+    "toolResultTokens": 11635,
+    "contextOverheadTokens": 5946
+  },
+  "agent": {
+    "turns": 33,
+    "toolCalls": 32,
+    "toolCallsByName": {
+      "Bash": 32
+    },
+    "fileReads": 0,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": null,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 366599,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": false,
+    "rules": {
+      "AB1 R1": true,
+      "AB1 R2": true,
+      "AB1 R3": true,
+      "AB1 R4": true,
+      "AB1 regression": false
+    },
+    "regressionFailures": [
+      "Rule rules are deterministically ranked"
+    ]
+  },
+  "reading": {
+    "filesRead": 18,
+    "readChars": 45391,
+    "relevantChars": 8812,
+    "coreChars": 7995,
+    "precision": 0.19413540129100482,
+    "coreRecall": 1,
+    "readTokens": 11348
+  },
+  "costUsd": 0.024637209999999996,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.024637210000000003,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 32,
+      "outTokens": 11637,
+      "carriedTokens": 236598
+    }
+  },
+  "bundle": {
+    "tokens": 5946,
+    "files": [
+      "packages/loot-core/src/server/post.ts",
+      "packages/api/methods.ts",
+      "packages/loot-core/src/server/accounts/app.ts",
+      "packages/loot-core/src/server/importers/ynab4.ts",
+      "packages/loot-core/src/server/importers/ynab5.ts",
+      "packages/desktop-client/src/components/rules/RuleEditor.tsx",
+      "packages/desktop-client/src/components/transactions/TransactionsTable.tsx",
+      "packages/loot-core/src/mocks/budget.ts",
+      "packages/desktop-client/src/components/accounts/Account.tsx",
+      "packages/desktop-client/src/components/modals/ImportTransactionsModal/ImportTransactionsModal.tsx",
+      "packages/desktop-client/src/components/transactions/SelectedTransactionsButton.tsx",
+      "packages/loot-core/src/server/rules/rule.ts",
+      "packages/loot-core/src/server/transactions/transaction-rules.ts",
+      "packages/desktop-client/src/components/formula/formulaBadgeRanges.ts",
+      "packages/loot-core/src/shared/rules.ts",
+      "packages/loot-core/src/server/accounts/sync.ts",
+      "packages/loot-core/src/types/models/rule.ts",
+      "packages/desktop-client/src/components/reports/reports/CustomReport.tsx",
+      "packages/desktop-client/src/components/reports/spreadsheets/sankey-spreadsheet.ts",
+      "packages/desktop-client/src/components/transactions/useTransactionRowContextActions.ts",
+      "packages/desktop-client/src/components/reports/spreadsheets/budgetDataQuery.ts",
+      "packages/desktop-client/src/hooks/useFormulaExecution.ts",
+      "packages/desktop-client/src/components/reports/ReportOptions.ts",
+      "packages/desktop-client/src/components/ManageRules.tsx",
+      "packages/loot-core/src/server/rules/rule-utils.ts",
+      "packages/desktop-client/src/components/Modals.tsx",
+      "packages/loot-core/src/server/schedules/app.ts",
+      "packages/desktop-client/src/components/banksync/useBankSyncAccountSettings.ts",
+      "packages/desktop-client/src/components/payees/ManagePayeesWithData.tsx",
+      "packages/desktop-client/src/components/banksync/BankSyncCheckboxOptions.tsx"
+    ]
+  }
+}

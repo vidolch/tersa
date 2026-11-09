@@ -1,0 +1,113 @@
+{
+  "suite": "actual",
+  "arm": "D-ts-bundle",
+  "task": "AB2",
+  "run": 6,
+  "chained": false,
+  "startState": "actual/AB2",
+  "specSha256": "a1b6c9a3316e43536a51ccfb90a60f6b8ee8767276240d41aca119b2672982b3",
+  "model": "claude-haiku-5-5",
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 72,
+    "cacheRead": 1468386,
+    "cacheWrite": 46680,
+    "output": 19789,
+    "toolResultTokens": 15110,
+    "contextOverheadTokens": 5954
+  },
+  "agent": {
+    "turns": 36,
+    "toolCalls": 35,
+    "toolCallsByName": {
+      "Bash": 35
+    },
+    "fileReads": 0,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": null,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 290810,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB2 R1": true,
+      "AB2 R2": true,
+      "AB2 R3": true,
+      "AB2 R4": true,
+      "AB2 R5": true,
+      "AB2 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 27,
+    "readChars": 59560,
+    "relevantChars": 14143,
+    "coreChars": 11550,
+    "precision": 0.23745802552048353,
+    "coreRecall": 1,
+    "readTokens": 14890
+  },
+  "costUsd": 0.030420560000000006,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.030420560000000006,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 35,
+      "outTokens": 15116,
+      "carriedTokens": 355182
+    }
+  },
+  "bundle": {
+    "tokens": 5954,
+    "files": [
+      "packages/api/methods.ts",
+      "packages/loot-core/src/server/rules/app.ts",
+      "packages/loot-core/src/server/transactions/transaction-rules.ts",
+      "packages/desktop-client/src/components/transactions/TransactionsTable.tsx",
+      "packages/loot-core/src/server/accounts/sync.ts",
+      "packages/loot-core/src/server/main.ts",
+      "packages/loot-core/src/types/models/import-transaction.ts",
+      "packages/loot-core/src/types/models/rule.ts",
+      "packages/desktop-client/src/components/formula/formulaBadgeRanges.ts",
+      "packages/loot-core/src/shared/rules.ts",
+      "packages/cli/src/commands/rules.ts",
+      "packages/loot-core/src/server/importers/ynab5.ts",
+      "packages/desktop-client/src/components/modals/ImportTransactionsModal/Transaction.tsx",
+      "packages/loot-core/src/server/rules/rule-utils.ts",
+      "packages/desktop-client/src/components/transactions/SelectedTransactionsButton.tsx",
+      "packages/loot-core/src/types/models/transaction.ts",
+      "packages/loot-core/src/server/importers/ynab4.ts",
+      "packages/desktop-client/src/components/formula/formulaCatalog.ts",
+      "packages/desktop-client/src/hooks/useTransactionBatchActions.ts",
+      "packages/desktop-client/src/components/rules/RuleEditor.tsx",
+      "packages/loot-core/src/server/forecast/forecast-filters.ts",
+      "packages/desktop-client/src/components/filters/FiltersMenu.tsx",
+      "packages/desktop-client/src/components/modals/ImportTransactionsModal/utils.ts",
+      "packages/loot-core/src/server/db/types/index.ts",
+      "packages/loot-core/src/server/aql/schema/index.ts",
+      "packages/cli/src/commands/query.ts",
+      "packages/desktop-client/src/components/transactions/SimpleTransactionsTable.tsx",
+      "packages/desktop-client/src/components/modals/ImportTransactionsModal/ImportTransactionsModal.tsx",
+      "packages/desktop-client/src/components/mobile/transactions/TransactionEdit.tsx",
+      "packages/desktop-client/src/util/rule.ts"
+    ]
+  }
+}

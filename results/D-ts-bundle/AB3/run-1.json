@@ -1,0 +1,114 @@
+{
+  "suite": "actual",
+  "arm": "D-ts-bundle",
+  "task": "AB3",
+  "run": 1,
+  "chained": false,
+  "startState": "actual/AB3",
+  "specSha256": "7e0fb28c9b577e2011238b1249121d7e61af14d7e381c0bdd5642cc2d45043b9",
+  "model": "claude-haiku-5-5",
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 30,
+    "cacheRead": 422304,
+    "cacheWrite": 33029,
+    "output": 10045,
+    "toolResultTokens": 6493,
+    "contextOverheadTokens": 6000
+  },
+  "agent": {
+    "turns": 15,
+    "toolCalls": 14,
+    "toolCallsByName": {
+      "Bash": 14
+    },
+    "fileReads": 0,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": null,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 115164,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB3 R1": true,
+      "AB3 R2": true,
+      "AB3 R3": true,
+      "AB3 R4": true,
+      "AB3 R5": true,
+      "AB3 R6": true,
+      "AB3 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 14,
+    "readChars": 25935,
+    "relevantChars": 1742,
+    "coreChars": 1286,
+    "precision": 0.06716791979949875,
+    "coreRecall": 0.6666666666666666,
+    "readTokens": 6484
+  },
+  "costUsd": 0.013377165,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.013377165,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 14,
+      "outTokens": 6494,
+      "carriedTokens": 72929
+    }
+  },
+  "bundle": {
+    "tokens": 6000,
+    "files": [
+      "packages/loot-core/src/server/schedules/occurrences.ts",
+      "packages/desktop-client/src/components/schedules/ScheduleEditForm.tsx",
+      "packages/desktop-client/src/hooks/useScheduleEdit.ts",
+      "packages/api/methods.ts",
+      "packages/loot-core/src/server/budget/schedule-template.ts",
+      "packages/desktop-client/src/components/schedules/SchedulesTable.tsx",
+      "packages/desktop-client/src/components/rules/RuleEditor.tsx",
+      "packages/loot-core/src/shared/rules.ts",
+      "packages/loot-core/src/server/rules/condition.ts",
+      "packages/desktop-client/src/components/mobile/schedules/SchedulesListItem.tsx",
+      "packages/loot-core/src/server/forecast/forecast-schedules.ts",
+      "packages/desktop-client/src/components/accounts/Balance.tsx",
+      "packages/loot-core/src/server/transactions/transaction-rules.ts",
+      "packages/desktop-client/src/components/schedules/ScheduleEditModal.tsx",
+      "packages/loot-core/src/types/models/schedule.ts",
+      "packages/loot-core/src/server/api-models.ts",
+      "packages/loot-core/src/server/api.ts",
+      "packages/desktop-client/src/components/mobile/schedules/MobileSchedulesPage.tsx",
+      "packages/desktop-client/src/components/formula/formulaBadgeRanges.ts",
+      "packages/loot-core/src/server/importers/ynab5.ts",
+      "packages/loot-core/src/server/rules/rule-utils.ts",
+      "packages/loot-core/src/server/aql/schema/index.ts",
+      "packages/desktop-client/src/util/schedule-actions.ts",
+      "packages/loot-core/src/shared/schedules.ts",
+      "packages/desktop-client/src/components/schedules/schedule-edit-utils.ts",
+      "packages/loot-core/src/server/schedules/app.ts",
+      "packages/desktop-client/src/components/rules/Value.tsx",
+      "packages/loot-core/src/types/models/rule.ts",
+      "packages/loot-core/src/server/forecast/forecast-projection.ts",
+      "packages/loot-core/src/server/schedules/find-schedules.ts"
+    ]
+  }
+}
