@@ -11,6 +11,10 @@ export interface AgentMetrics {
   compileFailures: number;
   testRuns: number;
   compactions: number;
+  /** Main-thread turn of the first Edit/Write (orientation cost); null if none. */
+  turnsToFirstEdit: number | null;
+  /** Bash calls that ran the `tersa` query command (arm B2). */
+  shellQueryCalls: number;
   /** API requests the SDK retried (rate limits, overload, connection errors). */
   apiRetries: number;
   /** Total time spent waiting before those retries. */
@@ -36,6 +40,7 @@ const EDIT_TOOLS = new Set(["Edit", "Write", "MultiEdit", "NotebookEdit"]);
 // A Bash command counts as a compile step if it runs the type checker or a build.
 const COMPILE_CMD = /\btsc\b|\btypecheck\b|npm run build|\btersa (build|check)\b/;
 // A Bash command counts as a test run if it runs a test runner.
+const SHELL_QUERY = /(^|[|;&(]\s*|\bcd\s+\S+\s*&&\s*)tersa\s+(find|get|refs|outline)\b/;
 const NETWORK_CMD = /\bgit\s+(clone|fetch|pull|ls-remote)\b|\bcurl\b|\bwget\b|github\.com|\bnpm\s+(view|info)\b/;
 const TEST_CMD = /\bvitest\b|\bnpm (run )?test\b|\bnode --test\b|\bjest\b/;
 
@@ -100,6 +105,8 @@ export class MetricsCollector {
     compileFailures: 0,
     testRuns: 0,
     compactions: 0,
+    turnsToFirstEdit: null,
+    shellQueryCalls: 0,
     apiRetries: 0,
     apiRetryWaitMs: 0,
     networkCommands: 0,
@@ -205,6 +212,10 @@ export class MetricsCollector {
             else this.readKeys.add(key);
           }
           if (b.name === "Bash" && TEST_CMD.test(String(b.input?.command ?? ""))) this.m.testRuns += 1;
+          if (b.name === "Bash" && SHELL_QUERY.test(String(b.input?.command ?? ""))) this.m.shellQueryCalls += 1;
+          if ((b.name === "Edit" || b.name === "Write" || b.name === "MultiEdit") && this.m.turnsToFirstEdit === null && !msg.parent_tool_use_id) {
+            this.m.turnsToFirstEdit = this.turnIds.size;
+          }
           if (b.name === "Bash" && NETWORK_CMD.test(String(b.input?.command ?? ""))) {
             this.m.networkCommands += 1;
             this.networkCommandLog.push(String(b.input.command).slice(0, 300));
@@ -287,6 +298,16 @@ export class MetricsCollector {
     if (use.name === "Grep") {
       fallback = typeof use.input?.path === "string" && SOURCE_FILE.test(" " + use.input.path) ? use.input.path : null;
       SOURCE_FILE.lastIndex = 0;
+    } else if (use.name === "Bash" && SHELL_QUERY.test(String(use.input?.command ?? ""))) {
+      // tersa output (possibly mixed with other commands): attribute like query-tool output
+      let current: string = UNATTRIBUTED;
+      for (const line of resultText(content).split("\n")) {
+        if (!line) continue;
+        const loc = line.match(QUERY_LOCATION) ?? line.match(LINE_PREFIX);
+        if (loc && /^(###|  \S|[\w.\/-]+:\d)/.test(line)) current = loc[1];
+        this.addRead(loc ? loc[1] : current, line.length + 1);
+      }
+      return;
     } else if (use.name === "Bash") {
       const cmd = String(use.input?.command ?? "");
       if (!READ_CMD.test(cmd)) return;

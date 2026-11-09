@@ -13,6 +13,7 @@ Everything is measured by the benchmark in this repo, so each idea has to prove 
 |---|---|---|---|
 | **A** `A-ts-baseline` | TypeScript | Claude Code's standard tools (Read, Edit, Write, Grep, Glob, Bash) | baseline measured |
 | **B** `B-ts-query` | TypeScript | standard tools + the tersa query layer (`query/`), steered: usage note in the system prompt; code-reading shell/Grep/Glob calls and whole-file Reads of large source files redirected to the query tools or ranged Reads | measured: no gain with DeepSeek, more expensive with Haiku (see `docs/iterations.md`) |
+| **B2** `B2-ts-query-shell` | TypeScript | standard tools + the query layer as a `tersa` shell command (daemon keeps the index warm), usage note in the system prompt, no redirects, so lookups batch with other shell commands in one turn | iteration 9 |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
 **B vs A** isolates the query layer. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
@@ -54,7 +55,7 @@ Everything runs in GitHub Actions; no local machine is needed.
 | `ci` | every push | self-check of the urlshort suite through the real pipeline; query-layer typecheck and tests | free |
 | `validate-actual` | push to the Actual suite, harness or query layer | every Actual task: the start state fails exactly as expected and the reference fix passes; the query layer reaches every task's core files | free |
 | `bench-baseline` | manual | arm A batch: suite × tasks × runs | API credits |
-| `bench-query` | manual | arm B batch, same steps (`_bench.yml` is shared) | API credits |
+| `bench-query` | manual | arm B or B2 batch, same steps (`_bench.yml` is shared) | API credits |
 | `summary` | after each batch, or a push to `results/` | rebuilds `results/summary.md` (one at a time, so batches never conflict) | free |
 
 Run **both arms in the same period**: providers can update a model behind the same name, and a same-day baseline rules that out as an explanation.
@@ -108,6 +109,7 @@ What went wrong, how it was caught, and what changed. Invalidated records are ke
 | 2026-11-03 | Two runs crashed at the same moment on a DeepSeek connection drop; the runner died and no record was written | missing records | crashes recorded (`error_agent_crash`) and listed, not scored; SDK stderr saved |
 | 2026-11-03 | **An agent downloaded the upstream file with `curl` and diffed it against the seeded workspace** (AB1 run 5; run 1 likely the same). It found the repo URL in `AGENTS.md` and the version in `package.json` | network-command flag | provider-only network per run; profile says no network; contaminated runs invalid; Actual baseline archived and rerun |
 | 2026-11-03 | Arm A and arm B batches finished together; both rewrote `results/summary.md`, arm B's commit hit a merge conflict, and the retry loop still reported success, so B's records were dropped | missing records | batches commit only their own record files; `summary` workflow rebuilds the summary; failed pushes fail the job |
+| 2026-11-09 | A run that hit the turn limit would have been recorded as a crash (not scored) instead of a failure: the SDK throws on max turns | mock test for arm B2 | recorded as `error_max_turns`, scored as failed; no past records affected |
 | 2026-11-09 | Recorded Claude costs undercounted output: per-request pricing read output tokens from the stream's start event (a placeholder) | recorded total below the SDK totals priced at the lowest rates | final output counts read from stream `message_delta` events; iteration 8 reported with both measures |
 | 2026-11-09 | First Claude (Haiku 5.5) pilot: one arm A run sat in the agent step for 40 minutes with an empty log, and transcripts are only downloadable afterwards | wall-clock time; cancelled by hand | a progress line per turn and every API retry in the live log; 30-minute wall-clock limit per run (recorded as `error_wall_timeout`, counted as a failed run in both arms) with the last tool calls printed |
 | 2026-11-03 | Reading metric counted only the Read tool, but agents read mostly via `sed`/`cat`/`grep`: one run showed 0 tokens read | implausible numbers | shell, Grep and query-tool output attributed to files |
@@ -144,7 +146,8 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 6: steering v1.2 pilot: B no longer more expensive than A; cheaper on AB2/AB3 (1 run each)
 - [x] Iteration 7: full comparison, B v1.2 vs same-period A, 6 runs per task: no significant difference (B +5% per pass)
 - [x] Iteration 8: same comparison on Claude Haiku 5.5: B significantly more expensive (+24% to +126%)
-- [ ] Next direction: reduce turns (task-scoped context up front; a smaller, shell-batchable query surface)
+- [ ] Iteration 9: query layer as a shell command (arm B2), Haiku 5.5
+- [ ] Iteration 10: task-scoped context bundle up front (fewer orientation turns)
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model

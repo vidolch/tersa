@@ -1,5 +1,5 @@
-import { spawnSync } from "node:child_process";
-import { cpSync, createWriteStream, readFileSync } from "node:fs";
+import { spawn, spawnSync, type ChildProcess } from "node:child_process";
+import { chmodSync, cpSync, createWriteStream, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { query } from "@anthropic-ai/claude-agent-sdk";
 import { paths, ROOT as ROOT_DIR, type Arm, type ArmConfig, type Suite, type Task } from "./config.ts";
@@ -56,6 +56,36 @@ export function buildPrompt(
   return { prompt, overheadChars: extras.reduce((n, e) => n + e.length, 0) };
 }
 
+/**
+ * Starts the query daemon for this run and returns the env that puts `tersa`
+ * on the agent's PATH. The daemon keeps the index and session dedupe alive
+ * across CLI calls.
+ */
+async function startShellQuery(workspace: string, rawDir: string): Promise<{ env: Record<string, string>; daemon: ChildProcess }> {
+  const bin = join(rawDir, "bin");
+  mkdirSync(bin, { recursive: true });
+  const socket = join(rawDir, "tersa.sock");
+  const cli = join(ROOT_DIR, "query", "src", "cli.ts");
+  writeFileSync(join(bin, "tersa"), `#!/bin/sh\nexec "${process.execPath}" --disable-warning=ExperimentalWarning "${cli}" "$@"\n`);
+  chmodSync(join(bin, "tersa"), 0o755);
+  const daemon = spawn(
+    process.execPath,
+    ["--disable-warning=ExperimentalWarning", join(ROOT_DIR, "query", "src", "daemon.ts"), "--root", workspace, "--socket", socket],
+    { stdio: ["ignore", "pipe", "inherit"] },
+  );
+  await new Promise<void>((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error("query daemon did not start within 60s")), 60_000);
+    daemon.stdout!.on("data", (d) => {
+      if (String(d).includes("ready")) {
+        clearTimeout(t);
+        resolve();
+      }
+    });
+    daemon.on("exit", (code) => reject(new Error(`query daemon exited with ${code}`)));
+  });
+  return { env: { PATH: `${bin}:${process.env.PATH}`, TERSA_SOCKET: socket }, daemon };
+}
+
 export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> {
   const { prompt, overheadChars: promptOverhead } = buildPrompt(input.suite, input.arm, input.task, input.armConfig);
   const steering = input.armConfig.steering ?? {};
@@ -65,6 +95,7 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
   const overheadChars = promptOverhead + systemAppend.length;
   const metrics = new MetricsCollector();
   const transcript = createWriteStream(join(input.rawDir, "transcript.jsonl"));
+  const shell = input.armConfig.shellQuery ? await startShellQuery(input.workspace, input.rawDir) : null;
   const stderrLog = createWriteStream(join(input.rawDir, "agent-stderr.log"));
   const stderrTail: string[] = [];
 
@@ -81,6 +112,7 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
       allowDangerouslySkipPermissions: true,
       // Isolation: no user/project settings or CLAUDE.md leak into runs.
       settingSources: [],
+      ...(shell ? { env: { ...(process.env as Record<string, string>), ...shell.env } } : {}),
       // raw stream events carry the final output token count per request (pricing, cap)
       includePartialMessages: true,
       ...(systemAppend ? { systemPrompt: { type: "preset" as const, preset: "claude_code" as const, append: systemAppend } } : {}),
@@ -130,11 +162,15 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
     }
   }
   } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
     if (timedOut) {
       // closing the query on timeout may surface as an error; it is not a crash
+    } else if (/maximum number of turns/i.test(message)) {
+      // hitting the turn limit is the agent failing, not infrastructure: scored as a failed run
+      metrics.resultSubtype = "error_max_turns";
+      console.error(`agent stopped: turn limit reached`);
     } else {
     // The run counts as failed but still gets a record: evaluate whatever the agent left.
-    const message = err instanceof Error ? err.message : String(err);
     metrics.resultSubtype = "error_agent_crash";
     metrics.crash = message.slice(0, 2000);
     transcript.write(JSON.stringify({ type: "harness", event: "agent_crash", message: metrics.crash }) + "\n");
@@ -144,6 +180,7 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
     }
   } finally {
     clearTimeout(timer);
+    shell?.daemon.kill("SIGTERM");
   }
   if (timedOut) {
     // A run that hits the wall-clock limit is a failed run (same limit for every arm), not a crash.

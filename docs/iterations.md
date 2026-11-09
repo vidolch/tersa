@@ -282,3 +282,14 @@ What this suggests next: the lever is **turns**, not bytes read. Candidates: han
 **AB1 on Haiku.** 11 of 12 runs failed only the regression rule: Haiku patches `runRules` with a special case instead of fixing the ranking comparator (seen in the job log), and the project's own tests catch it. DeepSeek fixed the comparator in 30 of 30 runs. The task separates a real fix from a symptom patch, as intended; from now on records carry the names of failed regression tests to confirm such cases.
 
 **Measurement issue (found in this iteration).** Per-request pricing (needed for Haiku's long-prompt tier) read output tokens from the stream's start event, which only carries a placeholder; the final count arrives at the end of the stream. Recorded Claude costs in iterations 8 (and its pilot) therefore undercount output, which is 30–38% of Haiku's cost. Token totals and turns are unaffected, and the short-rate column above confirms the direction of every comparison. Fixed by observing the stream's `message_delta` events (tested against a mock). DeepSeek records were priced from SDK totals and are not affected.
+
+---
+
+## Iteration 9 — The query layer as a shell command (arm B2)
+**Date** 2026-11-09 · **Model** `claude-haiku-5-5` · **Status** pilot
+
+**Hypothesis.** Iteration 8 showed the MCP tools add turns: one compound shell command became several tool calls. If the same queries are a shell command (`tersa find|get|refs|outline`), the agent can batch them with other commands in one turn, keep its efficient habits, and still read more precisely. Then B2 costs no more than A, ideally less.
+
+**Change.** New arm `B2-ts-query-shell`: a query daemon starts with the run (index, language services and session dedupe stay warm across calls, ~300 ms per call) and a `tersa` CLI is put on the agent's PATH. No MCP tools and no redirects (redirects cost turns); a short usage note in the system prompt shows a batched example. New metrics for every arm: `turnsToFirstEdit` (orientation cost) and `shellQueryCalls`; `tersa` output is attributed to files for reading precision.
+
+**Harness fix found while building it.** A run that hits the turn limit made the SDK throw, which the runner recorded as a crash (not scored). It is now `error_max_turns`, a failed run. No past records were affected.

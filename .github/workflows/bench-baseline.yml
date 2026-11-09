@@ -28,9 +28,6 @@ on:
       model:
         description: Model id (empty = provider default; deepseek-v4-flash, claude-haiku-5-5)
         default: ""
-      max_turns:
-        description: Max agent turns per run
-        default: "150"
       max_minutes:
         description: Wall-clock limit per run, minutes (a run that hits it counts as failed)
         default: "30"
@@ -52,7 +49,6 @@ jobs:
       first_run: ${{ inputs.first_run }}
       provider: ${{ inputs.provider }}
       model: ${{ inputs.model }}
-      max_turns: ${{ inputs.max_turns }}
       max_budget_usd: ${{ inputs.max_budget_usd }}
       max_minutes: ${{ inputs.max_minutes }}
       max_parallel: ${{ inputs.max_parallel }}

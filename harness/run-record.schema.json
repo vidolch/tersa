@@ -20,6 +20,7 @@
       "enum": [
         "A-ts-baseline",
         "B-ts-query",
+        "B2-ts-query-shell",
         "C-tersa-lang"
       ]
     },
@@ -151,6 +152,16 @@
           "type": "integer"
         },
         "apiRetryWaitMs": {
+          "type": "integer"
+        },
+        "turnsToFirstEdit": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "main-thread turn of the first Edit/Write"
+        },
+        "shellQueryCalls": {
           "type": "integer"
         }
       }

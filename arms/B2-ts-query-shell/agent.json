@@ -1,0 +1,11 @@
+{
+  "ready": true,
+  "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash"],
+  "mcpServers": {},
+  "contextFiles": [],
+  "shellQuery": true,
+  "steering": {
+    "systemPrompt": ["query-shell.md"],
+    "redirect": false
+  }
+}

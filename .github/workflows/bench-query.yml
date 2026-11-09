@@ -1,11 +1,16 @@
 name: bench-query
 
-# Arm B: standard tools plus the tersa query layer (query/).
+# Arms B / B2: standard tools plus the tersa query layer (query/), as MCP tools (B) or as a shell command (B2).
 # Same steps as the other arm (see _bench.yml). Run both arms in the same
 # period so a silent model update can't explain a difference.
 on:
   workflow_dispatch:
     inputs:
+      arm:
+        description: B = query tools over MCP with redirects; B2 = the `tersa` shell command, no redirects
+        type: choice
+        options: [B-ts-query, B2-ts-query-shell]
+        default: B2-ts-query-shell
       suite:
         description: Suite (urlshort = small control, actual = Actual Budget)
         type: choice
@@ -28,9 +33,6 @@ on:
       model:
         description: Model id (empty = provider default; deepseek-v4-flash, claude-haiku-5-5)
         default: ""
-      max_turns:
-        description: Max agent turns per run
-        default: "150"
       max_minutes:
         description: Wall-clock limit per run, minutes (a run that hits it counts as failed)
         default: "30"
@@ -45,14 +47,13 @@ jobs:
   bench:
     uses: ./.github/workflows/_bench.yml
     with:
-      arm: B-ts-query
+      arm: ${{ inputs.arm }}
       suite: ${{ inputs.suite }}
       tasks: ${{ inputs.tasks }}
       runs: ${{ inputs.runs }}
       first_run: ${{ inputs.first_run }}
       provider: ${{ inputs.provider }}
       model: ${{ inputs.model }}
-      max_turns: ${{ inputs.max_turns }}
       max_budget_usd: ${{ inputs.max_budget_usd }}
       max_minutes: ${{ inputs.max_minutes }}
       max_parallel: ${{ inputs.max_parallel }}

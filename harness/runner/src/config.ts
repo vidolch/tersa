@@ -8,7 +8,7 @@ export const TASKS = ["T1", "T2", "T3", "T4", "T5"] as const;
 export type Task = string;
 export const SUITES = ["urlshort", "actual"] as const;
 export type Suite = (typeof SUITES)[number];
-export const ARMS = ["A-ts-baseline", "B-ts-query", "C-tersa-lang"] as const;
+export const ARMS = ["A-ts-baseline", "B-ts-query", "B2-ts-query-shell", "C-tersa-lang"] as const;
 export type Arm = (typeof ARMS)[number];
 
 /** Reference snapshot each task starts from; null = arm scaffold only. */
@@ -40,6 +40,8 @@ export interface ArmConfig {
   contextFiles: string[];
   /** Extra tools to allow without prompting (e.g. MCP tools: mcp__<server>__<tool>). */
   allowedTools?: string[];
+  /** Start the query daemon for the run and put the `tersa` command on the agent's PATH. */
+  shellQuery?: boolean;
   /** How the harness steers the agent toward this arm's tools (see src/steering.ts). */
   steering?: {
     /** Files under arms/<arm>/ appended to Claude Code's system prompt; counted as overhead. */
