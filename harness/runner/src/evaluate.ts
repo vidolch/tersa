@@ -8,6 +8,8 @@ import { paths, type Arm, type Suite, type Task } from "./config.ts";
 export interface AcceptanceResult {
   passed: boolean;
   rules: Record<string, boolean>;
+  /** Names of the project's own tests that failed (suites with a regression check). */
+  regressionFailures?: string[];
 }
 
 export interface PerfResult {
@@ -133,9 +135,11 @@ export function runSuiteAcceptance(suite: Suite, task: Task, workspace: string, 
   const rules: Record<string, boolean> = {};
   const haveAcceptance = mergeVitestReport(join(outDir, "acceptance-default.json"), rules);
   const regFile = join(outDir, "regression.json");
-  rules[`${task} regression`] = existsSync(regFile) && JSON.parse(readFileSync(regFile, "utf8")).passed === true;
+  const reg = existsSync(regFile) ? JSON.parse(readFileSync(regFile, "utf8")) : null;
+  rules[`${task} regression`] = reg?.passed === true;
   const passed = r.status === 0 && haveAcceptance && Object.values(rules).every(Boolean);
-  return { passed, rules };
+  if (reg?.failed?.length) console.log(`regression failures:\n  ${reg.failed.slice(0, 10).join("\n  ")}`);
+  return { passed, rules, ...(reg?.failed?.length ? { regressionFailures: reg.failed.slice(0, 30) } : {}) };
 }
 
 export interface ReadingStats {

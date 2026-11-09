@@ -172,6 +172,12 @@
           "additionalProperties": {
             "type": "boolean"
           }
+        },
+        "regressionFailures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },

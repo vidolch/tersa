@@ -81,6 +81,8 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
       allowDangerouslySkipPermissions: true,
       // Isolation: no user/project settings or CLAUDE.md leak into runs.
       settingSources: [],
+      // raw stream events carry the final output token count per request (pricing, cap)
+      includePartialMessages: true,
       ...(systemAppend ? { systemPrompt: { type: "preset" as const, preset: "claude_code" as const, append: systemAppend } } : {}),
       ...(steering.redirect ? { hooks: redirectHooks(metrics.steering) as any } : {}),
       stderr: (data: string) => {
@@ -104,7 +106,10 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
   const diagnose = () => console.error(`last tool calls:\n  ${metrics.recentCalls.join("\n  ") || "(none)"}`);
   try {
   for await (const msg of q) {
-    transcript.write(JSON.stringify(msg) + "\n");
+    // Keep the transcript readable: only the usage-bearing stream events.
+    if (msg.type !== "stream_event" || msg.event?.type === "message_start" || msg.event?.type === "message_delta") {
+      transcript.write(JSON.stringify(msg) + "\n");
+    }
     metrics.observe(msg);
     // Live progress, one line per turn, so a slow or stuck run is visible in the job log.
     if (metrics.turnCount() !== lastTurn) {

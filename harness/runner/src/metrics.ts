@@ -128,10 +128,25 @@ export class MetricsCollector {
   private turnIds = new Set<string>();
   /** Calls the arm's steering redirected to the query layer. */
   steering = { redirects: 0, byTool: {} as Record<string, number> };
-  /** Latest usage per API message id, for a running cost estimate. */
+  /**
+   * Usage per API request. Assistant messages carry the usage snapshot from
+   * message_start, whose output_tokens is a placeholder; the final count
+   * arrives in the stream's message_delta, so stream events are observed too.
+   */
+  private streamId = new Map<string, string>(); // session/parent key → current message id
   private liveUsage = new Map<string, { i: number; r: number; w: number; o: number }>();
 
   /** Running cost from per-message usage at the given prices (USD per 1M tokens). */
+  private mergeUsage(id: string, u: any) {
+    const prev = this.liveUsage.get(id) ?? { i: 0, r: 0, w: 0, o: 0 };
+    this.liveUsage.set(id, {
+      i: Math.max(prev.i, u.input_tokens ?? 0),
+      r: Math.max(prev.r, u.cache_read_input_tokens ?? 0),
+      w: Math.max(prev.w, u.cache_creation_input_tokens ?? 0),
+      o: Math.max(prev.o, u.output_tokens ?? 0),
+    });
+  }
+
   /** Turns so far in the main thread. */
   turnCount(): number {
     return this.turnIds.size;
@@ -158,19 +173,23 @@ export class MetricsCollector {
   /** Feed every message from the SDK stream. Subagent messages are counted too. */
   observe(msg: any): void {
     switch (msg.type) {
+      case "stream_event": {
+        const ev = msg.event;
+        const key = String(msg.parent_tool_use_id ?? "main");
+        if (ev?.type === "message_start" && ev.message?.id) {
+          this.streamId.set(key, ev.message.id);
+          this.mergeUsage(ev.message.id, ev.message.usage ?? {});
+        } else if (ev?.type === "message_delta" && ev.usage) {
+          const id = this.streamId.get(key);
+          if (id) this.mergeUsage(id, ev.usage);
+        }
+        break;
+      }
       case "assistant": {
         const id = msg.message?.id;
         if (id && !msg.parent_tool_use_id) this.turnIds.add(id);
         const u = msg.message?.usage;
-        if (id && u) {
-          const prev = this.liveUsage.get(id) ?? { i: 0, r: 0, w: 0, o: 0 };
-          this.liveUsage.set(id, {
-            i: Math.max(prev.i, u.input_tokens ?? 0),
-            r: Math.max(prev.r, u.cache_read_input_tokens ?? 0),
-            w: Math.max(prev.w, u.cache_creation_input_tokens ?? 0),
-            o: Math.max(prev.o, u.output_tokens ?? 0),
-          });
-        }
+        if (id && u) this.mergeUsage(id, u);
         for (const b of msg.message?.content ?? []) {
           if (b?.type !== "tool_use" || this.toolUses.has(b.id)) continue;
           this.toolUses.set(b.id, { name: b.name, input: b.input ?? {} });

@@ -228,7 +228,7 @@ A better reading interface alone does not lower cost for this model. Cost is dri
 ---
 
 ## Iteration 8 — Same comparison on Claude Haiku 5.5
-**Date** 2026-11-09 · **Arms** A runs 16–21 and B v1.2 runs 9–14 on `claude-haiku-5-5`, 6 runs per task each, started together (3 concurrent per arm) · **Status** running
+**Date** 2026-11-09 · **Arms** A runs 16–21 and B v1.2 runs 9–14 on `claude-haiku-5-5`, 6 runs per task each, started together (3 concurrent per arm) · **Records** `results/A-ts-baseline/AB*/run-16..21`, `results/B-ts-query/AB*/run-9..14`
 
 **Question.** Iteration 7 found no cost difference with DeepSeek Flash. Was that the model (DeepSeek rarely batched queries), or does the query layer not help in this form?
 
@@ -239,3 +239,46 @@ A better reading interface alone does not lower cost for this model. Cost is dri
 `node src/compare.ts "A haiku=results/A-ts-baseline@15" "B haiku=results/B-ts-query@8" --suite actual --model claude-haiku-5-5`
 
 **Incident.** In the pilot, one arm A run sat in the agent step for 40 minutes with an empty log and was cancelled by hand; that led to the progress lines and the wall-clock limit above.
+
+**Result.** All 48 runs completed (no crashes, no API retries, no network attempts).
+| Task | Group | Runs | Pass | Median cost | Median turns | Median input | Median reading | Read precision | Query calls | Redirects | Read share of carried |
+|------|-------|------|------|-------------|--------------|--------------|----------------|----------------|-------------|-----------|-----------------------|
+| AB1 | A haiku (it.8) | 6 | 0/6 | $0.010 | 29 | 0.61M | 9k | 37% | 0 | 0 | 0% |
+| AB1 | B v1.2 haiku (it.8) | 6 | 1/6 | $0.016 | 37.5 | 0.97M | 12k | 39% | 14 | 3 | 29% |
+| AB2 | A haiku (it.8) | 6 | 6/6 | $0.021 | 43.5 | 1.40M | 18k | 19% | 0 | 0 | 0% |
+| AB2 | B v1.2 haiku (it.8) | 6 | 6/6 | $0.036 | 62.5 | 2.59M | 23k | 46% | 27 | 2 | 15% |
+| AB3 | A haiku (it.8) | 6 | 6/6 | $0.008 | 22 | 0.42M | 9k | 4% | 0 | 0 | 0% |
+| AB3 | B v1.2 haiku (it.8) | 6 | 6/6 | $0.020 | 47 | 1.33M | 15k | 45% | 13 | 4 | 17% |
+| AB4 | A haiku (it.8) | 6 | 6/6 | $0.007 | 19.5 | 0.36M | 8k | 20% | 0 | 0 | 0% |
+| AB4 | B v1.2 haiku (it.8) | 6 | 6/6 | $0.008 | 20.5 | 0.46M | 10k | 34% | 6 | 1 | 12% |
+
+`node src/compare.ts "A haiku (it.8)=results/A-ts-baseline@16-21" "B v1.2 haiku (it.8)=results/B-ts-query@9-14" --suite actual --model claude-haiku-5-5`
+
+Mean cost and turns, two-sided permutation test (20,000 shuffles). Cost is shown two ways because the recorded cost undercounts output (see Measurement issue): *recorded* and *short-rate* (SDK token totals at Haiku's short-prompt rates, which are correct totals but ignore the long-prompt surcharge).
+
+| Task | Recorded A → B | p | Short-rate A → B | Turns A → B | p (turns) | Pass A / B |
+|---|---|---|---|---|---|---|
+| AB1 | $0.0106 → $0.0170 (+61%) | 0.08 | $0.0173 → $0.0244 (+41%) | 29 → 41 | 0.09 | 0/6 · 1/6 |
+| AB2 | $0.0199 → $0.0374 (+88%) | 0.005 | $0.0301 → $0.0509 (+69%) | 41 → 66 | 0.002 | 6/6 · 6/6 |
+| AB3 | $0.0083 → $0.0221 (+167%) | 0.003 | $0.0143 → $0.0323 (+126%) | 21 → 49 | 0.002 | 6/6 · 6/6 |
+| AB4 | $0.0067 → $0.0092 (+36%) | 0.016 | $0.0112 → $0.0139 (+24%) | 20 → 21 | 0.61 | 6/6 · 6/6 |
+
+Where the input comes from (averages per run):
+
+| | Turns | Input | Output | Tool output carried, share of input | Main tool |
+|---|---|---|---|---|---|
+| A | 28 | 0.72M | 14k | 29% | Bash: 23 calls, 10k output |
+| B | 44 | 1.51M | 18k | 28% | query tools: 14 calls, 9k output; plus 8 Reads, 12 Bash, 9 Edits |
+
+Cost by billing class (short-rate): A = cache write 24%, cache read 38%, output 38%; B = 22%, 48%, 30%.
+
+**Conclusion.** On Haiku 5.5 the query layer makes the agent significantly more expensive (3 of 4 tasks at p ≤ 0.016, the fourth p = 0.08), with no gain in pass rate. Together with iteration 7 (DeepSeek: no difference), the hypothesis that a batched, symbol-level reading interface lowers cost is **rejected for this form of the tool**. Why:
+- **Reading was never the bottleneck for an efficient agent.** Haiku in arm A reads only 7–18k tokens per run, mostly through compound shell commands (`cd …; grep …; sed -n …`) that already batch several lookups into one turn. Tool output is under a third of its input; the rest is the per-turn harness overhead (about 6–7k tokens per request) and the growing conversation.
+- **The tools add turns.** B used 42 tool calls per run against A's 26, splitting what one shell command did into several query, Read and Edit calls. Every extra turn re-sends the context, so cost follows turns (2× on AB3).
+- The DeepSeek result (no difference) fits the same picture: a model that reads inefficiently gains a little from the tools, and loses it again in turns.
+
+What this suggests next: the lever is **turns**, not bytes read. Candidates: hand the agent a task-scoped context bundle up front (fewer orientation turns, measured as turns before the first edit); and keep per-turn overhead and context growth down. A smaller query surface (one tool, or query commands usable from the shell, so they batch like grep does) would be the version of the current idea worth a final test.
+
+**AB1 on Haiku.** 11 of 12 runs failed only the regression rule: Haiku patches `runRules` with a special case instead of fixing the ranking comparator (seen in the job log), and the project's own tests catch it. DeepSeek fixed the comparator in 30 of 30 runs. The task separates a real fix from a symptom patch, as intended; from now on records carry the names of failed regression tests to confirm such cases.
+
+**Measurement issue (found in this iteration).** Per-request pricing (needed for Haiku's long-prompt tier) read output tokens from the stream's start event, which only carries a placeholder; the final count arrives at the end of the stream. Recorded Claude costs in iterations 8 (and its pilot) therefore undercount output, which is 30–38% of Haiku's cost. Token totals and turns are unaffected, and the short-rate column above confirms the direction of every comparison. Fixed by observing the stream's `message_delta` events (tested against a mock). DeepSeek records were priced from SDK totals and are not affected.
