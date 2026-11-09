@@ -17,6 +17,8 @@ export interface AgentRunInput {
   maxTurns: number;
   /** Hard spending cap for this run, in USD. */
   maxBudgetUsd: number;
+  /** Wall-clock limit for the agent phase, minutes. */
+  maxMinutes: number;
   /** Prices from harness/prices.json; when present the runner enforces the cap itself. */
   prices?: Price;
 }
@@ -91,10 +93,29 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
     },
   });
 
+  const started = Date.now();
+  let timedOut = false;
+  const timer = setTimeout(() => {
+    timedOut = true;
+    q.close();
+  }, input.maxMinutes * 60_000);
+  let lastTurn = 0;
+  const elapsed = () => `${Math.round((Date.now() - started) / 1000)}s`;
+  const diagnose = () => console.error(`last tool calls:\n  ${metrics.recentCalls.join("\n  ") || "(none)"}`);
   try {
   for await (const msg of q) {
     transcript.write(JSON.stringify(msg) + "\n");
     metrics.observe(msg);
+    // Live progress, one line per turn, so a slow or stuck run is visible in the job log.
+    if (metrics.turnCount() !== lastTurn) {
+      lastTurn = metrics.turnCount();
+      const t = metrics.liveTokens();
+      const cost = input.prices ? ` $${metrics.liveCost(input.prices).toFixed(4)}` : "";
+      console.log(`[turn ${lastTurn} ${elapsed()}] in ${Math.round(t.input / 1000)}k out ${Math.round(t.output / 1000)}k${cost} | ${metrics.recentCalls.at(-1)?.slice(0, 100) ?? ""}`);
+    }
+    if (msg.type === "system" && msg.subtype === "api_retry") {
+      console.log(`[retry ${elapsed()}] attempt ${msg.attempt}/${msg.max_retries}, status ${msg.error_status ?? "no response"}, waiting ${Math.round((msg.retry_delay_ms ?? 0) / 1000)}s`);
+    }
     // Other models: enforce the cap ourselves from per-message usage.
     if (input.prices && metrics.liveCost(input.prices) > input.maxBudgetUsd) {
       metrics.resultSubtype = "error_max_budget_usd";
@@ -104,6 +125,9 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
     }
   }
   } catch (err) {
+    if (timedOut) {
+      // closing the query on timeout may surface as an error; it is not a crash
+    } else {
     // The run counts as failed but still gets a record: evaluate whatever the agent left.
     const message = err instanceof Error ? err.message : String(err);
     metrics.resultSubtype = "error_agent_crash";
@@ -111,6 +135,17 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
     transcript.write(JSON.stringify({ type: "harness", event: "agent_crash", message: metrics.crash }) + "\n");
     console.error(`agent crashed: ${metrics.crash.slice(0, 500)}`);
     console.error(`last stderr lines:\n${stderrTail.slice(-20).join("\n")}`);
+    diagnose();
+    }
+  } finally {
+    clearTimeout(timer);
+  }
+  if (timedOut) {
+    // A run that hits the wall-clock limit is a failed run (same limit for every arm), not a crash.
+    metrics.resultSubtype = "error_wall_timeout";
+    transcript.write(JSON.stringify({ type: "harness", event: "wall_timeout", minutes: input.maxMinutes }) + "\n");
+    console.error(`agent stopped: wall-clock limit of ${input.maxMinutes} min reached after ${metrics.turnCount()} turns`);
+    diagnose();
   }
   transcript.end();
   stderrLog.end();

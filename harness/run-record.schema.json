@@ -146,6 +146,12 @@
         "networkCommands": {
           "type": "integer",
           "description": "Bash commands reaching the network; nonzero runs need review"
+        },
+        "apiRetries": {
+          "type": "integer"
+        },
+        "apiRetryWaitMs": {
+          "type": "integer"
         }
       }
     },
@@ -209,7 +215,7 @@
         "string",
         "null"
       ],
-      "description": "SDK result subtype, e.g. success, error_max_turns, error_max_budget_usd"
+      "description": "SDK result subtype (success, error_max_turns, \u2026) or harness: error_max_budget_usd, error_agent_crash, error_wall_timeout"
     },
     "suite": {
       "enum": [

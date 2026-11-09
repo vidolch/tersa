@@ -69,6 +69,7 @@ Secrets: `DEEPSEEK_API_KEY` (currently used) or `ANTHROPIC_API_KEY`. Each run ha
 - **Tests can't be gamed:** the project's original tests are copied back over the agent's versions before scoring.
 - **Provider-only network:** the agent runs as a separate Linux user whose only network path is a local proxy that tunnels to the model API. A CI step proves github.com is unreachable before each run. Runs that used the network without this policy are reported as invalid.
 - **Crashes aren't failures:** a provider error mid-run is recorded as a crash and listed, not scored.
+- **Bounded runs:** 150 turns, a spending cap per run, and a 30-minute wall-clock limit; a run that hits a limit counts as failed. Progress (turn, tokens, cost, API retries) is printed live in the job log.
 - **Self-checks:** every suite has a fake-agent check (the known-good solution plays the agent), so a harness bug shows up in CI instead of in the results.
 
 Details: `harness/PROTOCOL.md`.
@@ -106,6 +107,7 @@ What went wrong, how it was caught, and what changed. Invalidated records are ke
 | 2026-11-03 | Two runs crashed at the same moment on a DeepSeek connection drop; the runner died and no record was written | missing records | crashes recorded (`error_agent_crash`) and listed, not scored; SDK stderr saved |
 | 2026-11-03 | **An agent downloaded the upstream file with `curl` and diffed it against the seeded workspace** (AB1 run 5; run 1 likely the same). It found the repo URL in `AGENTS.md` and the version in `package.json` | network-command flag | provider-only network per run; profile says no network; contaminated runs invalid; Actual baseline archived and rerun |
 | 2026-11-03 | Arm A and arm B batches finished together; both rewrote `results/summary.md`, arm B's commit hit a merge conflict, and the retry loop still reported success, so B's records were dropped | missing records | batches commit only their own record files; `summary` workflow rebuilds the summary; failed pushes fail the job |
+| 2026-11-09 | First Claude (Haiku 5.5) pilot: one arm A run sat in the agent step for 40 minutes with an empty log, and transcripts are only downloadable afterwards | wall-clock time; cancelled by hand | a progress line per turn and every API retry in the live log; 30-minute wall-clock limit per run (recorded as `error_wall_timeout`, counted as a failed run in both arms) with the last tool calls printed |
 | 2026-11-03 | Reading metric counted only the Read tool, but agents read mostly via `sed`/`cat`/`grep`: one run showed 0 tokens read | implausible numbers | shell, Grep and query-tool output attributed to files |
 
 ## Layout

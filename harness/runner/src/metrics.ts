@@ -11,6 +11,10 @@ export interface AgentMetrics {
   compileFailures: number;
   testRuns: number;
   compactions: number;
+  /** API requests the SDK retried (rate limits, overload, connection errors). */
+  apiRetries: number;
+  /** Total time spent waiting before those retries. */
+  apiRetryWaitMs: number;
   /** Bash commands that reach the network (git clone/fetch, curl, wget, npm view…). Should be 0. */
   networkCommands: number;
   wallMs: number;
@@ -82,6 +86,8 @@ export class MetricsCollector {
   private toolResultChars = 0;
   /** Characters returned by Read, per file path (P1 reading precision). */
   reads: Record<string, number> = {};
+  /** Last tool calls, for diagnosing a run that crashed or timed out. */
+  recentCalls: string[] = [];
   /** The flagged commands themselves, for review. */
   networkCommandLog: string[] = [];
   m: AgentMetrics = {
@@ -94,6 +100,8 @@ export class MetricsCollector {
     compileFailures: 0,
     testRuns: 0,
     compactions: 0,
+    apiRetries: 0,
+    apiRetryWaitMs: 0,
     networkCommands: 0,
     wallMs: 0,
     completed: false,
@@ -124,6 +132,20 @@ export class MetricsCollector {
   private liveUsage = new Map<string, { i: number; r: number; w: number; o: number }>();
 
   /** Running cost from per-message usage at the given prices (USD per 1M tokens). */
+  /** Turns so far in the main thread. */
+  turnCount(): number {
+    return this.turnIds.size;
+  }
+  /** Usage so far from per-message usage (input incl. cache, output). */
+  liveTokens(): { input: number; output: number } {
+    let input = 0, output = 0;
+    for (const u of this.liveUsage.values()) {
+      input += u.i + u.r + u.w;
+      output += u.o;
+    }
+    return { input, output };
+  }
+
   liveCost(p: Price): number {
     let c = 0;
     for (const u of this.liveUsage.values()) {
@@ -152,6 +174,8 @@ export class MetricsCollector {
         for (const b of msg.message?.content ?? []) {
           if (b?.type !== "tool_use" || this.toolUses.has(b.id)) continue;
           this.toolUses.set(b.id, { name: b.name, input: b.input ?? {} });
+          this.recentCalls.push(`${b.name} ${JSON.stringify(b.input ?? {}).slice(0, 160)}`);
+          if (this.recentCalls.length > 10) this.recentCalls.shift();
           this.m.toolCalls += 1;
           this.m.toolCallsByName[b.name] = (this.m.toolCallsByName[b.name] ?? 0) + 1;
           if (b.name === "Read") {
@@ -188,6 +212,10 @@ export class MetricsCollector {
       }
       case "system":
         if (msg.subtype === "compact_boundary") this.m.compactions += 1;
+        if (msg.subtype === "api_retry") {
+          this.m.apiRetries += 1;
+          this.m.apiRetryWaitMs += msg.retry_delay_ms ?? 0;
+        }
         break;
       case "result": {
         // Results are cumulative per query(); keep the latest.

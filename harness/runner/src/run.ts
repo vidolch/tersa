@@ -31,6 +31,7 @@ const { values: a } = parseArgs({
     provider: { type: "string", default: process.env.TERSA_PROVIDER ?? "anthropic" },
     model: { type: "string", default: process.env.TERSA_MODEL },
     "max-turns": { type: "string", default: "150" },
+    "max-minutes": { type: "string", default: process.env.TERSA_MAX_MINUTES ?? "30" },
     // empty = provider default (PROVIDERS[...].defaultBudgetUsd)
     "max-budget-usd": { type: "string", default: process.env.TERSA_MAX_BUDGET_USD ?? "" },
     chained: { type: "boolean", default: false },
@@ -141,6 +142,7 @@ if (does("agent")) {
         rawDir,
         model,
         maxTurns: Number(a["max-turns"]),
+        maxMinutes: Number(a["max-minutes"]) || 30,
         maxBudgetUsd: Number(a["max-budget-usd"]) || PROVIDERS[provider].defaultBudgetUsd,
         prices: JSON.parse(readFileSync(paths.prices, "utf8"))[model],
       });

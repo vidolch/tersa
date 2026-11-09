@@ -17,6 +17,7 @@ on:
       model: { type: string, default: "" }
       max_turns: { type: string, default: "150" }
       max_budget_usd: { type: string, default: "" }
+      max_minutes: { type: string, default: "30" }
       max_parallel: { type: string, default: "3" }
     secrets:
       ANTHROPIC_API_KEY: { required: false }
@@ -147,7 +148,7 @@ jobs:
             CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 TERSA_NETWORK_POLICY=provider-only \
             node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RAW" --phase agent \
             --provider "${{ inputs.provider }}" --max-turns "${{ inputs.max_turns }}" \
-            --max-budget-usd "${{ inputs.max_budget_usd }}"
+            --max-budget-usd "${{ inputs.max_budget_usd }}" --max-minutes "${{ inputs.max_minutes }}"
 
       - name: Restore ownership
         if: always()
