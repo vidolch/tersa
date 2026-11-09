@@ -30,13 +30,14 @@ export function resolvePlaceholders<T>(value: T, workspace: string): T {
   );
 }
 
-/** Identical across arms except the profile and the arm's context files. */
-export function buildPrompt(
+/** Identical across arms except the profile, the arm's context files and (arm D) the bundle. */
+export async function buildPrompt(
   suite: Suite,
   arm: Arm,
   task: Task,
   armConfig: ArmConfig,
-): { prompt: string; overheadChars: number } {
+  workspace?: string,
+): Promise<{ prompt: string; overheadChars: number; bundle?: { tokens: number; files: string[] } }> {
   const spec = readFileSync(paths.spec(suite, task), "utf8");
   const profile = readFileSync(paths.profile(suite, arm), "utf8");
   const extras = armConfig.contextFiles.map((f) => readFileSync(join(paths.arm(arm), f), "utf8"));
@@ -53,7 +54,18 @@ export function buildPrompt(
     spec.trim(),
     "</spec>",
   ].join("\n");
-  return { prompt, overheadChars: extras.reduce((n, e) => n + e.length, 0) };
+  let overheadChars = extras.reduce((n, e) => n + e.length, 0);
+  if (!armConfig.bundle || !workspace) return { prompt, overheadChars };
+  // The bundle is built from the spec only (never from ground truth), on the agent's own workspace.
+  const { Engine } = await import("../../../query/src/engine.ts");
+  const { buildBundle } = await import("../../../query/src/bundle.ts");
+  const b = buildBundle(new Engine(workspace), spec, { budgetTokens: armConfig.bundle.budgetTokens });
+  overheadChars += b.text.length;
+  return {
+    prompt: `${prompt}\n\n<context>\n${b.text}\n</context>`,
+    overheadChars,
+    bundle: { tokens: b.tokens, files: b.files.slice(0, 30) },
+  };
 }
 
 /**
@@ -87,7 +99,7 @@ async function startShellQuery(workspace: string, rawDir: string): Promise<{ env
 }
 
 export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> {
-  const { prompt, overheadChars: promptOverhead } = buildPrompt(input.suite, input.arm, input.task, input.armConfig);
+  const { prompt, overheadChars: promptOverhead, bundle } = await buildPrompt(input.suite, input.arm, input.task, input.armConfig, input.workspace);
   const steering = input.armConfig.steering ?? {};
   const systemAppend = (steering.systemPrompt ?? [])
     .map((f) => readFileSync(join(paths.arm(input.arm), f), "utf8").trim())
@@ -95,6 +107,10 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
   const overheadChars = promptOverhead + systemAppend.length;
   const metrics = new MetricsCollector();
   const transcript = createWriteStream(join(input.rawDir, "transcript.jsonl"));
+  if (bundle) {
+    metrics.bundle = bundle;
+    console.log(`bundle: ${bundle.tokens} tokens, ${bundle.files.length} files`);
+  }
   const shell = input.armConfig.shellQuery ? await startShellQuery(input.workspace, input.rawDir) : null;
   const stderrLog = createWriteStream(join(input.rawDir, "agent-stderr.log"));
   const stderrTail: string[] = [];

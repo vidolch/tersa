@@ -21,7 +21,8 @@
         "A-ts-baseline",
         "B-ts-query",
         "B2-ts-query-shell",
-        "C-tersa-lang"
+        "C-tersa-lang",
+        "D-ts-bundle"
       ]
     },
     "task": {
@@ -332,6 +333,21 @@
     "sdkCostUsd": {
       "type": "number",
       "description": "the SDK's own cost estimate, kept for comparison"
+    },
+    "bundle": {
+      "type": "object",
+      "description": "arm D: context bundle in the first prompt",
+      "properties": {
+        "tokens": {
+          "type": "integer"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     }
   }
 }

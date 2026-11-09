@@ -91,6 +91,8 @@ export class MetricsCollector {
   private toolResultChars = 0;
   /** Characters returned by Read, per file path (P1 reading precision). */
   reads: Record<string, number> = {};
+  /** Arm D: the context bundle put in the first prompt. */
+  bundle: { tokens: number; files: string[] } | null = null;
   /** Last tool calls, for diagnosing a run that crashed or timed out. */
   recentCalls: string[] = [];
   /** The flagged commands themselves, for review. */

@@ -312,5 +312,22 @@ Useful by-product: **orientation takes 20–30% of turns** (first edit at turn 6
 
 ---
 
-## Iteration 10 — Task-scoped context bundle up front (planned)
+## Iteration 10 — Task-scoped context bundle up front (arm D)
 **Hypothesis.** If the agent starts with the code most likely relevant to the task already in its prompt, it skips most orientation turns (iteration 9: first edit at turn 6–14), and fewer turns means less re-sent context. The bundle must be built automatically from the spec (no ground truth), and stay small, because it is re-sent every turn.
+
+**Change.** New arm `D-ts-bundle`: standard tools, plus a context bundle of about 6,000 tokens appended to the first prompt (counted as overhead). The bundle is built by `query/src/bundle.ts` from the spec text only, on the agent's own workspace: code terms from the spec (with naming-convention variants) and stemmed prose words matched to symbol names, scored by rarity (IDF); the top symbols as bodies, the rest as signatures. Nothing else differs from arm A.
+
+**Offline check before spending anything** (does the bundle contain each task's core files?):
+
+| Task | v1 (raw term matching) | v2 (IDF, naming variants, prose stems, docs down-weighted) |
+|---|---|---|
+| AB1 | rule-utils.ts missing | rule-utils.ts in, as a signature (#24 of 64 files) |
+| AB2 | 2 of 3 core files | 2 of 3 (condition.ts missing: no term in the spec leads to it) |
+| AB3 | 3 of 3 | 3 of 3 |
+| AB4 | envelope.ts missing | envelope.ts in (#7) |
+
+Core-file recall 4/8 → 7/8. All changes are generic rules; none was tuned to a task's ground truth. The bundle still carries noise (UI and importer files), which the agent pays for on every turn as cached input.
+
+**Run.** A runs 22–27 (same period, corrected Claude pricing) and D runs 1–6 on `claude-haiku-5-5`, started together.
+
+**Expected if the hypothesis holds.** Fewer turns before the first edit (A on Haiku: about 6–14) and fewer turns overall, at equal pass rate, outweighing the bundle's per-turn cost.

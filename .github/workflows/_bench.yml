@@ -78,8 +78,8 @@ jobs:
       - name: Install runner
         working-directory: bench/harness/runner
         run: npm ci --no-audit --no-fund
-      - name: Install query layer (arms B, B2)
-        if: startsWith(inputs.arm, 'B')
+      - name: Install query layer (treatment arms)
+        if: inputs.arm != 'A-ts-baseline'
         working-directory: bench/query
         run: npm ci --no-audit --no-fund
 

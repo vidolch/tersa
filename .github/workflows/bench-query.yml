@@ -1,16 +1,17 @@
 name: bench-query
 
-# Arms B / B2: standard tools plus the tersa query layer (query/), as MCP tools (B) or as a shell command (B2).
+# Treatment arms, compared against bench-baseline (arm A): B = query layer as MCP tools,
+# B2 = query layer as a shell command, D = task-scoped context bundle in the first prompt.
 # Same steps as the other arm (see _bench.yml). Run both arms in the same
 # period so a silent model update can't explain a difference.
 on:
   workflow_dispatch:
     inputs:
       arm:
-        description: B = query tools over MCP with redirects; B2 = the `tersa` shell command, no redirects
+        description: B = query tools over MCP with redirects; B2 = tersa shell command; D = context bundle up front
         type: choice
-        options: [B-ts-query, B2-ts-query-shell]
-        default: B2-ts-query-shell
+        options: [D-ts-bundle, B2-ts-query-shell, B-ts-query]
+        default: D-ts-bundle
       suite:
         description: Suite (urlshort = small control, actual = Actual Budget)
         type: choice
