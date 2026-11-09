@@ -1,0 +1,113 @@
+{
+  "suite": "actual",
+  "arm": "B-ts-query",
+  "task": "AB1",
+  "run": 8,
+  "chained": false,
+  "startState": "actual/AB1",
+  "specSha256": "3ed4a82cf3927a943b3086ced320b193ae91463d7a5e760a67aa3f4de5276f1c",
+  "model": "claude-haiku-5-5",
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 62,
+    "cacheRead": 821512,
+    "cacheWrite": 35645,
+    "output": 10965,
+    "toolResultTokens": 11515,
+    "contextOverheadTokens": 320
+  },
+  "agent": {
+    "turns": 31,
+    "toolCalls": 30,
+    "toolCallsByName": {
+      "Bash": 9,
+      "mcp__tersa__code_find": 6,
+      "mcp__tersa__code_get": 7,
+      "Read": 5,
+      "Grep": 1,
+      "Edit": 2
+    },
+    "fileReads": 5,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "networkCommands": 0,
+    "wallMs": 238104,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB1 R1": true,
+      "AB1 R2": true,
+      "AB1 R3": true,
+      "AB1 R4": true,
+      "AB1 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 44,
+    "readChars": 43920,
+    "relevantChars": 17510,
+    "coreChars": 7189,
+    "precision": 0.3986794171220401,
+    "coreRecall": 1,
+    "readTokens": 10980
+  },
+  "costUsd": 0.012885445000000002,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.018159445,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 1,
+    "denied": [
+      "connect registry.npmjs.org:443"
+    ]
+  },
+  "steering": {
+    "redirects": 3,
+    "byTool": {
+      "Bash": 2,
+      "Grep": 1
+    }
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 9,
+      "outTokens": 1301,
+      "carriedTokens": 13605
+    },
+    "mcp__tersa__code_find": {
+      "calls": 6,
+      "outTokens": 3719,
+      "carriedTokens": 82944
+    },
+    "mcp__tersa__code_get": {
+      "calls": 7,
+      "outTokens": 3559,
+      "carriedTokens": 83432
+    },
+    "Read": {
+      "calls": 5,
+      "outTokens": 2757,
+      "carriedTokens": 31852
+    },
+    "Grep": {
+      "calls": 1,
+      "outTokens": 112,
+      "carriedTokens": 1904
+    },
+    "Edit": {
+      "calls": 2,
+      "outTokens": 73,
+      "carriedTokens": 574
+    }
+  }
+}
