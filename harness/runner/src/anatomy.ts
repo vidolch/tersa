@@ -26,6 +26,9 @@ export interface Anatomy {
   output: number;
   outputByKind: Record<Kind, number>;
   carried: { start: number; ownOutput: number; toolResults: number };
+  /** Characters of visible output and thinking blocks seen: output tokens per visible character far above ~0.3 means hidden (omitted) thinking. */
+  visibleChars: number;
+  thinkingBlocks: number;
 }
 
 function blockKind(b: any): Kind | null {
@@ -76,6 +79,11 @@ export function analyze(lines: string[], id: { arm: string; task: string; run: n
   const outputByKind = Object.fromEntries(KINDS.map((k) => [k, 0])) as Record<Kind, number>;
   const carried = { start: 0, ownOutput: 0, toolResults: 0 };
   const startContext = reqs[0]?.input ?? 0;
+  let visibleChars = 0, thinkingBlocks = 0;
+  for (const list of content.values()) for (const b of list) {
+    if (b?.type === "thinking" || b?.type === "redacted_thinking") thinkingBlocks++;
+    else visibleChars += blockChars(b);
+  }
   let ownSoFar = 0; // earlier non-thinking output still in context
   for (const r of reqs) {
     // Re-sent context = start + own earlier output + tool results (the remainder).
@@ -106,6 +114,8 @@ export function analyze(lines: string[], id: { arm: string; task: string; run: n
     output: reqs.reduce((a, r) => a + r.output, 0),
     outputByKind,
     carried,
+    visibleChars,
+    thinkingBlocks,
   };
 }
 
@@ -160,6 +170,10 @@ function main() {
         ` | ${pct(mean((a) => a.carried.start), car)} | ${pct(mean((a) => a.carried.ownOutput), car)} | ${pct(mean((a) => a.carried.toolResults), car)} |`,
     );
   };
+  for (const [arm, g] of all) {
+    const o = g.reduce((t, a) => t + a.output, 0), v = g.reduce((t, a) => t + a.visibleChars, 0);
+    console.log(`<!-- ${arm}: ${(o / Math.max(1, v)).toFixed(2)} output tokens per visible character, ${g.reduce((t, a) => t + a.thinkingBlocks, 0)} thinking blocks -->`);
+  }
   for (const [key, g] of groups) line(key.split("|")[0], key.split("|")[1], g);
   for (const [arm, g] of all) line(arm, "all", g);
 
