@@ -37,6 +37,18 @@ const TEST_CMD = /\bvitest\b|\bnpm (run )?test\b|\bnode --test\b|\bjest\b/;
 
 const est = (chars: number) => Math.round(chars / 4);
 
+/** USD per 1M tokens (harness/prices.json). */
+export interface Rate {
+  inputMiss: number;
+  cacheWrite?: number;
+  inputHit: number;
+  output: number;
+}
+export interface Price extends Rate {
+  /** Applied per request when its input exceeds threshold tokens. */
+  longContext?: Rate & { threshold: number };
+}
+
 // Shell commands that read code (as opposed to running tests or builds, whose
 // output is P6 noise, not reading).
 const READ_CMD = /(^|[|;&]\s*|\bcd\s+\S+\s*&&\s*)(cat|sed|head|tail|nl|awk|less|more|grep|rg|ag|git\s+(show|grep|diff|log\s+-p))\b/;
@@ -112,9 +124,12 @@ export class MetricsCollector {
   private liveUsage = new Map<string, { i: number; r: number; w: number; o: number }>();
 
   /** Running cost from per-message usage at the given prices (USD per 1M tokens). */
-  liveCost(p: { inputMiss: number; inputHit: number; output: number }): number {
+  liveCost(p: Price): number {
     let c = 0;
-    for (const u of this.liveUsage.values()) c += ((u.i + u.w) * p.inputMiss + u.r * p.inputHit + u.o * p.output) / 1e6;
+    for (const u of this.liveUsage.values()) {
+      const rate = p.longContext && u.i + u.r + u.w > p.longContext.threshold ? p.longContext : p;
+      c += (u.i * rate.inputMiss + u.w * (rate.cacheWrite ?? rate.inputMiss) + u.r * rate.inputHit + u.o * rate.output) / 1e6;
+    }
     return c;
   }
 

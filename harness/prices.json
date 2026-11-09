@@ -1,6 +1,12 @@
 {
-  "_comment": "USD per 1M tokens. Used to recompute costUsd for models the SDK cannot price (third-party providers). Claude models are priced by the SDK itself.",
-  "_source": "DeepSeek pricing via api-docs.deepseek.com/quick_start/pricing, as reported 2026-07; re-check before large runs",
+  "_comment": "USD per 1M tokens, used for costUsd in run records. cacheWrite = 5-minute cache write (defaults to inputMiss). longContext applies per request when its input (uncached + cache read + cache write) exceeds the threshold.",
+  "_source": "DeepSeek: api-docs.deepseek.com pricing (2026-07). Claude: Anthropic pricing as of 2026-11 (Sonnet 5.5 cache read cut to $0.10 on 2026-10-07; Haiku 5.5 released 2026-10-07 with a 100K long-prompt tier). Re-check before large runs.",
   "deepseek-v4-flash": { "inputMiss": 0.14, "inputHit": 0.0028, "output": 0.28 },
-  "deepseek-v4-pro": { "inputMiss": 0.435, "inputHit": 0.003625, "output": 0.87 }
+  "deepseek-v4-pro": { "inputMiss": 0.435, "inputHit": 0.003625, "output": 0.87 },
+  "claude-haiku-5-5": {
+    "inputMiss": 0.10, "cacheWrite": 0.125, "inputHit": 0.01, "output": 0.50,
+    "longContext": { "threshold": 100000, "inputMiss": 0.50, "cacheWrite": 0.625, "inputHit": 0.05, "output": 2.50 }
+  },
+  "claude-sonnet-5-5": { "inputMiss": 2.00, "cacheWrite": 2.50, "inputHit": 0.10, "output": 10.00 },
+  "claude-opus-5-5": { "inputMiss": 4.00, "cacheWrite": 5.00, "inputHit": 0.20, "output": 20.00 }
 }

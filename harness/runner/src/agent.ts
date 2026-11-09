@@ -3,7 +3,7 @@ import { cpSync, createWriteStream, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { query } from "@anthropic-ai/claude-agent-sdk";
 import { paths, ROOT as ROOT_DIR, type Arm, type ArmConfig, type Suite, type Task } from "./config.ts";
-import { MetricsCollector } from "./metrics.ts";
+import { MetricsCollector, type Price } from "./metrics.ts";
 import { redirectHooks } from "./steering.ts";
 
 export interface AgentRunInput {
@@ -17,8 +17,8 @@ export interface AgentRunInput {
   maxTurns: number;
   /** Hard spending cap for this run, in USD. */
   maxBudgetUsd: number;
-  /** Real prices for models the SDK cannot price; enables the cap for them. */
-  prices?: { inputMiss: number; inputHit: number; output: number };
+  /** Prices from harness/prices.json; when present the runner enforces the cap itself. */
+  prices?: Price;
 }
 
 /** Replaces {{ROOT}} (this repo) and {{WORKSPACE}} (the agent's workspace) in an arm's MCP config. */

@@ -86,11 +86,12 @@ export function isArm(v: string): v is Arm {
 
 /** How the agent reaches a model. Anthropic is the default; others use an Anthropic-compatible endpoint. */
 export const PROVIDERS = {
-  anthropic: { baseUrl: null, keyEnv: "ANTHROPIC_API_KEY", defaultModel: "claude-sonnet-5-5" },
+  anthropic: { baseUrl: null, keyEnv: "ANTHROPIC_API_KEY", defaultModel: "claude-haiku-5-5", defaultBudgetUsd: 3 },
   deepseek: {
     baseUrl: process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek.com/anthropic",
     keyEnv: "DEEPSEEK_API_KEY",
     defaultModel: "deepseek-v4-flash",
+    defaultBudgetUsd: 0.5,
   },
 } as const;
 export type Provider = keyof typeof PROVIDERS;

@@ -305,6 +305,10 @@
           }
         }
       }
+    },
+    "sdkCostUsd": {
+      "type": "number",
+      "description": "the SDK's own cost estimate, kept for comparison"
     }
   }
 }

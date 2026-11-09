@@ -31,7 +31,8 @@ const { values: a } = parseArgs({
     provider: { type: "string", default: process.env.TERSA_PROVIDER ?? "anthropic" },
     model: { type: "string", default: process.env.TERSA_MODEL },
     "max-turns": { type: "string", default: "150" },
-    "max-budget-usd": { type: "string", default: process.env.TERSA_MAX_BUDGET_USD ?? "1" },
+    // empty = provider default (PROVIDERS[...].defaultBudgetUsd)
+    "max-budget-usd": { type: "string", default: process.env.TERSA_MAX_BUDGET_USD ?? "" },
     chained: { type: "boolean", default: false },
     "fake-agent": { type: "string" },
     "skip-perf": { type: "boolean", default: false },
@@ -140,7 +141,7 @@ if (does("agent")) {
         rawDir,
         model,
         maxTurns: Number(a["max-turns"]),
-        maxBudgetUsd: Number(a["max-budget-usd"]),
+        maxBudgetUsd: Number(a["max-budget-usd"]) || PROVIDERS[provider].defaultBudgetUsd,
         prices: JSON.parse(readFileSync(paths.prices, "utf8"))[model],
       });
 
@@ -160,6 +161,11 @@ if (does("agent")) {
       usage: metrics.usage,
       costUsd: metrics.costUsd,
       stopReason: metrics.resultSubtype,
+      // Our own pricing from per-request usage (handles per-request tiers).
+      pricedUsd: (() => {
+        const p = JSON.parse(readFileSync(paths.prices, "utf8"))[model];
+        return p ? metrics.liveCost(p) : null;
+      })(),
       crash: metrics.crash,
       networkCommandLog: metrics.networkCommandLog,
       steering: metrics.steering,
@@ -184,6 +190,7 @@ if (does("eval")) {
     usage: Usage;
     costUsd: number;
     stopReason?: string | null;
+    pricedUsd?: number | null;
     reads?: Record<string, number>;
     crash?: string | null;
     networkCommandLog?: string[];
@@ -209,10 +216,14 @@ if (does("eval")) {
   const p = prices[am.model];
   let costUsd = am.costUsd;
   let costSource = "sdk";
-  if (p) {
+  if (p?.longContext && typeof am.pricedUsd === "number") {
+    // tiered prices need per-request usage
+    costUsd = am.pricedUsd;
+    costSource = "harness/prices.json (per request)";
+  } else if (p) {
     const u = am.usage;
     costUsd =
-      ((u.inputUncached + u.cacheWrite) * p.inputMiss + u.cacheRead * p.inputHit + u.output * p.output) / 1e6;
+      (u.inputUncached * p.inputMiss + u.cacheWrite * (p.cacheWrite ?? p.inputMiss) + u.cacheRead * p.inputHit + u.output * p.output) / 1e6;
     costSource = "harness/prices.json";
   } else if (am.provider !== "anthropic" && am.provider !== "fake") {
     console.warn(`warning: no price for ${am.model} in harness/prices.json; costUsd uses Claude rates`);
@@ -249,6 +260,7 @@ if (does("eval")) {
     ...(perf ? { perf } : {}),
     costUsd,
     costSource,
+    ...(am.costUsd ? { sdkCostUsd: am.costUsd } : {}),
     stopReason: am.stopReason ?? null,
     ...(am.crash ? { crash: am.crash } : {}),
     ...(am.networkCommandLog?.length ? { networkCommandLog: am.networkCommandLog } : {}),

@@ -16,7 +16,7 @@ on:
       provider: { type: string, default: deepseek }
       model: { type: string, default: "" }
       max_turns: { type: string, default: "150" }
-      max_budget_usd: { type: string, default: "0.5" }
+      max_budget_usd: { type: string, default: "" }
       max_parallel: { type: string, default: "3" }
     secrets:
       ANTHROPIC_API_KEY: { required: false }
