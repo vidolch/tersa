@@ -224,3 +224,18 @@ All 48 runs passed, no network attempts, no crashes. Totals: A $0.380 for 24 pas
 A better reading interface alone does not lower cost for this model. Cost is driven by turns × context size, and the tools change neither. Candidate directions: give the agent a task-scoped slice of the code up front (fewer orientation turns); test on a Claude model (DeepSeek rarely batched queries); keep context from growing (drop tool output once used).
 
 **Statistics note.** Single-run pilots were misleading twice (iteration 6 vs 7). From now on a pilot only checks that a change works; claims about cost need 6+ runs per arm in the same period, reported with a test.
+
+---
+
+## Iteration 8 — Same comparison on Claude Haiku 5.5
+**Date** 2026-11-09 · **Arms** A runs 16–21 and B v1.2 runs 9–14 on `claude-haiku-5-5`, 6 runs per task each, started together (3 concurrent per arm) · **Status** running
+
+**Question.** Iteration 7 found no cost difference with DeepSeek Flash. Was that the model (DeepSeek rarely batched queries), or does the query layer not help in this form?
+
+**Setup changes since iteration 7.** Claude pricing in `harness/prices.json` (per-request long-prompt tier for Haiku), per-provider spending cap ($3 for Claude), live progress and API-retry lines in the job log, 30-minute wall-clock limit per run (`error_wall_timeout`, counted as failed).
+
+**Pilot** (A run 15, B run 8, one run per task; checks the setup only): all runs completed, no API retries. A Haiku was very fast on the bug tasks (AB4 18 turns, AB3 25); B was cheaper on AB1 and more expensive on AB2–AB4. A failed AB1 (regression).
+
+`node src/compare.ts "A haiku=results/A-ts-baseline@15" "B haiku=results/B-ts-query@8" --suite actual --model claude-haiku-5-5`
+
+**Incident.** In the pilot, one arm A run sat in the agent step for 40 minutes with an empty log and was cancelled by hand; that led to the progress lines and the wall-clock limit above.
