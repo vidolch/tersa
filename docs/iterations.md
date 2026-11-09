@@ -393,3 +393,35 @@ The decisive line is in the file's header: **about 417 thinking blocks per arm, 
 **Run.** Three same-period arm A batches on `claude-haiku-5-5`, 6 runs per task: SDK defaults (runs 28–33), `effort=low` (runs 34–39), `thinking=disabled` (runs 40–45).
 
 **Expected if the hypothesis holds.** Output tokens per run down by about half with `thinking=disabled`, cost per pass down 20–30%, the same 18/24 passes (AB1 already fails in every run). If passes drop, the saving is not real.
+
+**Result** (`node src/compare.ts "default=results/A-ts-baseline@28-33" "effort low=results/A-ts-baseline@34-39" "thinking off=results/A-ts-baseline@40-45" --suite actual --model claude-haiku-5-5`; per-task means, two-sided permutation test against the default batch):
+
+| Setting | Pass | Cost per pass | Turns per run | Output per run | Wall time per run |
+|---|---|---|---|---|---|
+| SDK defaults (runs 28–33) | 19/24 | $0.0235 | 27.1 | 14.1k | 3.5 min |
+| `effort=low` (runs 34–39) | 16/24 | **$0.0116 (−51%)** | 13.8 | 6.6k | 1.3 min |
+| `thinking=disabled` (runs 40–45) | 18/24 | $0.0277 (+18%) | 29.5 | 15.2k | 3.6 min |
+
+| Task | Cost default → `effort=low` | p | → `thinking=disabled` | p | Pass default / low / off |
+|---|---|---|---|---|---|
+| AB1 | $0.0167 → $0.0094 | 0.016 | $0.0193 | 0.35 | 1 / 0 / 0 |
+| AB2 | $0.0297 → $0.0108 | 0.002 | $0.0378 | 0.20 | 6 / 4 / 6 |
+| AB3 | $0.0168 → $0.0077 | 0.002 | $0.0152 | 0.30 | 6 / 6 / 6 |
+| AB4 | $0.0112 → $0.0030 | 0.002 | $0.0109 | 0.89 | 6 / 6 / 6 |
+
+Anatomy (`results/analysis/it12-haiku.json`, split by run number):
+
+| Setting | Requests per run | Output per request | Thinking blocks per run |
+|---|---|---|---|
+| defaults | 26.8 | 524 | 17.1 |
+| `effort=low` | 12.8 | 513 | 7.1 |
+| `thinking=disabled` | 26.5 | 575 | 17.4 |
+
+**Conclusion.**
+- **`effort=low` halves cost per passing task**, significant on every task (p ≤ 0.016), and runs 2.7× faster. It does so entirely by halving turns: output per request is unchanged (~520 tokens). Turns are the lever again, as in iterations 7–10.
+- **But it loses completeness:** AB2 drops to 4/6, and both failures are R5, the second code path (`make-filters-from-conditions`) that the spec names explicitly. The low-effort agent implements the operator where it first finds it and stops; nothing in the code tells it there's a second place. AB1 stays at the symptom-patch failure (0–1/6 in every setting).
+- **`thinking=disabled` had no effect.** The transcripts still hold ~17 thinking blocks per run, the same as the defaults; the setting doesn't reach the model in this SDK/model combination. That batch is effectively a second default batch, and its +18% (p 0.2–0.9) is a useful check on run-to-run noise. The "hidden thinking is ~60% of output" estimate from iteration 11 is unconfirmed: output tokens per visible character are 0.70–0.78 in all three settings, so the gap may be tool-call encoding rather than thinking.
+
+**What this means for Tersa.** This is the first result that points at the language rather than at tooling. A cheap, low-effort agent is half the price, and its failure is a *missed second place that had to change*. That is the kind of failure a language can prevent: if adding an operator to a closed set made every place that handles operators fail to compile until handled (exhaustive matching, no silent `default`), a low-effort agent would be told by the compiler where R5 is. Next: check how Actual's condition and filter code dispatch on operators, and whether a compile-time exhaustiveness check in plain TS would have flagged R5 (cheap to test as an arm before building any language).
+
+Records: `results/A-ts-baseline/AB*/run-28..45.json`.
