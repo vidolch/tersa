@@ -116,6 +116,7 @@ What went wrong, how it was caught, and what changed. Invalidated records are ke
 | 2026-11-09 | Recorded Claude costs undercounted output: per-request pricing read output tokens from the stream's start event (a placeholder) | recorded total below the SDK totals priced at the lowest rates | final output counts read from stream `message_delta` events; iteration 8 reported with both measures |
 | 2026-11-09 | First Claude (Haiku 5.5) pilot: one arm A run sat in the agent step for 40 minutes with an empty log, and transcripts are only downloadable afterwards | wall-clock time; cancelled by hand | a progress line per turn and every API retry in the live log; 30-minute wall-clock limit per run (recorded as `error_wall_timeout`, counted as a failed run in both arms) with the last tool calls printed |
 | 2026-11-03 | Reading metric counted only the Read tool, but agents read mostly via `sed`/`cat`/`grep`: one run showed 0 tokens read | implausible numbers | shell, Grep and query-tool output attributed to files |
+| 2026-11-09 | Three same-arm batches dispatched together: the concurrency group was per arm, so GitHub cancelled the middle one while it was pending | Run list showed it cancelled | Group per arm and first run; batches of one arm with different run numbers now run side by side |
 
 ## Layout
 

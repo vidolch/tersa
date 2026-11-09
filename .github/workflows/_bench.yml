@@ -25,7 +25,7 @@ on:
       DEEPSEEK_API_KEY: { required: false }
 
 concurrency:
-  group: bench-${{ inputs.arm }}
+  group: bench-${{ inputs.arm }}-${{ inputs.first_run }}
   cancel-in-progress: false
 
 jobs:
