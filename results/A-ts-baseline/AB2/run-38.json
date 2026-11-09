@@ -1,0 +1,81 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 38,
+  "chained": false,
+  "startState": "actual/AB2",
+  "specSha256": "a1b6c9a3316e43536a51ccfb90a60f6b8ee8767276240d41aca119b2672982b3",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 20,
+    "cacheRead": 172264,
+    "cacheWrite": 23223,
+    "output": 7140,
+    "toolResultTokens": 9963,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 10,
+    "toolCalls": 9,
+    "toolCallsByName": {
+      "Bash": 9
+    },
+    "fileReads": 0,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": 8,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 45905,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": false,
+    "rules": {
+      "AB2 R1": true,
+      "AB2 R2": true,
+      "AB2 R3": true,
+      "AB2 R4": true,
+      "AB2 R5": false,
+      "AB2 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 13,
+    "readChars": 39778,
+    "relevantChars": 1682,
+    "coreChars": 1105,
+    "precision": 0.0422846799738549,
+    "coreRecall": 1,
+    "readTokens": 9945
+  },
+  "costUsd": 0.008197514999999999,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.008197515,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 9,
+      "outTokens": 9964,
+      "carriedTokens": 68089
+    }
+  }
+}
