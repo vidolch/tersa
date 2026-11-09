@@ -1,0 +1,94 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 18,
+  "chained": false,
+  "startState": "actual/AB2",
+  "specSha256": "a1b6c9a3316e43536a51ccfb90a60f6b8ee8767276240d41aca119b2672982b3",
+  "model": "claude-haiku-5-5",
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 42,
+    "cacheRead": 734984,
+    "cacheWrite": 45279,
+    "output": 12863,
+    "toolResultTokens": 18292,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 32,
+    "toolCalls": 31,
+    "toolCallsByName": {
+      "Grep": 7,
+      "Read": 9,
+      "Edit": 9,
+      "Bash": 6
+    },
+    "fileReads": 9,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 155407,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB2 R1": true,
+      "AB2 R2": true,
+      "AB2 R3": true,
+      "AB2 R4": true,
+      "AB2 R5": true,
+      "AB2 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 53,
+    "readChars": 71529,
+    "relevantChars": 37975,
+    "coreChars": 30139,
+    "precision": 0.5309035496092493,
+    "coreRecall": 1,
+    "readTokens": 17882
+  },
+  "costUsd": 0.013113915,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.019445415000000004,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Grep": {
+      "calls": 7,
+      "outTokens": 5597,
+      "carriedTokens": 94437
+    },
+    "Read": {
+      "calls": 9,
+      "outTokens": 10470,
+      "carriedTokens": 183816
+    },
+    "Edit": {
+      "calls": 9,
+      "outTokens": 413,
+      "carriedTokens": 4591
+    },
+    "Bash": {
+      "calls": 6,
+      "outTokens": 1818,
+      "carriedTokens": 11243
+    }
+  }
+}
