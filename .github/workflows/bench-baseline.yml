@@ -28,9 +28,9 @@ on:
       model:
         description: Model id (empty = provider default; deepseek-v4-flash, claude-haiku-5-5)
         default: ""
-      max_minutes:
-        description: Wall-clock limit per run, minutes (a run that hits it counts as failed)
-        default: "30"
+      model_options:
+        description: Model settings to vary, comma-separated (empty = SDK defaults; effort=low|medium|high, thinking=disabled)
+        default: ""
       max_budget_usd:
         description: Hard spending cap per run, USD (empty = provider default; deepseek 0.5, anthropic 3)
         default: ""
@@ -50,7 +50,7 @@ jobs:
       provider: ${{ inputs.provider }}
       model: ${{ inputs.model }}
       max_budget_usd: ${{ inputs.max_budget_usd }}
-      max_minutes: ${{ inputs.max_minutes }}
+      model_options: ${{ inputs.model_options }}
       max_parallel: ${{ inputs.max_parallel }}
     secrets: inherit
     permissions:

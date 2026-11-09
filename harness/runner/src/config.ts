@@ -102,3 +102,24 @@ export type Provider = keyof typeof PROVIDERS;
 export function isProvider(v: string): v is Provider {
   return v in PROVIDERS;
 }
+
+/** Model settings an experiment may vary: `effort=low|medium|high|xhigh|max`, `thinking=adaptive|disabled`, comma-separated. */
+export interface ModelOptions {
+  effort?: "low" | "medium" | "high" | "xhigh" | "max";
+  thinking?: "adaptive" | "disabled";
+}
+
+export function parseModelOptions(s: string | undefined): ModelOptions {
+  const out: ModelOptions = {};
+  for (const part of (s ?? "").split(",").map((x) => x.trim()).filter(Boolean)) {
+    const [k, v] = part.split("=");
+    if (k === "effort" && ["low", "medium", "high", "xhigh", "max"].includes(v)) out.effort = v as ModelOptions["effort"];
+    else if (k === "thinking" && ["adaptive", "disabled"].includes(v)) out.thinking = v as ModelOptions["thinking"];
+    else throw new Error(`bad model option "${part}" (expected effort=low|medium|high|xhigh|max or thinking=adaptive|disabled)`);
+  }
+  return out;
+}
+
+export function modelOptionsLabel(o: ModelOptions | undefined): string {
+  return o && Object.keys(o).length ? Object.entries(o).map(([k, v]) => `${k}=${v}`).join(",") : "";
+}

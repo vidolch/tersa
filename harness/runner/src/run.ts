@@ -18,7 +18,7 @@ import { parseArgs } from "node:util";
 import { spawnSync } from "node:child_process";
 import { Ajv2020 } from "ajv/dist/2020.js";
 import { fakeAgent, runAgent } from "./agent.ts";
-import { isArm, isProvider, isSuite, isTask, loadArm, paths, PROVIDERS, START_STATE } from "./config.ts";
+import { isArm, isProvider, isSuite, isTask, loadArm, parseModelOptions, paths, PROVIDERS, START_STATE } from "./config.ts";
 import { readingStats, runAcceptance, runPerf, runSuiteAcceptance } from "./evaluate.ts";
 import type { AgentMetrics, Usage } from "./metrics.ts";
 
@@ -30,6 +30,8 @@ const { values: a } = parseArgs({
     run: { type: "string", default: "1" },
     provider: { type: "string", default: process.env.TERSA_PROVIDER ?? "anthropic" },
     model: { type: "string", default: process.env.TERSA_MODEL },
+    // e.g. "effort=low" or "thinking=disabled" (see parseModelOptions)
+    "model-options": { type: "string", default: process.env.TERSA_MODEL_OPTIONS ?? "" },
     "max-turns": { type: "string", default: "150" },
     "max-minutes": { type: "string", default: process.env.TERSA_MAX_MINUTES ?? "30" },
     // empty = provider default (PROVIDERS[...].defaultBudgetUsd)
@@ -60,6 +62,12 @@ const provider = a.provider!;
 if (!isProvider(provider)) fail(`unknown provider ${provider} (expected: ${Object.keys(PROVIDERS).join(", ")})`);
 if (!isProvider(provider)) process.exit(2);
 const model = a.model || PROVIDERS[provider].defaultModel;
+let modelOptions: ReturnType<typeof parseModelOptions> = {};
+try {
+  modelOptions = parseModelOptions(a["model-options"]);
+} catch (e) {
+  fail((e as Error).message);
+}
 const phase = a.phase!;
 if (!["all", "prepare", "agent", "eval"].includes(phase)) fail(`unknown phase ${phase}`);
 const does = (p: string) => phase === "all" || phase === p;
@@ -141,6 +149,7 @@ if (does("agent")) {
         workspace,
         rawDir,
         model,
+        modelOptions,
         maxTurns: Number(a["max-turns"]),
         maxMinutes: Number(a["max-minutes"]) || 30,
         maxBudgetUsd: Number(a["max-budget-usd"]) || PROVIDERS[provider].defaultBudgetUsd,
@@ -155,6 +164,7 @@ if (does("agent")) {
     metricsPath,
     JSON.stringify({
       model: a["fake-agent"] ? "fake" : model,
+      modelOptions: Object.keys(modelOptions).length ? modelOptions : undefined,
       provider: a["fake-agent"] ? "fake" : provider,
       harness: a["fake-agent"]
         ? { name: "fake-agent", version: "0" }
@@ -187,6 +197,7 @@ if (does("eval")) {
   const { startState } = JSON.parse(readFileSync(statePath, "utf8")) as { startState: string };
   const am = JSON.parse(readFileSync(metricsPath, "utf8")) as {
     model: string;
+    modelOptions?: Record<string, string>;
     provider: string;
     harness: { name: string; version: string };
     agent: AgentMetrics;
@@ -255,6 +266,7 @@ if (does("eval")) {
     startState,
     specSha256: createHash("sha256").update(readFileSync(paths.spec(suite, task))).digest("hex"),
     model: am.model,
+    ...(am.modelOptions ? { modelOptions: am.modelOptions } : {}),
     provider: am.provider,
     harness: am.harness,
     usage: am.usage,

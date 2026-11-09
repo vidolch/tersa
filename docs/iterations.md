@@ -372,3 +372,24 @@ Records: `results/A-ts-baseline/AB*/run-22..27.json`, `results/D-ts-bundle/AB*/r
 | D (Haiku, runs 1–6) | 44% | 9% | 21% | 35% | 26.0k tokens |
 
 **Conclusion.** Old tool output is about 12% of cost on Haiku. Trimming it can save at most that, minus the cache rewrites it causes (changing an earlier message invalidates the cached prefix after it). Not worth an iteration. The bigger shares are the agent's output (38%) and the fixed context re-sent on every turn (about 26%). That confirms D's problem in numbers: the bundle adds ~9k tokens to every turn. With costs this split, the remaining levers are fewer turns (scales every class except output) and less output per turn.
+
+**Follow-up: token anatomy from the transcripts** (`results/analysis/it10-haiku.md`, made by `harness/runner/src/anatomy.ts` via the `anatomy` workflow, because transcripts are only kept as Actions artifacts). Per request: start context from the first request, output shared out by content-block characters, carried input split into start context, the agent's own earlier output, and the rest (tool results).
+
+| Arm | Start context | Output per run | Output share of cost* | Start context re-sent | Own output re-sent | Tool results re-sent |
+|---|---|---|---|---|---|---|
+| A | 6.2k | 15.0k | 49% | 11% | 13% | 27% |
+| D | 16.0k | 14.8k | 44% | 23% | 12% | 21% |
+
+\*Cache writes not split; carried input at the cache-read price.
+
+The decisive line is in the file's header: **about 417 thinking blocks per arm, all with empty text, and 0.74 output tokens per visible character** (visible code and prose run at roughly 0.25–0.3). Haiku 5.5 thinks adaptively by default and the SDK doesn't return the thinking text, so the output split above is wrong in one way: roughly 60% of output tokens are hidden thinking, which makes thinking alone about 30% of the bill. The start context (system prompt + tool definitions + task prompt) is only 6.2k in arm A: the SDK already uses its minimal system prompt, so a "lean harness" arm has little to remove.
+
+## Iteration 12 — Thinking and effort (arm A, model settings only)
+
+**Hypothesis.** Hidden thinking is ~60% of Haiku's output tokens and ~30% of cost (iteration 11 follow-up). Lowering effort, or turning thinking off, cuts that directly; the question is whether pass rate holds. This is not about Tersa itself, but it sets the cost floor every other arm is measured against, and shows how much of "cost per passing task" is reasoning rather than reading or writing.
+
+**Change.** New runner option `--model-options` (`effort=low|medium|high|xhigh|max`, `thinking=adaptive|disabled`), recorded as `modelOptions` in the run record and shown in the summary next to the model. The bench forms get a `model_options` input (it replaces `max_minutes`, which keeps its 30-minute default, because forms allow 10 inputs). Nothing else changes.
+
+**Run.** Three same-period arm A batches on `claude-haiku-5-5`, 6 runs per task: SDK defaults (runs 28–33), `effort=low` (runs 34–39), `thinking=disabled` (runs 40–45).
+
+**Expected if the hypothesis holds.** Output tokens per run down by about half with `thinking=disabled`, cost per pass down 20–30%, the same 18/24 passes (AB1 already fails in every run). If passes drop, the saving is not real.

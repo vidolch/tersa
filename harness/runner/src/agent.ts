@@ -2,7 +2,7 @@ import { spawn, spawnSync, type ChildProcess } from "node:child_process";
 import { chmodSync, cpSync, createWriteStream, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { query } from "@anthropic-ai/claude-agent-sdk";
-import { paths, ROOT as ROOT_DIR, type Arm, type ArmConfig, type Suite, type Task } from "./config.ts";
+import { paths, ROOT as ROOT_DIR, type Arm, type ArmConfig, type ModelOptions, type Suite, type Task } from "./config.ts";
 import { MetricsCollector, type Price } from "./metrics.ts";
 import { redirectHooks } from "./steering.ts";
 
@@ -14,6 +14,8 @@ export interface AgentRunInput {
   workspace: string;
   rawDir: string;
   model: string;
+  /** Experiment settings for the model (effort, thinking); empty = SDK defaults. */
+  modelOptions?: ModelOptions;
   maxTurns: number;
   /** Hard spending cap for this run, in USD. */
   maxBudgetUsd: number;
@@ -120,6 +122,8 @@ export async function runAgent(input: AgentRunInput): Promise<MetricsCollector> 
     options: {
       cwd: input.workspace,
       model: input.model,
+      ...(input.modelOptions?.effort ? { effort: input.modelOptions.effort } : {}),
+      ...(input.modelOptions?.thinking ? { thinking: { type: input.modelOptions.thinking } } : {}),
       maxTurns: input.maxTurns,
       tools: input.armConfig.tools,
       allowedTools: [...input.armConfig.tools, ...(input.armConfig.allowedTools ?? [])],

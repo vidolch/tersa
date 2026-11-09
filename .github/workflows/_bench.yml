@@ -18,6 +18,7 @@ on:
       max_turns: { type: string, default: "150" }
       max_budget_usd: { type: string, default: "" }
       max_minutes: { type: string, default: "30" }
+      model_options: { type: string, default: "" }
       max_parallel: { type: string, default: "3" }
     secrets:
       ANTHROPIC_API_KEY: { required: false }
@@ -142,9 +143,10 @@ jobs:
           ANTHROPIC_API_KEY: ${{ inputs.provider == 'anthropic' && secrets.ANTHROPIC_API_KEY || '' }}
           DEEPSEEK_API_KEY: ${{ inputs.provider == 'deepseek' && secrets.DEEPSEEK_API_KEY || '' }}
           TERSA_MODEL: ${{ inputs.model }}
+          TERSA_MODEL_OPTIONS: ${{ inputs.model_options }}
         run: |
           sudo -u agent -H env PATH="$PATH" HTTPS_PROXY="$PROXY" HTTP_PROXY="$PROXY" NO_PROXY= \
-            ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" DEEPSEEK_API_KEY="$DEEPSEEK_API_KEY" TERSA_MODEL="$TERSA_MODEL" \
+            ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" DEEPSEEK_API_KEY="$DEEPSEEK_API_KEY" TERSA_MODEL="$TERSA_MODEL" TERSA_MODEL_OPTIONS="$TERSA_MODEL_OPTIONS" \
             CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 TERSA_NETWORK_POLICY=provider-only \
             node --disable-warning=ExperimentalWarning src/run.ts $ARGS --raw-dir "$RAW" --phase agent \
             --provider "${{ inputs.provider }}" --max-turns "${{ inputs.max_turns }}" \

@@ -2,7 +2,7 @@
 // Primary metric: cost per passing task = Σ cost ÷ passing runs.
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { ARMS, paths, TASKS } from "./config.ts";
+import { ARMS, modelOptionsLabel, paths, TASKS } from "./config.ts";
 
 const median = (xs: number[]) => {
   if (!xs.length) return NaN;
@@ -25,7 +25,10 @@ for (const arm of ARMS) {
       .filter((f) => f.endsWith(".json"))
       .map((f) => JSON.parse(readFileSync(join(dir, f), "utf8")));
     const byModel = new Map<string, any[]>();
-    for (const r of recs) byModel.set(r.model, [...(byModel.get(r.model) ?? []), r]);
+    for (const r of recs) {
+      const key = r.model + (modelOptionsLabel(r.modelOptions) ? ` (${modelOptionsLabel(r.modelOptions)})` : "");
+      byModel.set(key, [...(byModel.get(key) ?? []), r]);
+    }
     for (let [model, recs] of byModel) {
     // Infrastructure crashes (provider errors) are not agent failures: shown, not scored.
     const crashed = recs.filter((r) => r.stopReason === "error_agent_crash").length;

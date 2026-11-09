@@ -152,6 +152,7 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 9: query layer as a shell command (arm B2): not adopted (0–4 calls per run); query-layer line closed
 - [x] Iteration 10: task-scoped context bundle up front (arm D): earlier first edit on AB3/AB4, but cost per pass +8%, not significant
 - [x] Iteration 11: cost anatomy on Haiku: old tool output ~12% of cost; `turnsToFirstEdit` fixed to count shell edits
+- [ ] Iteration 12: thinking and effort on arm A (hidden thinking is ~30% of Haiku's cost)
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model
