@@ -1,0 +1,107 @@
+{
+  "suite": "actual",
+  "arm": "B-ts-query",
+  "task": "AB3",
+  "run": 13,
+  "chained": false,
+  "startState": "actual/AB3",
+  "specSha256": "7e0fb28c9b577e2011238b1249121d7e61af14d7e381c0bdd5642cc2d45043b9",
+  "model": "claude-haiku-5-5",
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 78,
+    "cacheRead": 1539914,
+    "cacheWrite": 57275,
+    "output": 22759,
+    "toolResultTokens": 16888,
+    "contextOverheadTokens": 320
+  },
+  "agent": {
+    "turns": 54,
+    "toolCalls": 53,
+    "toolCallsByName": {
+      "mcp__tersa__code_find": 8,
+      "Bash": 14,
+      "mcp__tersa__code_get": 5,
+      "Read": 12,
+      "Edit": 14
+    },
+    "fileReads": 12,
+    "repeatReads": 0,
+    "failedEdits": 1,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 146633,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB3 R1": true,
+      "AB3 R2": true,
+      "AB3 R3": true,
+      "AB3 R4": true,
+      "AB3 R5": true,
+      "AB3 R6": true,
+      "AB3 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 33,
+    "readChars": 63049,
+    "relevantChars": 28409,
+    "coreChars": 21628,
+    "precision": 0.4505860521181938,
+    "coreRecall": 1,
+    "readTokens": 15762
+  },
+  "costUsd": 0.022808314999999996,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.03394581499999999,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "steering": {
+    "redirects": 5,
+    "byTool": {
+      "Bash": 5
+    }
+  },
+  "toolCost": {
+    "mcp__tersa__code_find": {
+      "calls": 8,
+      "outTokens": 5318,
+      "carriedTokens": 157517
+    },
+    "Bash": {
+      "calls": 14,
+      "outTokens": 3850,
+      "carriedTokens": 84324
+    },
+    "mcp__tersa__code_get": {
+      "calls": 5,
+      "outTokens": 1964,
+      "carriedTokens": 34470
+    },
+    "Read": {
+      "calls": 12,
+      "outTokens": 5285,
+      "carriedTokens": 133097
+    },
+    "Edit": {
+      "calls": 14,
+      "outTokens": 482,
+      "carriedTokens": 9172
+    }
+  }
+}

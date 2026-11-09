@@ -1,0 +1,100 @@
+{
+  "suite": "actual",
+  "arm": "B-ts-query",
+  "task": "AB4",
+  "run": 9,
+  "chained": false,
+  "startState": "actual/AB4",
+  "specSha256": "ad84b917a1fa928bb20b220ef396e0a3f8cc28c28535b7786c2e408807abae54",
+  "model": "claude-haiku-5-5",
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 44,
+    "cacheRead": 604335,
+    "cacheWrite": 34223,
+    "output": 11431,
+    "toolResultTokens": 10237,
+    "contextOverheadTokens": 320
+  },
+  "agent": {
+    "turns": 26,
+    "toolCalls": 25,
+    "toolCallsByName": {
+      "mcp__tersa__code_find": 2,
+      "mcp__tersa__code_get": 4,
+      "Read": 3,
+      "Edit": 5,
+      "Bash": 11
+    },
+    "fileReads": 3,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 199078,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB4 R1": true,
+      "AB4 R2": true,
+      "AB4 R3": true,
+      "AB4 R4": true,
+      "AB4 R5": true,
+      "AB4 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 36,
+    "readChars": 39731,
+    "relevantChars": 13590,
+    "coreChars": 12054,
+    "precision": 0.3420502881880647,
+    "coreRecall": 1,
+    "readTokens": 9933
+  },
+  "costUsd": 0.010437125,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.016041125,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "mcp__tersa__code_find": {
+      "calls": 2,
+      "outTokens": 2343,
+      "carriedTokens": 48636
+    },
+    "mcp__tersa__code_get": {
+      "calls": 4,
+      "outTokens": 3692,
+      "carriedTokens": 67971
+    },
+    "Read": {
+      "calls": 3,
+      "outTokens": 1107,
+      "carriedTokens": 19777
+    },
+    "Edit": {
+      "calls": 5,
+      "outTokens": 216,
+      "carriedTokens": 1666
+    },
+    "Bash": {
+      "calls": 11,
+      "outTokens": 2882,
+      "carriedTokens": 24050
+    }
+  }
+}

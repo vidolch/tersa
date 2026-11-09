@@ -1,0 +1,106 @@
+{
+  "suite": "actual",
+  "arm": "B-ts-query",
+  "task": "AB4",
+  "run": 12,
+  "chained": false,
+  "startState": "actual/AB4",
+  "specSha256": "ad84b917a1fa928bb20b220ef396e0a3f8cc28c28535b7786c2e408807abae54",
+  "model": "claude-haiku-5-5",
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 32,
+    "cacheRead": 393039,
+    "cacheWrite": 31861,
+    "output": 7387,
+    "toolResultTokens": 11582,
+    "contextOverheadTokens": 320
+  },
+  "agent": {
+    "turns": 16,
+    "toolCalls": 15,
+    "toolCallsByName": {
+      "mcp__tersa__code_find": 2,
+      "Read": 4,
+      "mcp__tersa__code_get": 3,
+      "Edit": 2,
+      "Bash": 4
+    },
+    "fileReads": 4,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 181823,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB4 R1": true,
+      "AB4 R2": true,
+      "AB4 R3": true,
+      "AB4 R4": true,
+      "AB4 R5": true,
+      "AB4 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 41,
+    "readChars": 45132,
+    "relevantChars": 15370,
+    "coreChars": 10988,
+    "precision": 0.3405565895595143,
+    "coreRecall": 1,
+    "readTokens": 11283
+  },
+  "costUsd": 0.007982715,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.011609715,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "steering": {
+    "redirects": 1,
+    "byTool": {
+      "Read": 1
+    }
+  },
+  "toolCost": {
+    "mcp__tersa__code_find": {
+      "calls": 2,
+      "outTokens": 2298,
+      "carriedTokens": 33558
+    },
+    "Read": {
+      "calls": 4,
+      "outTokens": 1975,
+      "carriedTokens": 18572
+    },
+    "mcp__tersa__code_get": {
+      "calls": 3,
+      "outTokens": 5043,
+      "carriedTokens": 58329
+    },
+    "Edit": {
+      "calls": 2,
+      "outTokens": 63,
+      "carriedTokens": 519
+    },
+    "Bash": {
+      "calls": 4,
+      "outTokens": 2205,
+      "carriedTokens": 8559
+    }
+  }
+}
