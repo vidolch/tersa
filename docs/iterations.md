@@ -286,10 +286,31 @@ What this suggests next: the lever is **turns**, not bytes read. Candidates: han
 ---
 
 ## Iteration 9 — The query layer as a shell command (arm B2)
-**Date** 2026-11-09 · **Model** `claude-haiku-5-5` · **Status** pilot
+**Date** 2026-11-09 · **Model** `claude-haiku-5-5` · **Records** `results/B2-ts-query-shell/AB*/run-1` (pilot, one run per task)
 
 **Hypothesis.** Iteration 8 showed the MCP tools add turns: one compound shell command became several tool calls. If the same queries are a shell command (`tersa find|get|refs|outline`), the agent can batch them with other commands in one turn, keep its efficient habits, and still read more precisely. Then B2 costs no more than A, ideally less.
 
 **Change.** New arm `B2-ts-query-shell`: a query daemon starts with the run (index, language services and session dedupe stay warm across calls, ~300 ms per call) and a `tersa` CLI is put on the agent's PATH. No MCP tools and no redirects (redirects cost turns); a short usage note in the system prompt shows a batched example. New metrics for every arm: `turnsToFirstEdit` (orientation cost) and `shellQueryCalls`; `tersa` output is attributed to files for reading precision.
 
 **Harness fix found while building it.** A run that hits the turn limit made the SDK throw, which the runner recorded as a crash (not scored). It is now `error_max_turns`, a failed run. No past records were affected.
+
+**Pilot result.**
+| Task | Group | Runs | Pass | Median cost | Median turns | Median input | Median reading | Read precision | Query calls | Redirects | Read share of carried |
+|------|-------|------|------|-------------|--------------|--------------|----------------|----------------|-------------|-----------|-----------------------|
+| AB1 | B2 pilot | 1 | 0/1 | $0.021 | 28 | 0.84M | 13k | 19% | 0 | 0 | 0% |
+| AB2 | B2 pilot | 1 | 1/1 | $0.050 | 51 | 2.33M | 23k | 9% | 0 | 0 | 0% |
+| AB3 | B2 pilot | 1 | 1/1 | $0.021 | 33 | 0.80M | 11k | 13% | 0 | 0 | 0% |
+| AB4 | B2 pilot | 1 | 1/1 | $0.019 | 27 | 0.68M | 13k | 30% | 0 | 0 | 0% |
+
+`node src/compare.ts "B2 pilot=results/B2-ts-query-shell@1" --suite actual --model claude-haiku-5-5`
+
+Per run: `tersa` calls 4 / 1 / 2 / 0 (AB1–AB4) against 25 / 37 / 22 / 21 plain Bash calls; first edit at turn 7 / 14 / 8 / 6 of 28 / 51 / 33 / 27. The AB1 failure is the restored test `rules are deterministically ranked`, which confirms the iteration-8 reading: Haiku patches the symptom instead of fixing the ranking.
+
+**Conclusion.** Not adopted: with the command available and described in the system prompt, Haiku still used grep/sed for almost everything. A full batch would compare A with A, so it was not run. Across three variants (MCP tools with redirects, MCP tools without, shell command without), the query layer either isn't used or adds turns. **The query-layer line is closed** in this form; its index and contract stay available for the next idea.
+
+Useful by-product: **orientation takes 20–30% of turns** (first edit at turn 6–14), which bounds what any "find the code faster" idea can save, and sets the target for iteration 10.
+
+---
+
+## Iteration 10 — Task-scoped context bundle up front (planned)
+**Hypothesis.** If the agent starts with the code most likely relevant to the task already in its prompt, it skips most orientation turns (iteration 9: first edit at turn 6–14), and fewer turns means less re-sent context. The bundle must be built automatically from the spec (no ground truth), and stay small, because it is re-sent every turn.

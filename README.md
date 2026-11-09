@@ -13,7 +13,7 @@ Everything is measured by the benchmark in this repo, so each idea has to prove 
 |---|---|---|---|
 | **A** `A-ts-baseline` | TypeScript | Claude Code's standard tools (Read, Edit, Write, Grep, Glob, Bash) | baseline measured |
 | **B** `B-ts-query` | TypeScript | standard tools + the tersa query layer (`query/`), steered: usage note in the system prompt; code-reading shell/Grep/Glob calls and whole-file Reads of large source files redirected to the query tools or ranged Reads | measured: no gain with DeepSeek, more expensive with Haiku (see `docs/iterations.md`) |
-| **B2** `B2-ts-query-shell` | TypeScript | standard tools + the query layer as a `tersa` shell command (daemon keeps the index warm), usage note in the system prompt, no redirects, so lookups batch with other shell commands in one turn | iteration 9 |
+| **B2** `B2-ts-query-shell` | TypeScript | standard tools + the query layer as a `tersa` shell command (daemon keeps the index warm), usage note in the system prompt, no redirects, so lookups batch with other shell commands in one turn | piloted: not adopted by Haiku |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
 **B vs A** isolates the query layer. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
@@ -146,7 +146,7 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 6: steering v1.2 pilot: B no longer more expensive than A; cheaper on AB2/AB3 (1 run each)
 - [x] Iteration 7: full comparison, B v1.2 vs same-period A, 6 runs per task: no significant difference (B +5% per pass)
 - [x] Iteration 8: same comparison on Claude Haiku 5.5: B significantly more expensive (+24% to +126%)
-- [ ] Iteration 9: query layer as a shell command (arm B2), Haiku 5.5
+- [x] Iteration 9: query layer as a shell command (arm B2): not adopted (0–4 calls per run); query-layer line closed
 - [ ] Iteration 10: task-scoped context bundle up front (fewer orientation turns)
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
