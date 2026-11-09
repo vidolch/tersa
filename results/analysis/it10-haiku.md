@@ -2,6 +2,8 @@ Token anatomy (48 runs; carried input priced as cache reads at $0.01/M, output a
 
 | Arm | Task | Runs | Requests | Start context | Output | thinking | text | shell edits | other shell | Edit/Write | other tools | Carried: start | own output | tool results |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+<!-- A-ts-baseline: 0.74 output tokens per visible character, 416 thinking blocks -->
+<!-- D-ts-bundle: 0.77 output tokens per visible character, 418 thinking blocks -->
 | A-ts-baseline | AB1 | 6 | 29 | 6.2k | 14.8k | 0% | 22% | 4% | 63% | 10% | 0% | 25% | 29% | 46% |
 | A-ts-baseline | AB2 | 6 | 35 | 6.1k | 21.9k | 0% | 17% | 6% | 72% | 4% | 1% | 16% | 26% | 58% |
 | A-ts-baseline | AB3 | 6 | 25 | 6.2k | 14.0k | 0% | 20% | 8% | 58% | 14% | 0% | 24% | 26% | 50% |

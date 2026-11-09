@@ -19,7 +19,9 @@
    "start": 141657,
    "ownOutput": 124232,
    "toolResults": 196794
-  }
+  },
+  "visibleChars": 15077,
+  "thinkingBlocks": 12
  },
  {
   "arm": "A-ts-baseline",
@@ -41,7 +43,9 @@
    "start": 215565,
    "ownOutput": 330283,
    "toolResults": 348289
-  }
+  },
+  "visibleChars": 25129,
+  "thinkingBlocks": 27
  },
  {
   "arm": "A-ts-baseline",
@@ -63,7 +67,9 @@
    "start": 172452,
    "ownOutput": 169415,
    "toolResults": 315127
-  }
+  },
+  "visibleChars": 19600,
+  "thinkingBlocks": 18
  },
  {
   "arm": "A-ts-baseline",
@@ -85,7 +91,9 @@
    "start": 110862,
    "ownOutput": 63341,
    "toolResults": 119596
-  }
+  },
+  "visibleChars": 11875,
+  "thinkingBlocks": 10
  },
  {
   "arm": "A-ts-baseline",
@@ -107,7 +115,9 @@
    "start": 221724,
    "ownOutput": 279410,
    "toolResults": 548195
-  }
+  },
+  "visibleChars": 21333,
+  "thinkingBlocks": 17
  },
  {
   "arm": "A-ts-baseline",
@@ -129,7 +139,9 @@
    "start": 215565,
    "ownOutput": 256439,
    "toolResults": 448765
-  }
+  },
+  "visibleChars": 27257,
+  "thinkingBlocks": 21
  },
  {
   "arm": "A-ts-baseline",
@@ -151,7 +163,9 @@
    "start": 189782,
    "ownOutput": 256208,
    "toolResults": 613445
-  }
+  },
+  "visibleChars": 26862,
+  "thinkingBlocks": 20
  },
  {
   "arm": "A-ts-baseline",
@@ -173,7 +187,9 @@
    "start": 214270,
    "ownOutput": 438958,
    "toolResults": 873708
-  }
+  },
+  "visibleChars": 29615,
+  "thinkingBlocks": 22
  },
  {
   "arm": "A-ts-baseline",
@@ -195,7 +211,9 @@
    "start": 195904,
    "ownOutput": 298089,
    "toolResults": 736775
-  }
+  },
+  "visibleChars": 33396,
+  "thinkingBlocks": 21
  },
  {
   "arm": "A-ts-baseline",
@@ -217,7 +235,9 @@
    "start": 269368,
    "ownOutput": 617303,
    "toolResults": 1189878
-  }
+  },
+  "visibleChars": 36513,
+  "thinkingBlocks": 33
  },
  {
   "arm": "A-ts-baseline",
@@ -239,7 +259,9 @@
    "start": 202026,
    "ownOutput": 273031,
    "toolResults": 763324
-  }
+  },
+  "visibleChars": 23474,
+  "thinkingBlocks": 23
  },
  {
   "arm": "A-ts-baseline",
@@ -261,7 +283,9 @@
    "start": 226514,
    "ownOutput": 321231,
    "toolResults": 668915
-  }
+  },
+  "visibleChars": 20993,
+  "thinkingBlocks": 18
  },
  {
   "arm": "A-ts-baseline",
@@ -283,7 +307,9 @@
    "start": 149736,
    "ownOutput": 163428,
    "toolResults": 320690
-  }
+  },
+  "visibleChars": 22052,
+  "thinkingBlocks": 17
  },
  {
   "arm": "A-ts-baseline",
@@ -305,7 +331,9 @@
    "start": 174692,
    "ownOutput": 195130,
    "toolResults": 323449
-  }
+  },
+  "visibleChars": 17810,
+  "thinkingBlocks": 16
  },
  {
   "arm": "A-ts-baseline",
@@ -327,7 +355,9 @@
    "start": 168453,
    "ownOutput": 206938,
    "toolResults": 342876
-  }
+  },
+  "visibleChars": 20050,
+  "thinkingBlocks": 17
  },
  {
   "arm": "A-ts-baseline",
@@ -349,7 +379,9 @@
    "start": 112302,
    "ownOutput": 95648,
    "toolResults": 191151
-  }
+  },
+  "visibleChars": 18743,
+  "thinkingBlocks": 11
  },
  {
   "arm": "A-ts-baseline",
@@ -371,7 +403,9 @@
    "start": 155975,
    "ownOutput": 194391,
    "toolResults": 332732
-  }
+  },
+  "visibleChars": 24382,
+  "thinkingBlocks": 18
  },
  {
   "arm": "A-ts-baseline",
@@ -393,7 +427,9 @@
    "start": 155975,
    "ownOutput": 142986,
    "toolResults": 369968
-  }
+  },
+  "visibleChars": 15562,
+  "thinkingBlocks": 18
  },
  {
   "arm": "A-ts-baseline",
@@ -415,7 +451,9 @@
    "start": 140461,
    "ownOutput": 119841,
    "toolResults": 218599
-  }
+  },
+  "visibleChars": 17252,
+  "thinkingBlocks": 17
  },
  {
   "arm": "A-ts-baseline",
@@ -437,7 +475,9 @@
    "start": 85498,
    "ownOutput": 35751,
    "toolResults": 91067
-  }
+  },
+  "visibleChars": 9062,
+  "thinkingBlocks": 8
  },
  {
   "arm": "A-ts-baseline",
@@ -459,7 +499,9 @@
    "start": 103819,
    "ownOutput": 55471,
    "toolResults": 140891
-  }
+  },
+  "visibleChars": 11666,
+  "thinkingBlocks": 12
  },
  {
   "arm": "A-ts-baseline",
@@ -481,7 +523,9 @@
    "start": 97712,
    "ownOutput": 52532,
    "toolResults": 124594
-  }
+  },
+  "visibleChars": 10439,
+  "thinkingBlocks": 10
  },
  {
   "arm": "A-ts-baseline",
@@ -503,7 +547,9 @@
    "start": 128247,
    "ownOutput": 95844,
    "toolResults": 182828
-  }
+  },
+  "visibleChars": 15040,
+  "thinkingBlocks": 13
  },
  {
   "arm": "A-ts-baseline",
@@ -525,7 +571,9 @@
    "start": 170996,
    "ownOutput": 172846,
    "toolResults": 378388
-  }
+  },
+  "visibleChars": 16414,
+  "thinkingBlocks": 17
  },
  {
   "arm": "D-ts-bundle",
@@ -547,7 +595,9 @@
    "start": 602693,
    "ownOutput": 379714,
    "toolResults": 518349
-  }
+  },
+  "visibleChars": 26710,
+  "thinkingBlocks": 24
  },
  {
   "arm": "D-ts-bundle",
@@ -569,7 +619,9 @@
    "start": 309491,
    "ownOutput": 84359,
    "toolResults": 213131
-  }
+  },
+  "visibleChars": 15439,
+  "thinkingBlocks": 11
  },
  {
   "arm": "D-ts-bundle",
@@ -591,7 +643,9 @@
    "start": 488670,
    "ownOutput": 215968,
    "toolResults": 408696
-  }
+  },
+  "visibleChars": 19353,
+  "thinkingBlocks": 15
  },
  {
   "arm": "D-ts-bundle",
@@ -613,7 +667,9 @@
    "start": 537537,
    "ownOutput": 284497,
    "toolResults": 418995
-  }
+  },
+  "visibleChars": 22917,
+  "thinkingBlocks": 23
  },
  {
   "arm": "D-ts-bundle",
@@ -635,7 +691,9 @@
    "start": 342069,
    "ownOutput": 89811,
    "toolResults": 207995
-  }
+  },
+  "visibleChars": 17170,
+  "thinkingBlocks": 13
  },
  {
   "arm": "D-ts-bundle",
@@ -657,7 +715,9 @@
    "start": 293202,
    "ownOutput": 76000,
    "toolResults": 186633
-  }
+  },
+  "visibleChars": 13088,
+  "thinkingBlocks": 12
  },
  {
   "arm": "D-ts-bundle",
@@ -679,7 +739,9 @@
    "start": 367770,
    "ownOutput": 182376,
    "toolResults": 403272
-  }
+  },
+  "visibleChars": 18427,
+  "thinkingBlocks": 18
  },
  {
   "arm": "D-ts-bundle",
@@ -701,7 +763,9 @@
    "start": 479700,
    "ownOutput": 316667,
    "toolResults": 580724
-  }
+  },
+  "visibleChars": 29382,
+  "thinkingBlocks": 24
  },
  {
   "arm": "D-ts-bundle",
@@ -723,7 +787,9 @@
    "start": 351780,
    "ownOutput": 163794,
    "toolResults": 385436
-  }
+  },
+  "visibleChars": 17540,
+  "thinkingBlocks": 17
  },
  {
   "arm": "D-ts-bundle",
@@ -745,7 +811,9 @@
    "start": 847470,
    "ownOutput": 828407,
    "toolResults": 1203696
-  }
+  },
+  "visibleChars": 36134,
+  "thinkingBlocks": 33
  },
  {
   "arm": "D-ts-bundle",
@@ -767,7 +835,9 @@
    "start": 495690,
    "ownOutput": 377041,
    "toolResults": 749648
-  }
+  },
+  "visibleChars": 27256,
+  "thinkingBlocks": 24
  },
  {
   "arm": "D-ts-bundle",
@@ -789,7 +859,9 @@
    "start": 575640,
    "ownOutput": 323293,
    "toolResults": 616205
-  }
+  },
+  "visibleChars": 25842,
+  "thinkingBlocks": 20
  },
  {
   "arm": "D-ts-bundle",
@@ -811,7 +883,9 @@
    "start": 247425,
    "ownOutput": 80376,
    "toolResults": 127562
-  }
+  },
+  "visibleChars": 14060,
+  "thinkingBlocks": 9
  },
  {
   "arm": "D-ts-bundle",
@@ -833,7 +907,9 @@
    "start": 329900,
    "ownOutput": 127682,
    "toolResults": 146467
-  }
+  },
+  "visibleChars": 17975,
+  "thinkingBlocks": 14
  },
  {
   "arm": "D-ts-bundle",
@@ -855,7 +931,9 @@
    "start": 329900,
    "ownOutput": 119246,
    "toolResults": 163313
-  }
+  },
+  "visibleChars": 16306,
+  "thinkingBlocks": 13
  },
  {
   "arm": "D-ts-bundle",
@@ -877,7 +955,9 @@
    "start": 412375,
    "ownOutput": 183615,
    "toolResults": 283905
-  }
+  },
+  "visibleChars": 20241,
+  "thinkingBlocks": 16
  },
  {
   "arm": "D-ts-bundle",
@@ -899,7 +979,9 @@
    "start": 329900,
    "ownOutput": 167398,
    "toolResults": 213733
-  }
+  },
+  "visibleChars": 19368,
+  "thinkingBlocks": 19
  },
  {
   "arm": "D-ts-bundle",
@@ -921,7 +1003,9 @@
    "start": 362890,
    "ownOutput": 162191,
    "toolResults": 265057
-  }
+  },
+  "visibleChars": 17430,
+  "thinkingBlocks": 19
  },
  {
   "arm": "D-ts-bundle",
@@ -943,7 +1027,9 @@
    "start": 212086,
    "ownOutput": 43368,
    "toolResults": 118393
-  }
+  },
+  "visibleChars": 9120,
+  "thinkingBlocks": 10
  },
  {
   "arm": "D-ts-bundle",
@@ -965,7 +1051,9 @@
    "start": 651407,
    "ownOutput": 561261,
    "toolResults": 625573
-  }
+  },
+  "visibleChars": 30003,
+  "thinkingBlocks": 37
  },
  {
   "arm": "D-ts-bundle",
@@ -987,7 +1075,9 @@
    "start": 242384,
    "ownOutput": 70421,
    "toolResults": 144415
-  }
+  },
+  "visibleChars": 11237,
+  "thinkingBlocks": 11
  },
  {
   "arm": "D-ts-bundle",
@@ -1009,7 +1099,9 @@
    "start": 227235,
    "ownOutput": 44737,
    "toolResults": 120094
-  }
+  },
+  "visibleChars": 9204,
+  "thinkingBlocks": 9
  },
  {
   "arm": "D-ts-bundle",
@@ -1031,7 +1123,9 @@
    "start": 166639,
    "ownOutput": 30399,
    "toolResults": 100434
-  }
+  },
+  "visibleChars": 9286,
+  "thinkingBlocks": 11
  },
  {
   "arm": "D-ts-bundle",
@@ -1053,6 +1147,8 @@
    "start": 302980,
    "ownOutput": 107572,
    "toolResults": 256298
-  }
+  },
+  "visibleChars": 20308,
+  "thinkingBlocks": 16
  }
 ]
