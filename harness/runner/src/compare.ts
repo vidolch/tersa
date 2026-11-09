@@ -5,7 +5,7 @@
 //   <dir> holds <task>/run-<n>.json (e.g. results/A-ts-baseline or
 //   results/archive/2026-11-03-armB-v1-steered/B-ts-query), relative to the repo root.
 //   @runs keeps only those run numbers, e.g. results/A-ts-baseline@1-6 or @7,8.
-//   --suite keeps only records of that suite.
+//   --suite keeps only records of that suite; --model only records of that model.
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT } from "./config.ts";
@@ -13,6 +13,8 @@ import { ROOT } from "./config.ts";
 const args = process.argv.slice(2);
 const suiteIdx = args.indexOf("--suite");
 const suite = suiteIdx >= 0 ? args[suiteIdx + 1] : null;
+const modelIdx = args.indexOf("--model");
+const model = modelIdx >= 0 ? args[modelIdx + 1] : null;
 function parseRuns(spec: string | undefined): Set<number> | null {
   if (!spec) return null;
   const out = new Set<number>();
@@ -23,7 +25,7 @@ function parseRuns(spec: string | undefined): Set<number> | null {
   return out;
 }
 const groups = args
-  .filter((a, i) => a.includes("=") && i !== suiteIdx + 1)
+  .filter((a, i) => a.includes("=") && i !== suiteIdx + 1 && i !== modelIdx + 1)
   .map((a) => {
     const [label, spec] = a.split("=");
     // "dirA@1-6,dirB" → [{dir, runs}]; a comma inside @runs belongs to the runs
@@ -59,6 +61,7 @@ function load({ dir, runs }: { dir: string; runs: Set<number> | null }): any[] {
       const r = JSON.parse(readFileSync(join(tdir, f), "utf8"));
       if (runs && !runs.has(r.run)) continue;
       if (suite && (r.suite ?? "urlshort") !== suite) continue;
+      if (model && r.model !== model) continue;
       if (r.stopReason === "error_agent_crash") continue;
       out.push(r);
     }
