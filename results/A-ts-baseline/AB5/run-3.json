@@ -1,0 +1,105 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 3,
+  "chained": false,
+  "startState": "actual/AB5",
+  "specSha256": "b651f9c1f7c00e6e661e7532d0d6dacff172223ea531f6f0d9b0fc69c263ee8e",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 22,
+    "cacheRead": 264519,
+    "cacheWrite": 33794,
+    "output": 7657,
+    "toolResultTokens": 15167,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 21,
+    "toolCalls": 20,
+    "toolCallsByName": {
+      "Grep": 3,
+      "Read": 8,
+      "Edit": 6,
+      "Bash": 2,
+      "Write": 1
+    },
+    "fileReads": 8,
+    "repeatReads": 0,
+    "failedEdits": 1,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": 8,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 73460,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB5 R1": true,
+      "AB5 R2": true,
+      "AB5 R3": true,
+      "AB5 R4": true,
+      "AB5 R5": true,
+      "AB5 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 38,
+    "readChars": 59368,
+    "relevantChars": 45496,
+    "coreChars": 24306,
+    "precision": 0.7663387683600593,
+    "coreRecall": 1,
+    "readTokens": 14842
+  },
+  "costUsd": 0.01070014,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.01070014,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Grep": {
+      "calls": 3,
+      "outTokens": 3570,
+      "carriedTokens": 28282
+    },
+    "Read": {
+      "calls": 8,
+      "outTokens": 10916,
+      "carriedTokens": 87952
+    },
+    "Edit": {
+      "calls": 6,
+      "outTokens": 275,
+      "carriedTokens": 775
+    },
+    "Bash": {
+      "calls": 2,
+      "outTokens": 357,
+      "carriedTokens": 555
+    },
+    "Write": {
+      "calls": 1,
+      "outTokens": 51,
+      "carriedTokens": 51
+    }
+  }
+}

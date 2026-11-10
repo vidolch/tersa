@@ -1,0 +1,99 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 8,
+  "chained": false,
+  "startState": "actual/AB5",
+  "specSha256": "b651f9c1f7c00e6e661e7532d0d6dacff172223ea531f6f0d9b0fc69c263ee8e",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 34,
+    "cacheRead": 513798,
+    "cacheWrite": 42529,
+    "output": 10974,
+    "toolResultTokens": 16553,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 29,
+    "toolCalls": 28,
+    "toolCallsByName": {
+      "Grep": 4,
+      "Read": 11,
+      "Bash": 7,
+      "Edit": 6
+    },
+    "fileReads": 11,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": 10,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 113092,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB5 R1": true,
+      "AB5 R2": true,
+      "AB5 R3": true,
+      "AB5 R4": true,
+      "AB5 R5": true,
+      "AB5 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 40,
+    "readChars": 65198,
+    "relevantChars": 40469,
+    "coreChars": 22989,
+    "precision": 0.6207092242093316,
+    "coreRecall": 1,
+    "readTokens": 16300
+  },
+  "costUsd": 0.015944505,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.015944505,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Grep": {
+      "calls": 4,
+      "outTokens": 3615,
+      "carriedTokens": 51557
+    },
+    "Read": {
+      "calls": 11,
+      "outTokens": 11202,
+      "carriedTokens": 149179
+    },
+    "Bash": {
+      "calls": 7,
+      "outTokens": 1483,
+      "carriedTokens": 8066
+    },
+    "Edit": {
+      "calls": 6,
+      "outTokens": 256,
+      "carriedTokens": 1722
+    }
+  }
+}
