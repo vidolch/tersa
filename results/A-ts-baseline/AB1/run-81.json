@@ -1,0 +1,92 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 81,
+  "chained": false,
+  "startState": "actual/AB1",
+  "specSha256": "3ed4a82cf3927a943b3086ced320b193ae91463d7a5e760a67aa3f4de5276f1c",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 54,
+    "cacheRead": 533371,
+    "cacheWrite": 24472,
+    "output": 11491,
+    "toolResultTokens": 7354,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 28,
+    "toolCalls": 27,
+    "toolCallsByName": {
+      "Bash": 24,
+      "Edit": 3
+    },
+    "fileReads": 0,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": 6,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 250873,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": false,
+    "rules": {
+      "AB1 R1": true,
+      "AB1 R2": true,
+      "AB1 R3": true,
+      "AB1 R4": true,
+      "AB1 regression": false
+    },
+    "regressionFailures": [
+      "Rule rules are deterministically ranked"
+    ]
+  },
+  "reading": {
+    "filesRead": 10,
+    "readChars": 28455,
+    "relevantChars": 7019,
+    "coreChars": 740,
+    "precision": 0.24667018098752416,
+    "coreRecall": 1,
+    "readTokens": 7114
+  },
+  "costUsd": 0.014143610000000001,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.014143610000000001,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 1,
+    "denied": [
+      "connect registry.npmjs.org:443"
+    ]
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 24,
+      "outTokens": 7243,
+      "carriedTokens": 130132
+    },
+    "Edit": {
+      "calls": 3,
+      "outTokens": 116,
+      "carriedTokens": 2156
+    }
+  }
+}

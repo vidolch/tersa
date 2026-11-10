@@ -1,0 +1,92 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 77,
+  "chained": false,
+  "startState": "actual/AB1",
+  "specSha256": "3ed4a82cf3927a943b3086ced320b193ae91463d7a5e760a67aa3f4de5276f1c",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 46,
+    "cacheRead": 375013,
+    "cacheWrite": 21753,
+    "output": 9040,
+    "toolResultTokens": 6626,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 23,
+    "toolCalls": 22,
+    "toolCallsByName": {
+      "Bash": 21,
+      "Edit": 1
+    },
+    "fileReads": 0,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": 14,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 120345,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": false,
+    "rules": {
+      "AB1 R1": true,
+      "AB1 R2": true,
+      "AB1 R3": true,
+      "AB1 R4": true,
+      "AB1 regression": false
+    },
+    "regressionFailures": [
+      "Rule rules are deterministically ranked"
+    ]
+  },
+  "reading": {
+    "filesRead": 15,
+    "readChars": 25532,
+    "relevantChars": 7694,
+    "coreChars": 1733,
+    "precision": 0.3013473288422372,
+    "coreRecall": 1,
+    "readTokens": 6383
+  },
+  "costUsd": 0.010993855,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.010993854999999999,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 1,
+    "denied": [
+      "connect registry.npmjs.org:443"
+    ]
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 21,
+      "outTokens": 6543,
+      "carriedTokens": 91952
+    },
+    "Edit": {
+      "calls": 1,
+      "outTokens": 87,
+      "carriedTokens": 783
+    }
+  }
+}
