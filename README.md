@@ -134,6 +134,7 @@ What went wrong, how it was caught, and what changed. Invalidated records are ke
 | 2026-11-03 | Reading metric counted only the Read tool, but agents read mostly via `sed`/`cat`/`grep`: one run showed 0 tokens read | implausible numbers | shell, Grep and query-tool output attributed to files |
 | 2026-11-09 | Three same-arm batches dispatched together: the concurrency group was per arm, so GitHub cancelled the middle one while it was pending | Run list showed it cancelled | Group per arm and first run; batches of one arm with different run numbers now run side by side |
 | 2026-11-10 | Arm Q's extension appended contracts in only 6 of 30 runs: agents wrote `cd dir; sed -n …` and it matched only `cd dir && …` | Probe of tool outputs (`it20.probe.json`) and the extension's per-run count | Batch archived; matching rewritten and tested on command shapes from the logs; rerun |
+| 2026-11-10 | Arm Q rerun (20b) still reached only 3 of 6 AB1 runs: agents batch several reads into one bash call, which the extension skipped | Command log added to `probe.ts` | Extension reads every file a command names or grep output prefixes; batch archived; rerun |
 
 ## Layout
 
@@ -178,7 +179,7 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 17: model-generated contracts, blind to the task (arm I): 10/12 vs 1/12, 19× lower cost per pass
 - [x] Iteration 18: arm I vs A on all five tasks: a wash overall (win on AB1, tax on AB3/AB4, unread on AB2)
 - [x] Iteration 19: harness alone: pi vs Claude Code: same passes, −22% cost per pass
-- [ ] Iteration 20: modified pi (arm Q, contracts appended where code is read): first batch undelivered (command matching bug), rerun as 20b
+- [ ] Iteration 20: modified pi (arm Q, contracts appended where code is read): first two batches mostly undelivered (agents' read commands not recognised), fixed, rerun as 20c
 - [ ] Later: run the agreement check automatically (as the toolchain would) instead of relying on the agent running tests
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next

@@ -1,10 +1,11 @@
 /**
  * pi extension for arm Q: contracts delivered where code is read.
  *
- * When a tool result shows source code of one file (pi's `read`, or a single-file `cat`/`sed`/
- * `head`/`tail`/`nl` through `bash`), appends the contracts of
- *   - the functions whose declarations appear in the shown text, and
- *   - the functions called in the shown text that are defined elsewhere (looked up by name),
+ * When a tool result shows source code (pi's `read`, or `bash` output: agents batch several
+ * `sed -n`/`cat`/`grep -n` reads into one call), appends the contracts of
+ *   - the functions whose declarations appear in the output, for every source file the command
+ *     names or the output prefixes as `path:line:` (grep -n), and
+ *   - the functions called in the output that are defined elsewhere (looked up by name),
  * each at most once per session, at most MAX_PER_RESULT per result.
  *
  * Contracts come from contracts.json next to this file: the blind, model-written contracts of
@@ -67,9 +68,38 @@ export function shownFile(toolName: string, input: any, workspace: string): stri
   return rel(resolve(cwd, files[0]));
 }
 
+/**
+ * Every source file a tool call may have shown (workspace-relative): the read tool's path, or for
+ * bash, the files named in any segment (following `cd`) plus `path:line:` prefixes in the output.
+ * Edits are excluded: a command that writes a file (sed -i, >, heredoc scripts) shows nothing.
+ */
+export function shownFiles(toolName: string, input: any, workspace: string, output: string): string[] {
+  const rel = (p: string) => {
+    const r = relative(workspace, isAbsolute(p) ? p : resolve(workspace, p));
+    return r.startsWith("..") ? null : r;
+  };
+  if (toolName === "read") return typeof input?.path === "string" ? [rel(input.path)].filter(Boolean) as string[] : [];
+  if (toolName !== "bash") return [];
+  const cmd = String(input?.command ?? "");
+  if (/<<\s*['"]?\w+/.test(cmd)) return []; // heredoc: a script or a file write, not a read
+  let cwd = workspace;
+  const found = new Set<string>();
+  for (const seg of cmd.split(/\s*(?:&&|;|\n)\s*/).map((x) => x.trim()).filter(Boolean)) {
+    const cd = /^cd\s+(\S+)$/.exec(seg);
+    if (cd) { cwd = resolve(cwd, cd[1].replace(/^['"]|['"]$/g, "")); continue; }
+    if (/\s-i\b|>\s*[\w./]/.test(seg.replace(/2>\s*\/dev\/null/g, ""))) continue;
+    for (const m of seg.matchAll(SOURCE)) { const r = rel(resolve(cwd, m[1])); if (r) found.add(r); }
+  }
+  for (const line of output.split("\n")) {
+    const m = /^((?:\.{0,2}\/)?[\w@.\-/]+\.(?:tsx?|jsx?|mts|cts)):\d+[:-]/.exec(line);
+    if (m) { const r = rel(resolve(cwd, m[1])); if (r) found.add(r); }
+  }
+  return [...found];
+}
+
 /** Contracts to append for one tool result; marks them as shown. */
 export function contractsFor(
-  file: string,
+  fileOrFiles: string | string[],
   text: string,
   workspace: string,
   db: ReturnType<typeof loadDb>,
@@ -82,10 +112,12 @@ export function contractsFor(
     shown.add(key);
     out.push(`- ${name} (${f}): ${contract}`);
   };
-  const own = db.byFile[file] ?? {};
-  const path = join(workspace, file);
+  const files = Array.isArray(fileOrFiles) ? fileOrFiles : [fileOrFiles];
   const defined = new Set<string>();
-  if (existsSync(path) && Object.keys(own).length) {
+  for (const file of files) {
+    const own = db.byFile[file] ?? {};
+    const path = join(workspace, file);
+    if (!existsSync(path) || !Object.keys(own).length) continue;
     for (const site of findFunctions(file, readFileSync(path, "utf8"))) {
       defined.add(site.name.split(".").pop()!);
       const decl = site.source.split("\n")[0].trim().slice(0, 60);
@@ -95,7 +127,7 @@ export function contractsFor(
   for (const m of text.matchAll(CALL)) {
     const name = m[1];
     if (KEYWORDS.has(name) || defined.has(name)) continue;
-    const hits = (db.byName.get(name) ?? []).filter((h) => h.file !== file);
+    const hits = (db.byName.get(name) ?? []).filter((h) => !files.includes(h.file));
     if (hits.length === 1) add(hits[0].file, name, hits[0].contract);
   }
   return out;
@@ -107,10 +139,10 @@ export default function contractsOnRead(pi: any, ctx: { workspace: string; rawDi
   let appended = 0;
   pi.on("tool_result", async (event: any) => {
     if (event.isError) return undefined;
-    const file = shownFile(event.toolName, event.input, ctx.workspace);
-    if (!file) return undefined;
     const text = (event.content ?? []).map((b: any) => (b.type === "text" ? b.text : "")).join("\n");
-    const lines = contractsFor(file, text, ctx.workspace, db, shown);
+    const files = shownFiles(event.toolName, event.input, ctx.workspace, text);
+    if (!files.length) return undefined;
+    const lines = contractsFor(files, text, ctx.workspace, db, shown);
     if (!lines.length) return undefined;
     appended += lines.length;
     return { content: [...event.content, { type: "text", text: `\n${HEADER}\n${lines.join("\n")}` }] };

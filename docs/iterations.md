@@ -696,3 +696,17 @@ Totals: turns per run 13.5 → 10.8, output 6.7k → 5.5k, cache reads 226k → 
 Fix: the extension now splits commands on `;` and `&&`, follows `cd`, allows `| head`/`| tail`/`| nl`/`| sed -n` and `2>/dev/null`, and still refuses edits (`sed -i`, `cat >`) and multi-file commands. Unit tests use command shapes taken from the run logs (`harness/runner/test/contracts-on-read.test.ts`). The lesson matches iteration 4: check that a treatment is actually delivered (here, the extension's per-run "contracts appended" count) before reading its effect.
 
 **Rerun (iteration 20b).** Same design, all five tasks, `effort=low`, 6 runs each, same period: A runs 112–117, P runs 7–12, Q runs 7–12.
+
+**Result of 20b: still mostly undelivered.** (`results/analysis/it20b*`.)
+
+| Arm (runs 112–117 / 7–12) | Pass | Cost per pass |
+|---|---|---|
+| A | 20/30 | $0.0116 |
+| P | 22/30 | $0.0099 |
+| Q | 21/30 | $0.0097 |
+
+On AB1, contracts reached 3 of 6 Q runs, and the decisive one (`_rankRules`: "sorted by ascending computed score") reached only one, run 11. That run restored the comparator and passed. The command log (new: `probe.ts` keeps the matching commands) shows why: agents batch reads, as in `cd WS; sed -n 60,140p rule-utils.ts; grep -n "sort" rule.ts … | head -60`. The extension still only accepted a single read per call. Run 11 was the only one that read the file with one plain `sed`. Batch archived (`results/archive/Q-pi-contracts-it20b-partial/`); P's and A's batches stand as a third harness comparison: P cheaper again (−15% cost per pass, 22 vs 20 passes).
+
+Fix 2: the extension collects every source file a bash command names, in any segment and following `cd`, plus `path:line:` prefixes in grep-style output. For each of those files it appends the contracts whose declarations appear in the output. Commands that write (`sed -i`, redirection, heredoc scripts) are skipped. Tests use the batched commands from the 20b logs.
+
+**Rerun (20c).** All five tasks, `effort=low`, 6 runs each, same period: P runs 13–18, Q runs 13–18. Delivery is checked first: Q runs where the AB1 agent saw `_rankRules`' contract.
