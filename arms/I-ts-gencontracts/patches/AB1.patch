@@ -1,0 +1,646 @@
+diff --git a/packages/loot-core/src/server/rules/rule-utils.ts b/packages/loot-core/src/server/rules/rule-utils.ts
+index 8531f3b..622b967 100644
+--- a/packages/loot-core/src/server/rules/rule-utils.ts
++++ b/packages/loot-core/src/server/rules/rule-utils.ts
+@@ -9,6 +9,11 @@ import type { RuleConditionEntity } from '#types/models';
+ 
+ import type { Rule } from './rule';
+ 
++/**
++ * Contract: Takes a value, an error type string, and a message. If the value is falsy, it
++ * throws a `RuleError` built from the type and message; otherwise it returns nothing and
++ * narrows the value's type via the assertion signature.
++ */
+ export function assert(test: unknown, type: string, msg: string): asserts test {
+   if (!test) {
+     throw new RuleError(type, msg);
+@@ -35,6 +40,12 @@ const OP_SCORES: Record<RuleConditionEntity['op'], number> = {
+   offBudget: 0,
+ };
+ 
++/**
++ * Contract: Takes a rule and returns a number: the sum of `OP_SCORES` for each condition's op,
++ * where an op with no score contributes 0 and is logged. If every condition's op is one of is,
++ * isNot, isapprox, oneOf, or notOneOf (including when there are no conditions), the sum is
++ * doubled; otherwise the plain sum is returned.
++ */
+ function computeScore(rule: Rule): number {
+   const initialScore = rule.conditions.reduce((score, condition) => {
+     if (OP_SCORES[condition.op] == null) {
+@@ -60,6 +71,11 @@ function computeScore(rule: Rule): number {
+   return initialScore;
+ }
+ 
++/**
++ * Contract: Takes an array of rules and returns a new array sorted by computed score
++ * ascending, with ties broken by ascending string comparison of rule ids, so the result is
++ * identical regardless of input order. The input array is not mutated.
++ */
+ function _rankRules(rules: Rule[]): Rule[] {
+   const scores = new Map();
+   rules.forEach(rule => {
+@@ -84,6 +100,11 @@ function _rankRules(rules: Rule[]): Rule[] {
+   });
+ }
+ 
++/**
++ * Contract: Takes an iterable of rules, partitions them by `stage` into 'pre', 'post', and all
++ * other stages (treated as normal), ranks each partition with `_rankRules`, and returns a new
++ * array concatenating pre, then normal, then post.
++ */
+ export function rankRules(rules: Iterable<Rule>): Rule[] {
+   let pre = [];
+   let normal = [];
+@@ -109,6 +130,14 @@ export function rankRules(rules: Iterable<Rule>): Rule[] {
+   return pre.concat(normal).concat(post);
+ }
+ 
++/**
++ * Contract: Takes a rule and an id mapping, and mutates the rule in place: for id-type
++ * conditions with `is`/`isNot` it sets `value` (and `unparsedValue`) to the mapped `rawValue`
++ * or `rawValue` itself when unmapped, and for `oneOf`/`notOneOf` it sets `value` to the
++ * deduplicated mapped list and `unparsedValue` to a copy of it. For id-type actions with op
++ * `set` it sets `value` to the mapped `rawValue`. `rawValue` is never modified, and a falsy
++ * mapping falls back to the raw value.
++ */
+ export function migrateIds(rule: Rule, mappings: Map<string, string>): void {
+   // Go through the in-memory rules and patch up ids that have been
+   // "migrated" to other ids. This is a little tricky, but a lot
+@@ -160,6 +189,14 @@ export function migrateIds(rule: Rule, mappings: Map<string, string>): void {
+ }
+ 
+ // This finds all the rules that reference the `id`
++/**
++ * Contract: Takes a list of rules, a field name, and a callback, and invokes the callback with
++ * each rule and matching id value, returning nothing. For each rule in order, it passes
++ * id-type conditions on that field with ops is, isNot, oneOf, or notOneOf; if the callback
++ * returns a truthy value, the rule's remaining conditions and actions are skipped and
++ * iteration moves to the next rule. It then passes `set` id-type actions on that field, where
++ * a truthy return stops only that rule's action checks.
++ */
+ export function iterateIds(
+   rules: Rule[],
+   fieldName: string,
+@@ -217,6 +254,13 @@ export function iterateIds(
+   }
+ }
+ 
++/**
++ * Contract: Takes a recurrence config object and returns `{ type: 'recur', schedule }`, where
++ * `schedule` is an `RSchedule` built from the config's rrules with `skipWeekend` and
++ * `weekendSolve` (from `weekendSolveMode`) stored in its data. Any error thrown during
++ * conversion is rethrown as a `RuleError` with type 'parse-recur-date' and the original
++ * message.
++ */
+ export function parseRecurDate(desc) {
+   try {
+     const rules = recurConfigToRSchedule(desc);
+@@ -236,6 +280,13 @@ export function parseRecurDate(desc) {
+   }
+ }
+ 
++/**
++ * Contract: Takes a value and returns null if it is not a string or is not a valid date at its
++ * length. A 10-character string is validated as a full ISO date, a 7-character string as a
++ * year-month (validated by appending '-01'), and a 4-character string as a year (validated by
++ * appending '-01-01'); valid input returns `{ type, date }` with the original string
++ * unchanged. Any other length returns null.
++ */
+ export function parseDateString(str) {
+   if (typeof str !== 'string') {
+     return null;
+@@ -265,6 +316,11 @@ export function parseDateString(str) {
+   return null;
+ }
+ 
++/**
++ * Contract: Takes an object with `num1` and `num2`, and returns `{ type: 'between', num1, num2
++ * }` when both are of JavaScript type number, otherwise null. The values are passed through
++ * unchanged, with no range or NaN check.
++ */
+ export function parseBetweenAmount(between) {
+   const { num1, num2 } = between;
+   if (typeof num1 !== 'number' || typeof num2 !== 'number') {
+diff --git a/packages/loot-core/src/server/rules/rule.ts b/packages/loot-core/src/server/rules/rule.ts
+index 9d5deeb..c2de718 100644
+--- a/packages/loot-core/src/server/rules/rule.ts
++++ b/packages/loot-core/src/server/rules/rule.ts
+@@ -12,17 +12,36 @@ import type { RuleEntity } from '#types/models';
+ import { Action } from './action';
+ import { Condition } from './condition';
+ 
++/**
++ * Contract: Takes an array of actions and a transaction, runs each action's exec on that same
++ * transaction object in order, and returns that object (mutated in place, not a copy).
++ */
+ function execNonSplitActions(actions: Action[], transaction) {
+   const update = transaction;
+   actions.forEach(action => action.exec(update));
+   return update;
+ }
+ 
++/**
++ * Contract: Takes an array of split transactions, groups them and runs recalculateSplit on the
++ * result, returning the error's difference when the split does not balance and 0 when it does.
++ * Does not mutate its input.
++ */
+ function getSplitRemainder(transactions) {
+   const { error } = recalculateSplit(groupTransaction(transactions));
+   return error ? error.difference : 0;
+ }
+ 
++/**
++ * Contract: Takes child actions (those with a split index) and a parent transaction, converts
++ * the parent into a split transaction, and creates split slots as needed so each action's
++ * split index+1 has a slot. It copies the parent's amount, notes, payees, account, balance and
++ * prefetch flag into parent_* fields of each slot, runs each action on its slot, sets
++ * fixed-percent splits to round(remainder × value/100), then divides the remaining amount
++ * evenly among remainder splits with the rounding leftover added to the highest-indexed
++ * remainder split. It removes the reserved slot at index 1 and returns
++ * recalculateSplit(groupTransaction(...)) for the resulting transactions.
++ */
+ function execSplitActions(actions: Action[], transaction) {
+   const splitAmountActions = actions.filter(
+     action => action.op === 'set-split-amount',
+@@ -100,6 +119,14 @@ function execSplitActions(actions: Action[], transaction) {
+   return recalculateSplit(groupTransaction(newTransactions));
+ }
+ 
++/**
++ * Contract: Takes a list of actions and a transaction, partitions actions into parent actions
++ * (no truthy splitIndex) and child actions (truthy splitIndex), and computes the split count
++ * as the maximum splitIndex plus one (with a missing index treated as 0). It applies the
++ * parent actions to the transaction first; if the split count is 1 or the result is a child
++ * transaction, it returns that result, otherwise it returns execSplitActions applied to the
++ * child actions and that result.
++ */
+ export function execActions(actions: Action[], transaction) {
+   const parentActions = actions.filter(action => !action.options?.splitIndex);
+   const childActions = actions.filter(action => action.options?.splitIndex);
+@@ -130,6 +157,11 @@ export class Rule {
+   id?: string;
+   stage: 'pre' | null | 'post';
+ 
++  /**
++   * Contract: Takes an object with optional id, optional stage, conditionsOp, conditions and
++   * actions, stores id and conditionsOp, sets stage to null when absent, and converts each
++   * condition and action definition into Condition and Action instances, preserving their order.
++   */
+   constructor({
+     id,
+     stage,
+@@ -154,6 +186,12 @@ export class Rule {
+     );
+   }
+ 
++  /**
++   * Contract: Returns false when the rule has no conditions. Otherwise returns true if some
++   * condition evaluates true (when conditionsOp is 'or') or if every condition evaluates true
++   * (for any other conditionsOp), evaluating conditions against the given object without
++   * modifying it.
++   */
+   evalConditions(object): boolean {
+     if (this.conditions.length === 0) {
+       return false;
+@@ -165,6 +203,11 @@ export class Rule {
+     });
+   }
+ 
++  /**
++   * Contract: Runs the rule's actions on a shallow copy of the given object and returns a new
++   * object containing only the keys whose resulting values are not strictly equal to the
++   * original object's values. The input object is not mutated.
++   */
+   execActions<T>(object: T): Partial<T> {
+     const result = execActions(this.actions, {
+       ...object,
+@@ -178,6 +221,10 @@ export class Rule {
+     return changes;
+   }
+ 
++  /**
++   * Contract: Returns the changes produced by execActions when evalConditions passes for the
++   * given object, and null when the conditions do not pass.
++   */
+   exec(object) {
+     if (this.evalConditions(object)) {
+       return this.execActions(object);
+@@ -186,15 +233,27 @@ export class Rule {
+   }
+ 
+   // Apply is similar to exec but applies the changes for you
++  /**
++   * Contract: Calls exec on the object and returns a new object that merges the original object
++   * with the returned changes (no changes if exec returned null); the input object is not
++   * mutated.
++   */
+   apply(object) {
+     const changes = this.exec(object);
+     return Object.assign({}, object, changes);
+   }
+ 
++  /**
++   * Contract: Returns the rule's id, or undefined if none was provided.
++   */
+   getId(): string | undefined {
+     return this.id;
+   }
+ 
++  /**
++   * Contract: Returns a RuleEntity containing the rule's id, stage, conditionsOp, and the
++   * serialized form of each condition and action in their existing order.
++   */
+   serialize(): RuleEntity {
+     return {
+       id: this.id,
+diff --git a/packages/loot-core/src/server/transactions/transaction-rules.ts b/packages/loot-core/src/server/transactions/transaction-rules.ts
+index 15a3786..a5b8b40 100644
+--- a/packages/loot-core/src/server/transactions/transaction-rules.ts
++++ b/packages/loot-core/src/server/transactions/transaction-rules.ts
+@@ -62,6 +62,10 @@ let unlistenSync;
+ let firstcharIndexer;
+ let payeeIndexer;
+ 
++/**
++ * Contract: Replaces the module-level `allRules` with an empty Map and creates new firstchar
++ * (on `imported_payee`) and payee indexers, discarding any previously indexed rules.
++ */
+ export function resetState() {
+   allRules = new Map();
+   firstcharIndexer = new RuleIndexer({
+@@ -73,6 +77,10 @@ export function resetState() {
+ 
+ // Database functions
+ 
++/**
++ * Contract: Returns a new object in which each entry's key and value are swapped, built with
++ * `Object.fromEntries`, so a colliding value keeps the later entry. The input is not mutated.
++ */
+ function invert(obj) {
+   return Object.fromEntries(
+     Object.entries(obj).map(entry => {
+@@ -84,6 +92,10 @@ function invert(obj) {
+ const internalFields = schemaConfig.views.transactions.fields;
+ const publicFields = invert(schemaConfig.views.transactions.fields);
+ 
++/**
++ * Contract: Returns a shallow copy of the object with `field` replaced by its public name from
++ * the inverted schema map, or left unchanged if no mapping exists.
++ */
+ function fromInternalField<T extends { field: string }>(obj: T): T {
+   return {
+     ...obj,
+@@ -91,6 +103,10 @@ function fromInternalField<T extends { field: string }>(obj: T): T {
+   };
+ }
+ 
++/**
++ * Contract: Returns a shallow copy of the object with `field` replaced by its internal column
++ * name from the schema map, or left unchanged if no mapping exists.
++ */
+ function toInternalField<T extends { field: string }>(obj: T): T {
+   return {
+     ...obj,
+@@ -98,6 +114,10 @@ function toInternalField<T extends { field: string }>(obj: T): T {
+   };
+ }
+ 
++/**
++ * Contract: Returns the input as an array, JSON-parsing it first if it is a string, and throws
++ * a `RuleError` of type 'internal' if parsing fails or the value is not an array.
++ */
+ function parseArray(str) {
+   let value;
+   try {
+@@ -112,10 +132,18 @@ function parseArray(str) {
+   return value;
+ }
+ 
++/**
++ * Contract: Returns an empty array for a falsy input; otherwise parses the input with
++ * `parseArray` and maps each item through `fromInternalField`.
++ */
+ export function parseConditionsOrActions(str) {
+   return str ? parseArray(str).map(item => fromInternalField(item)) : [];
+ }
+ 
++/**
++ * Contract: Maps each item through `toInternalField` and returns the JSON string of the
++ * resulting array.
++ */
+ export function serializeConditionsOrActions(arr) {
+   return JSON.stringify(arr.map(item => toInternalField(item)));
+ }
+@@ -167,6 +195,11 @@ export const ruleModel = {
+   },
+ };
+ 
++/**
++ * Contract: Builds a `Rule` from the converted input, returning null and logging a warning if
++ * a `RuleError` is thrown and rethrowing any other error. On success it remaps the rule's ids
++ * with `migrateIds` using the current mappings and returns the rule.
++ */
+ export function makeRule(data) {
+   let rule;
+   try {
+@@ -187,6 +220,12 @@ export function makeRule(data) {
+   return rule;
+ }
+ 
++/**
++ * Contract: Resets state, then loads non-tombstoned rules with non-null conditions and actions
++ * from the database, converting legacy stages 'cleanup' and 'modify' to 'pre'. Each rule that
++ * builds successfully is added to `allRules` and both indexers, and any previous sync listener
++ * is removed before a new one is registered.
++ */
+ export async function loadRules() {
+   resetState();
+ 
+@@ -216,11 +255,19 @@ export async function loadRules() {
+   unlistenSync = addSyncListener(onApplySync);
+ }
+ 
++/**
++ * Contract: Returns a new array containing the rules currently held in `allRules`.
++ */
+ export function getRules() {
+   // This can simply return the in-memory data
+   return [...allRules.values()];
+ }
+ 
++/**
++ * Contract: Validates the rule (requires conditions and actions, a stage of 'pre', 'post' or
++ * null, and a conditionsOp of 'and' or 'or') and inserts it with a UUID, returning the result
++ * of `db.insertWithUUID`. Validation failures throw.
++ */
+ export async function insertRule(
+   rule: Omit<RuleEntity, 'id'> & { id?: string },
+ ) {
+@@ -228,11 +275,19 @@ export async function insertRule(
+   return db.insertWithUUID('rules', ruleModel.fromJS(rule));
+ }
+ 
++/**
++ * Contract: Validates the rule in update mode, checking stage and conditionsOp only when those
++ * keys are present, then persists it with `db.update` and returns the result.
++ */
+ export async function updateRule(rule) {
+   rule = ruleModel.validate(rule, { update: true });
+   return db.update('rules', ruleModel.fromJS(rule));
+ }
+ 
++/**
++ * Contract: Returns false without deleting if any schedule references the rule id; otherwise
++ * deletes the rule from the database and returns true.
++ */
+ export async function deleteRule(id: string) {
+   const schedule = await db.first<Pick<db.DbSchedule, 'id'>>(
+     'SELECT id FROM schedules WHERE rule = ?',
+@@ -249,6 +304,11 @@ export async function deleteRule(id: string) {
+ 
+ // Sync projections
+ 
++/**
++ * Contract: Applies synced changes to `rules` by removing tombstoned rules from `allRules` and
++ * both indexers, and for other rules replacing any previous indexed entry with the rebuilt
++ * rule. If any mapping table changed, it re-runs `migrateIds` on every in-memory rule.
++ */
+ function onApplySync(oldValues, newValues) {
+   newValues.forEach((items, table) => {
+     if (table === 'rules') {
+@@ -290,6 +350,10 @@ function onApplySync(oldValues, newValues) {
+   }
+ }
+ 
++/**
++ * Contract: Returns the `rule` value of the schedule with the given id, or null if no such
++ * schedule exists or its rule is empty.
++ */
+ export async function getRuleIdFromScheduleId(
+   scheduleId: string,
+ ): Promise<string | null> {
+@@ -301,6 +365,10 @@ export async function getRuleIdFromScheduleId(
+   return row?.rule || null;
+ }
+ 
++/**
++ * Contract: Returns the non-empty rule ids of all schedules, excluding the given id. The
++ * result is not de-duplicated, so it may contain repeated ids.
++ */
+ export async function getAllRuleIdsFromSchedules(
+   excluding: string,
+ ): Promise<string[]> {
+@@ -320,6 +388,14 @@ export async function getAllRuleIdsFromSchedules(
+ // Runner
+ const NULLABLE_RULE_FIELDS = ['payee', 'category'] as const;
+ 
++/**
++ * Contract: Applies the ranked candidate rules to a transaction in sequence and returns the
++ * transaction with their changes. Missing `payee` or `category` values are treated as null
++ * during evaluation and removed from the result if still null, and a schedule's own rule runs
++ * unconditionally while other schedule-linked rules are skipped. The running balance is
++ * fetched at most once and only when a rule that reads it is about to run, and the category
++ * group is refreshed after each rule.
++ */
+ export async function runRules(
+   trans,
+   accounts: Map<string, db.DbAccount> | null = null,
+@@ -457,6 +533,12 @@ export async function runRules(
+   return result;
+ }
+ 
++/**
++ * Contract: Returns falsy input unchanged. For an `is` condition on a null category it returns
++ * an AND of that condition with `transfer is false` and `parent is false`, for an `isNot`
++ * condition on a null category it returns an AND with `parent is false`, and otherwise returns
++ * the condition unchanged.
++ */
+ function conditionSpecialCases(cond: Condition | null): Condition | null {
+   if (!cond) {
+     return cond;
+@@ -490,6 +572,12 @@ function conditionSpecialCases(cond: Condition | null): Condition | null {
+ }
+ 
+ // This does the inverse: finds all the transactions matching a rule
++/**
++ * Contract: Converts each condition (instances or plain objects) to an AQL filter, dropping
++ * invalid conditions and collecting their error types, and optionally applies the special-case
++ * expansion first. It returns `{ filters, errors }`, with recurring date `is` conditions
++ * expanded to at most `recurDateBounds` occurrences.
++ */
+ export function conditionsToAQL(
+   conditions,
+   { recurDateBounds = 100, applySpecialCases = true } = {},
+@@ -752,6 +840,12 @@ export function conditionsToAQL(
+   return { filters, errors };
+ }
+ 
++/**
++ * Contract: Parses the actions into `Action` instances and returns null if any fail. It then
++ * prepares the transactions (computing balances only when an action references them),
++ * prefetches `BALANCE_OF` values, executes and ungroups the actions, finalizes each
++ * transaction, and passes the results to `batchUpdateTransactions`.
++ */
+ export async function applyActions(
+   transactions: TransactionEntity[],
+   actions: Array<Action | RuleActionEntity>,
+@@ -827,6 +921,10 @@ export async function applyActions(
+   return batchUpdateTransactions({ updated: finalized });
+ }
+ 
++/**
++ * Contract: Returns the ranked, de-duplicated rules whose payee-indexed ids include the given
++ * payee id.
++ */
+ export function getRulesForPayee(payeeId) {
+   const rules = new Set<Rule>();
+   iterateIds(getRules(), 'payee', (rule, id) => {
+@@ -838,6 +936,11 @@ export function getRulesForPayee(payeeId) {
+   return rankRules([...rules]);
+ }
+ 
++/**
++ * Contract: Generator that yields serialized rules in the given stage that have exactly one
++ * `set` action on `actionField` and exactly one `is` or `isNot` condition on `condField`,
++ * further filtered by `condValue` and `actionValue` when those are defined.
++ */
+ function* getIsSetterRules(
+   stage,
+   condField,
+@@ -865,6 +968,12 @@ function* getIsSetterRules(
+ 
+   return null;
+ }
++/**
++ * Contract: Generator that yields serialized rules in the given stage that have exactly one
++ * `set` action on `actionField` and exactly one `oneOf` condition on `condField`, where
++ * `condValue` must appear in the condition's value array and `actionValue` must equal the
++ * action value when those are non-null.
++ */
+ function* getOneOfSetterRules(
+   stage,
+   condField,
+@@ -893,6 +1002,12 @@ function* getOneOfSetterRules(
+   return null;
+ }
+ 
++/**
++ * Contract: If a pre-stage rule already sets the payee from `imported_payee` via `oneOf`, it
++ * merges the non-empty `fromNames` into that condition's values, updates the rule, and returns
++ * its id. Otherwise it inserts a new pre-stage rule mapping those names to `to` and returns
++ * the result of `insertRule`.
++ */
+ export async function updatePayeeRenameRule(fromNames: string[], to: string) {
+   const renameRule = getOneOfSetterRules('pre', 'imported_payee', 'payee', {
+     actionValue: to,
+@@ -929,6 +1044,11 @@ export async function updatePayeeRenameRule(fromNames: string[], to: string) {
+   }
+ }
+ 
++/**
++ * Contract: Counts the non-empty categories among the transactions and returns the category
++ * with the highest count if that count is at least 3, otherwise null. Ties resolve to the
++ * category first encountered, and an empty array throws.
++ */
+ export function getProbableCategory(transactions) {
+   const scores = new Map();
+ 
+@@ -949,6 +1069,13 @@ export function getProbableCategory(transactions) {
+   return winner.score >= 3 ? winner.category : null;
+ }
+ 
++/**
++ * Contract: For each payee among the given transactions whose five most recent learnable,
++ * non-parent transactions include one of the given transactions and have a probable category,
++ * updates existing 'is payee' category-setting rules whose value differs. If no such rule
++ * exists and no 'oneOf' rule already sets that category, it creates a new rule. It does
++ * nothing for an empty input.
++ */
+ export async function updateCategoryRules(transactions) {
+   if (transactions.length === 0) {
+     return;
+@@ -1069,6 +1196,11 @@ export type TransactionForRules = TransactionEntity & {
+ /**
+  * Running balance for `accountId` before the current transaction row (same cutoff as `balance`).
+  */
++/**
++ * Contract: Returns the sum of amounts of non-parent transactions in the given account that
++ * precede the transaction, meaning earlier dates or the same date with an earlier sort order,
++ * excluding the transaction itself. It returns 0 when the sum is null.
++ */
+ export async function getRunningBalanceBeforeTransaction(
+   trans: TransactionEntity,
+   accountId: string,
+@@ -1111,6 +1243,11 @@ export async function getRunningBalanceBeforeTransaction(
+   return balance ?? 0;
+ }
+ 
++/**
++ * Contract: Collects the distinct `BALANCE_OF` account literals from the formulas and returns
++ * a Map from each literal to the running balance before the transaction for its resolved
++ * account, or 0 when the literal does not resolve to an account.
++ */
+ export async function prefetchBalanceOfForTransaction(
+   trans: TransactionEntity,
+   accountsMap: Map<string, db.DbAccount>,
+@@ -1143,6 +1280,10 @@ const BALANCE_VARIABLE = /\bbalance\b/i;
+ // balance: Handlebars templates via `{{balance}}` and formulas via the
+ // `balance` variable. `BALANCE_OF(...)` is a different, prefetched value
+ // and does not count.
++/**
++ * Contract: Returns true if any action's `template` or `formula` option string contains the
++ * word `balance`, matched case-insensitively. `BALANCE_OF(...)` does not count.
++ */
+ export function actionsReferenceBalance(
+   actions: Array<{ options?: { template?: string; formula?: string } }>,
+ ): boolean {
+@@ -1155,6 +1296,12 @@ export function actionsReferenceBalance(
+   });
+ }
+ 
++/**
++ * Contract: Returns a copy of the transaction with `payee_name`, `_account`, `_account_name`,
++ * `balance` and `category_group` populated from the matching records, where they exist.
++ * `balance` is 0 unless `includeBalance` is set and the transaction has an account, in which
++ * case it is the running balance before the transaction.
++ */
+ export async function prepareTransactionForRules(
+   trans: TransactionEntity,
+   accounts: Map<string, db.DbAccount> | null = null,
+@@ -1207,6 +1354,11 @@ export async function prepareTransactionForRules(
+   return r;
+ }
+ 
++/**
++ * Contract: When the transaction has a `payee_name` key and `payee` equals 'new', it sets
++ * `payee` to the id of the payee with that name, inserting the payee if none exists, or to
++ * null if the name is empty. Otherwise it does nothing, and it mutates the object in place.
++ */
+ async function resolvePayeeNameForRules(
+   trans: TransactionEntity | TransactionForRules,
+ ): Promise<void> {
+@@ -1236,6 +1388,11 @@ async function resolvePayeeNameForRules(
+  * actually changed since the last check, to avoid a database lookup on
+  * every rule when category was untouched.
+  */
++/**
++ * Contract: If the transaction's category equals `lastCategoryId`, it returns that value
++ * unchanged. Otherwise it sets `category_group` from the new category's group, or deletes it
++ * when there is no category, and returns the current category id.
++ */
+ async function refreshCategoryGroupIfChanged(
+   trans: TransactionForRules,
+   lastCategoryId: string | null,
+@@ -1255,6 +1412,12 @@ async function refreshCategoryGroupIfChanged(
+   return currentCategoryId;
+ }
+ 
++/**
++ * Contract: Resolves a pending 'new' payee if `payee_name` is present, then mutates and
++ * returns the transaction with the synthetic fields `payee_name`, `balance`, `category_group`,
++ * `_balanceOfPrefetched` and the `parent_*` fields removed. Subtransactions have `balance`,
++ * `_balanceOfPrefetched` and the `parent_*` fields removed.
++ */
+ export async function finalizeTransactionForRules(
+   trans: TransactionEntity | TransactionForRules,
+ ): Promise<TransactionEntity> {
