@@ -1,0 +1,90 @@
+{
+  "suite": "hono",
+  "arm": "A-ts-baseline",
+  "task": "HN4",
+  "run": 8,
+  "chained": false,
+  "startState": "hono/HN4",
+  "specSha256": "c6da37c98c188d446ea04a74bbeb77f10ea5e633960eeb2a98d32710c165685a",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 10,
+    "cacheRead": 40800,
+    "cacheWrite": 5791,
+    "output": 2364,
+    "toolResultTokens": 1818,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 6,
+    "toolCalls": 5,
+    "toolCallsByName": {
+      "Bash": 4,
+      "Edit": 1
+    },
+    "fileReads": 0,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 2,
+    "compactions": 0,
+    "turnsToFirstEdit": 2,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 22798,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "HN4 R1": true,
+      "HN4 R2": true,
+      "HN4 R3": true,
+      "HN4 R4": true,
+      "HN4 R5": true,
+      "HN4 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 2,
+    "readChars": 7139,
+    "relevantChars": 6813,
+    "coreChars": 6813,
+    "precision": 0.9543353410841855,
+    "coreRecall": 1,
+    "readTokens": 1785
+  },
+  "costUsd": 0.002314875,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.002314875,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 1,
+    "denied": [
+      "connect registry.npmjs.org:443"
+    ]
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 4,
+      "outTokens": 1790,
+      "carriedTokens": 6300
+    },
+    "Edit": {
+      "calls": 1,
+      "outTokens": 29,
+      "carriedTokens": 29
+    }
+  }
+}
