@@ -1,0 +1,99 @@
+{
+  "suite": "actual",
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 114,
+  "chained": false,
+  "startState": "actual/AB4",
+  "specSha256": "ad84b917a1fa928bb20b220ef396e0a3f8cc28c28535b7786c2e408807abae54",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 10,
+    "cacheRead": 45607,
+    "cacheWrite": 9767,
+    "output": 2274,
+    "toolResultTokens": 4260,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 6,
+    "toolCalls": 5,
+    "toolCallsByName": {
+      "Grep": 1,
+      "Read": 1,
+      "Edit": 1,
+      "Bash": 2
+    },
+    "fileReads": 1,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": 3,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 35752,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB4 R1": true,
+      "AB4 R2": true,
+      "AB4 R3": true,
+      "AB4 R4": true,
+      "AB4 R5": true,
+      "AB4 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 5,
+    "readChars": 16834,
+    "relevantChars": 13574,
+    "coreChars": 13574,
+    "precision": 0.806344303195913,
+    "coreRecall": 1,
+    "readTokens": 4209
+  },
+  "costUsd": 0.002814945,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.002814945,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Grep": {
+      "calls": 1,
+      "outTokens": 103,
+      "carriedTokens": 412
+    },
+    "Read": {
+      "calls": 1,
+      "outTokens": 3394,
+      "carriedTokens": 10182
+    },
+    "Edit": {
+      "calls": 1,
+      "outTokens": 51,
+      "carriedTokens": 102
+    },
+    "Bash": {
+      "calls": 2,
+      "outTokens": 713,
+      "carriedTokens": 973
+    }
+  }
+}
