@@ -6,6 +6,7 @@
  * --cmd   counts Bash commands matching regex; reports how many, the turn of the first, and whether
  *         any/the last output contained "error" lines (TS errors, test failures).
  * --file  whether the final file at relpath (inside the run's workspace) matches regex.
+ * --output  counts tool results (any tool) whose text matches regex, and the turn of the first.
  * --extract  the 12 lines starting at the first match of regex in the final file at relpath (JSON output only).
  * Finds runs as .../<arm>/<task>/run-<n>/transcript.jsonl under <dir>.
  */
@@ -13,11 +14,17 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "
 import { dirname, join, relative, sep } from "node:path";
 
 interface CmdStat { count: number; firstTurn: number | null; anyError: boolean; lastError: boolean | null }
-export interface Probe { arm: string; task: string; run: number; cmds: Record<string, CmdStat>; files: Record<string, boolean | null>; extracts: Record<string, string | null> }
+export interface Probe { arm: string; task: string; run: number; cmds: Record<string, CmdStat>; outputs: Record<string, { count: number; firstTurn: number | null }>; files: Record<string, boolean | null>; extracts: Record<string, string | null> }
 
 const ERROR_LINE = /error TS\d+|\bFAIL\b|✗|AssertionError|Error:/;
 
-export function probeTranscript(lines: string[], cmds: Record<string, RegExp>): Record<string, CmdStat> {
+export function probeTranscript(
+  lines: string[],
+  cmds: Record<string, RegExp>,
+  outputs: Record<string, RegExp> = {},
+  outStats: Record<string, { count: number; firstTurn: number | null }> = {},
+): Record<string, CmdStat> {
+  for (const k of Object.keys(outputs)) outStats[k] = { count: 0, firstTurn: null };
   const out: Record<string, CmdStat> = Object.fromEntries(
     Object.keys(cmds).map((k) => [k, { count: 0, firstTurn: null, anyError: false, lastError: null }]),
   );
@@ -43,6 +50,10 @@ export function probeTranscript(lines: string[], cmds: Record<string, RegExp>): 
       }
     } else if (m.type === "user") {
       for (const b of m.message?.content ?? []) {
+        if (b?.type === "tool_result") {
+          const t = typeof b.content === "string" ? b.content : JSON.stringify(b.content ?? "");
+          for (const [k, re] of Object.entries(outputs)) if (re.test(t)) { outStats[k].count++; outStats[k].firstTurn ??= turn; }
+        }
         if (b?.type !== "tool_result" || !pending.has(b.tool_use_id)) continue;
         const k = pending.get(b.tool_use_id)!;
         const text = typeof b.content === "string" ? b.content : JSON.stringify(b.content ?? "");
@@ -87,11 +98,13 @@ function main() {
   const cmds: Record<string, RegExp> = {};
   const files: Record<string, { rel: string; re: RegExp }> = {};
   const extracts: Record<string, { rel: string; re: RegExp }> = {};
+  const outputs: Record<string, RegExp> = {};
   let jsonOut: string | null = null;
   for (let i = 1; i < args.length; i++) {
     const v = args[i + 1] ?? "";
     if (args[i] === "--cmd") { const [k, ...r] = v.split("="); cmds[k] = new RegExp(r.join("=")); i++; }
     else if (args[i] === "--file") { const [k, ...r] = v.split("="); const s = r.join("="); const c = s.indexOf(":"); files[k] = { rel: s.slice(0, c), re: new RegExp(s.slice(c + 1)) }; i++; }
+    else if (args[i] === "--output") { const [k, ...r] = v.split("="); outputs[k] = new RegExp(r.join("=")); i++; }
     else if (args[i] === "--extract") { const [k, ...r] = v.split("="); const s = r.join("="); const c = s.indexOf(":"); extracts[k] = { rel: s.slice(0, c), re: new RegExp(s.slice(c + 1)) }; i++; }
     else if (args[i] === "--json") { jsonOut = v; i++; }
   }
@@ -100,9 +113,11 @@ function main() {
     const parts = relative(dir, t).split(sep);
     const n = parts.length;
     const runDir = dirname(t);
+    const outStats: Probe["outputs"] = {};
     const row: Probe = {
       arm: parts[n - 4], task: parts[n - 3], run: Number(parts[n - 2].replace("run-", "")),
-      cmds: probeTranscript(readFileSync(t, "utf8").split("\n"), cmds),
+      cmds: probeTranscript(readFileSync(t, "utf8").split("\n"), cmds, outputs, outStats),
+      outputs: outStats,
       files: {},
       extracts: {},
     };
