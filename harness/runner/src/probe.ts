@@ -13,7 +13,7 @@
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 
-interface CmdStat { count: number; firstTurn: number | null; anyError: boolean; lastError: boolean | null }
+interface CmdStat { count: number; firstTurn: number | null; anyError: boolean; lastError: boolean | null; commands: string[] }
 export interface Probe { arm: string; task: string; run: number; cmds: Record<string, CmdStat>; outputs: Record<string, { count: number; firstTurn: number | null }>; files: Record<string, boolean | null>; extracts: Record<string, string | null> }
 
 const ERROR_LINE = /error TS\d+|\bFAIL\b|✗|AssertionError|Error:/;
@@ -26,7 +26,7 @@ export function probeTranscript(
 ): Record<string, CmdStat> {
   for (const k of Object.keys(outputs)) outStats[k] = { count: 0, firstTurn: null };
   const out: Record<string, CmdStat> = Object.fromEntries(
-    Object.keys(cmds).map((k) => [k, { count: 0, firstTurn: null, anyError: false, lastError: null }]),
+    Object.keys(cmds).map((k) => [k, { count: 0, firstTurn: null, anyError: false, lastError: null, commands: [] as string[] }]),
   );
   const pending = new Map<string, string>(); // tool_use id -> cmd name
   const seenMsg = new Set<string>();
@@ -45,6 +45,7 @@ export function probeTranscript(
           if (!re.test(c)) continue;
           out[k].count++;
           out[k].firstTurn ??= turn;
+          if (out[k].commands.length < 12) out[k].commands.push(c.slice(0, 400));
           pending.set(b.id, k);
         }
       }
