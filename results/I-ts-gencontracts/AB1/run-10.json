@@ -1,0 +1,95 @@
+{
+  "suite": "actual",
+  "arm": "I-ts-gencontracts",
+  "task": "AB1",
+  "run": 10,
+  "chained": false,
+  "startState": "actual/AB1",
+  "specSha256": "3ed4a82cf3927a943b3086ced320b193ae91463d7a5e760a67aa3f4de5276f1c",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 24,
+    "cacheRead": 151772,
+    "cacheWrite": 18489,
+    "output": 5475,
+    "toolResultTokens": 7572,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 13,
+    "toolCalls": 12,
+    "toolCallsByName": {
+      "Bash": 9,
+      "Read": 1,
+      "Edit": 2
+    },
+    "fileReads": 1,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": 10,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 48848,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": false,
+    "rules": {
+      "AB1 R1": true,
+      "AB1 R2": true,
+      "AB1 R3": true,
+      "AB1 R4": true,
+      "AB1 regression": false
+    },
+    "regressionFailures": [
+      "Rule rules are deterministically ranked"
+    ]
+  },
+  "reading": {
+    "filesRead": 13,
+    "readChars": 28928,
+    "relevantChars": 21348,
+    "coreChars": 15529,
+    "precision": 0.7379701327433629,
+    "coreRecall": 1,
+    "readTokens": 7232
+  },
+  "costUsd": 0.006568745000000001,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.006568745,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 9,
+      "outTokens": 6364,
+      "carriedTokens": 40885
+    },
+    "Read": {
+      "calls": 1,
+      "outTokens": 1135,
+      "carriedTokens": 3405
+    },
+    "Edit": {
+      "calls": 2,
+      "outTokens": 75,
+      "carriedTokens": 150
+    }
+  }
+}
