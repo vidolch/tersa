@@ -1,0 +1,812 @@
+[
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          return { [field]: [{ $gte: value.from }, { $lte: value.to }] };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          // Dates are normalized to YYYY-MM-DD, so string comparison is\n          // chronological. Both ends are inclusive.\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case \"isbetween\":\n        if (type === \"date\") {\n          return {\n            $and: [\n              { date: { $gte: value.from } },\n              { date: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          // Both ends are exact YYYY-MM-DD strings, so string comparison\n          // is chronological\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          // `value` is already normalized to { low, high } (both inclusive)\n          return {\n            $and: [\n              { date: { $gte: value.low } },\n              { date: { $lte: value.high } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          return fieldValue >= this.value.low && fieldValue <= this.value.high;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;\n      }"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case \"isbetween\":\n        if (type === \"date\") {\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);",
+   "eval": "      case \"isbetween\": {\n        if (type === \"date\") {\n          return (\n            !isBefore(fieldValue, this.value.from) &&\n            !isAfter(fieldValue, this.value.to)\n          );\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;\n      }"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          // Dates are stored as YYYY-MM-DD strings, so string comparison\n          // is chronological. Both ends are inclusive.\n          return {\n            $and: [\n              { date: { $gte: value.from } },\n              { date: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`",
+   "eval": "      case 'isbetween': {\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;\n      }"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case \"isbetween\":\n        if (type === \"date\") {\n          // `value` is already normalized (sorted) by the Condition parser\n          return {\n            [field]: [{ $gte: value.low }, { $lte: value.high }],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],",
+   "eval": "      case \"isbetween\": {\n        if (type === \"date\") {\n          if (fieldValue == null) {\n            return false;\n          }\n          return fieldValue >= this.value.low && fieldValue <= this.value.high;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;\n      }"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 1,
+    "firstTurn": 10
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          return (\n            fieldValue >= this.value.from && fieldValue <= this.value.to\n          );\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        if (type === 'date') {\n          const [dateLow, dateHigh] = sortNumbers(value.from, value.to);\n          return {\n            $and: [{ date: { $gte: dateLow } }, { date: { $lte: dateHigh } }],\n          };\n        }\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],",
+   "eval": "      case 'isbetween': {\n        // The parsing logic already checks that the value is of the\n        // right type (numbers with num1/num2, or exact dates with from/to)\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          const [dateLow, dateHigh] = sortNumbers(\n            this.value.from,\n            this.value.to,\n          );\n          return fieldValue >= dateLow && fieldValue <= dateHigh;"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 9,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          return {\n            $and: [{ date: { $gte: value.low } }, { date: { $lte: value.high } }],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          // Both ends are normalized to YYYY-MM-DD strings at parse time,\n          // so string comparison is chronological\n          return fieldValue >= this.value.low && fieldValue <= this.value.high;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 10,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween': {\n        if (type === 'date') {\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          // Exact YYYY-MM-DD strings compare correctly lexicographically\n          return (\n            fieldValue >= this.value.from && fieldValue <= this.value.to\n          );\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;\n      }"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 11,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          // Parsed date ranges already have their ends sorted\n          return {\n            $and: [\n              { [field]: { $gte: value.num1 } },\n              { [field]: { $lte: value.num2 } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          // Dates are stored as YYYY-MM-DD strings, so string comparison\n          // is chronological. Both ends are inclusive.\n          if (fieldValue == null) {\n            return false;\n          }\n          return fieldValue >= this.value.num1 && fieldValue <= this.value.num2;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 12,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case \"isbetween\":\n        if (type === \"date\") {\n          const [dateLow, dateHigh] = [value.from, value.to].sort();\n          return {\n            $and: [{ date: { $gte: dateLow } }, { date: { $lte: dateHigh } }],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],",
+   "eval": "      case \"isbetween\": {\n        if (type === \"date\") {\n          if (fieldValue == null) {\n            return false;\n          }\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;\n      }"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 13,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween': {\n        if (type === 'date') {\n          // `from`/`to` are already normalized to be ordered and are\n          // exact YYYY-MM-DD strings, so a range on the date works\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          const { from, to } = this.value;\n          return (\n            (fieldValue === from || isAfter(fieldValue, from)) &&\n            (fieldValue === to || isBefore(fieldValue, to))\n          );\n        }\n        // The parsing logic already checks that the value is of the"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 14,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 1,
+    "firstTurn": 24
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        // Date ranges are inclusive on both ends; `from` <= `to` is\n        // guaranteed by the condition parser\n        if (type === 'date') {\n          return {\n            $and: [\n              { date: { $gte: value.from } },\n              { date: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          // The parsed value is already sorted (from <= to) and inclusive\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 15,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween': {\n        if (type === 'date') {\n          // Inclusive range on both ends; `value` is already normalized\n          // to `from <= to` by the condition parser\n          return {\n            $and: [\n              { date: { $gte: value.from } },\n              { date: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          // Both ends are inclusive. Dates are normalized to `from <= to`\n          // during parsing, and `YYYY-MM-DD` strings compare correctly.\n          if (fieldValue == null) {\n            return false;\n          }\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 16,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          // Both ends are inclusive; `from`/`to` were already ordered at parse time\n          return {\n            $and: [\n              { date: { $gte: value.from } },\n              { date: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          // Both ends are inclusive; `from`/`to` were already ordered at parse time\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 17,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween': {\n        if (type === 'date') {\n          // `value.from` / `value.to` are already validated and ordered\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;\n      }"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 18,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": null
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          // `value` is already normalized to { from, to } with from <= to\n          return {\n            [field]: [{ $gte: value.from }, { $lte: value.to }],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          // Exact `YYYY-MM-DD` strings compare correctly lexically. The\n          // bounds are already normalized (low <= high) during parsing.\n          if (fieldValue == null) {\n            return false;\n          }\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 2,
+    "firstTurn": 14
+   },
+   "agreeFailed": {
+    "count": 1,
+    "firstTurn": 14
+   },
+   "coverageMsg": {
+    "count": 1,
+    "firstTurn": 15
+   }
+  },
+  "files": {
+   "sampleAdded": true
+  },
+  "extracts": {
+   "aql": "      case 'isbetween': {\n        if (type === 'date') {\n          return {\n            $and: [\n              { date: { $gte: value.low } },\n              { date: { $lte: value.high } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          return fieldValue >= this.value.low && fieldValue <= this.value.high;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;\n      }"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 1,
+    "firstTurn": 9
+   },
+   "agreeFailed": {
+    "count": 1,
+    "firstTurn": 9
+   },
+   "coverageMsg": {
+    "count": 2,
+    "firstTurn": 8
+   }
+  },
+  "files": {
+   "sampleAdded": true
+  },
+  "extracts": {
+   "aql": "      case \"isbetween\":\n        if (type === \"date\") {\n          // Dates are stored as YYYY-MM-DD strings, so string comparison\n          // is chronological. `value` is already sorted by the parser.\n          return {\n            $and: [\n              { date: { $gte: value.from } },\n              { date: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`",
+   "eval": "      case \"isbetween\": {\n        if (type === \"date\") {\n          if (fieldValue == null) {\n            return false;\n          }\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;\n      }"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": false
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          return {\n            $and: [{ date: { $gte: value.low } }, { date: { $lte: value.high } }],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          return (\n            fieldValue >= this.value.low && fieldValue <= this.value.high\n          );\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 2,
+    "firstTurn": 13
+   },
+   "agreeFailed": {
+    "count": 1,
+    "firstTurn": 13
+   },
+   "coverageMsg": {
+    "count": 2,
+    "firstTurn": 12
+   }
+  },
+  "files": {
+   "sampleAdded": true
+  },
+  "extracts": {
+   "aql": "      case 'isbetween': {\n        if (type === 'date') {\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);",
+   "eval": "      case 'isbetween': {\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        if (type === 'date') {\n          // Dates are normalized to YYYY-MM-DD strings, so string\n          // comparison is chronological. Both ends are inclusive.\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;\n      }\n      case 'contains':"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 3,
+    "firstTurn": 3
+   },
+   "agreeFailed": {
+    "count": 1,
+    "firstTurn": 10
+   },
+   "coverageMsg": {
+    "count": 1,
+    "firstTurn": 10
+   }
+  },
+  "files": {
+   "sampleAdded": true
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          // Parsed value holds sorted YYYY-MM-DD bounds (both inclusive)\n          return {\n            [field]: [{ $gte: value.low }, { $lte: value.high }],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          // Both ends are exact YYYY-MM-DD strings, so string order is date order\n          return fieldValue >= this.value.low && fieldValue <= this.value.high;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 1,
+    "firstTurn": 11
+   },
+   "agreeFailed": {
+    "count": 1,
+    "firstTurn": 11
+   },
+   "coverageMsg": {
+    "count": 1,
+    "firstTurn": 11
+   }
+  },
+  "files": {
+   "sampleAdded": true
+  },
+  "extracts": {
+   "aql": "      case 'isbetween': {\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        if (type === 'date') {\n          return {\n            $and: [{ date: { $gte: low } }, { date: { $lte: high } }],\n          };\n        }\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };",
+   "eval": "      case 'isbetween': {\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;\n      }\n      case 'contains':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).indexOf(this.value) !== -1;\n      case 'doesNotContain':"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 2,
+    "firstTurn": 11
+   },
+   "agreeFailed": {
+    "count": 2,
+    "firstTurn": 11
+   },
+   "coverageMsg": {
+    "count": 2,
+    "firstTurn": 13
+   }
+  },
+  "files": {
+   "sampleAdded": true
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          // Parsing guarantees `from` <= `to` and both are exact dates\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          // Parsing guarantees `from` <= `to` and both are exact dates\n          if (fieldValue == null) {\n            return false;\n          }\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 2,
+    "firstTurn": 8
+   },
+   "agreeFailed": {
+    "count": 1,
+    "firstTurn": 8
+   },
+   "coverageMsg": {
+    "count": 2,
+    "firstTurn": 8
+   }
+  },
+  "files": {
+   "sampleAdded": true
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          // `from` and `to` are already normalized (low, high) by the parser\n          return {\n            date: [{ $gte: value.from }, { $lte: value.to }],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          // YYYY-MM-DD strings compare correctly lexicographically\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 9,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 2,
+    "firstTurn": 12
+   },
+   "agreeFailed": {
+    "count": 1,
+    "firstTurn": 12
+   },
+   "coverageMsg": {
+    "count": 2,
+    "firstTurn": 12
+   }
+  },
+  "files": {
+   "sampleAdded": true
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          // Exact `YYYY-MM-DD` strings compare correctly lexicographically\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 10,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 3,
+    "firstTurn": 4
+   },
+   "agreeFailed": {
+    "count": 1,
+    "firstTurn": 11
+   },
+   "coverageMsg": {
+    "count": 1,
+    "firstTurn": 11
+   }
+  },
+  "files": {
+   "sampleAdded": true
+  },
+  "extracts": {
+   "aql": "      case 'isbetween': {\n        if (type === 'date') {\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          // Exact dates are YYYY-MM-DD strings, so lexical order matches date order\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 11,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "coverageMsg": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "sampleAdded": false
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          return {\n            $and: [\n              { date: { $gte: value.from } },\n              { date: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          const { from, to } = this.value;\n          return (\n            (fieldValue === from || isAfter(fieldValue, from)) &&\n            (fieldValue === to || isBefore(fieldValue, to))\n          );\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 12,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 3,
+    "firstTurn": 14
+   },
+   "agreeFailed": {
+    "count": 2,
+    "firstTurn": 14
+   },
+   "coverageMsg": {
+    "count": 1,
+    "firstTurn": 15
+   }
+  },
+  "files": {
+   "sampleAdded": true
+  },
+  "extracts": {
+   "aql": "      case 'isbetween':\n        if (type === 'date') {\n          return {\n            $and: [\n              { date: { $gte: value.from } },\n              { date: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);",
+   "eval": "      case 'isbetween': {\n        if (type === 'date') {\n          if (fieldValue == null) {\n            return false;\n          }\n          // Exact dates in YYYY-MM-DD form compare correctly as strings\n          return fieldValue >= this.value.from && fieldValue <= this.value.to;\n        }\n        // The parsing logic already checks that the value is of the\n        // right type (only numbers with high and low)\n        const [low, high] = sortNumbers(this.value.num1, this.value.num2);\n        return fieldValue >= low && fieldValue <= high;"
+  }
+ }
+]
