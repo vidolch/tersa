@@ -1,0 +1,1262 @@
+[
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 100,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 101,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 102,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 103,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 104,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 105,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 100,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith': {\n        // Case-insensitive prefix match. Built as a regexp (rather than LIKE)\n        // so that `%` and `_` in the value are matched literally.\n        const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\n        const prefix = [...String(value)]\n          .map(ch =>\n            [...new Set([ch, ch.toLowerCase(), ch.toUpperCase()])]\n              .map(escapeRegex)\n              .join('|'),\n          )\n          .map(alt => `(?:${alt})`)\n          .join('');",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 101,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith':\n        // Case-insensitive prefix match (LIKE is case-insensitive here)\n        return apply(field, '$like', value + '%');\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 102,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 2,
+    "firstTurn": 7
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith':\n        // Anchored regex on the lowercased field (the `apply` helper\n        // applies `$lower` for string fields and the value is already\n        // lowercased when parsed)\n        return apply(field, '$regexp', '^' + escapeRegExp(value));\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 103,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith':\n        // Anchored regex with each letter as a case-insensitive character\n        // class, so LIKE wildcards (% and _) in the value are taken literally\n        return apply(field, '$regexp', makeStartsWithRegex(value));\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 104,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith':\n        // NULL values never match LIKE, so notes-less transactions are excluded\n        return apply(field, '$like', value + '%');\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 105,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 1,
+    "firstTurn": 9
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith':\n        // Value is already lowercased and the field is lowercased by\n        // `apply`, so an anchored, escaped regexp gives a prefix match\n        return apply(\n          field,\n          '$regexp',\n          '^' + String(value).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 100,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 101,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 102,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 103,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 104,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 105,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 100,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 101,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 102,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 103,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 104,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 105,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 100,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        if (type === 'date') {\n          // `value` is already normalized (sorted) by the Condition parser\n          return {\n            $and: [{ date: { $gte: value.from } }, { date: { $lte: value.to } }],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 101,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        if (type === 'date') {\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 102,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween': {\n        if (type === 'date') {\n          return {\n            $and: [\n              { [field]: { $gte: value.low } },\n              { [field]: { $lte: value.high } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 103,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        if (type === 'date') {\n          // `value` is already normalized to sorted `from`/`to` dates\n          return {\n            $and: [\n              { date: { $gte: value.from } },\n              { date: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 104,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        if (type === 'date') {\n          return {\n            $and: [\n              { date: { $gte: value.low } },\n              { date: { $lte: value.high } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB5",
+  "run": 105,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        if (type === 'date') {\n          return {\n            $and: [\n              { date: { $gte: value.from } },\n              { date: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB1",
+  "run": 13,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB1",
+  "run": 14,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB1",
+  "run": 15,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB1",
+  "run": 16,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB1",
+  "run": 17,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB1",
+  "run": 18,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB2",
+  "run": 13,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith':\n        // Case-insensitive prefix match (SQL LIKE is ASCII case-insensitive)\n        return apply(field, '$like', value + '%');\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n\n      case 'hasTags': {",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB2",
+  "run": 14,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith':\n        // `$like` is case-insensitive (values are lowercased at parse time)\n        return apply(field, '$like', value + '%');\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n\n      case 'hasTags': {",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB2",
+  "run": 15,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith':\n        // Value is already lowercased by parse(); apply() lowercases the field\n        // via $lower for string types, so a case-insensitive anchored regex\n        // matches the prefix exactly.\n        return apply(\n          field,\n          '$regexp',\n          '^' + String(value).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB2",
+  "run": 16,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 1,
+    "firstTurn": 8
+   },
+   "sawUnicodeLike": {
+    "count": 2,
+    "firstTurn": 6
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith':\n        // Anchored, case-insensitive literal prefix match. Letters are\n        // expanded into both cases so the REGEXP function (which has no\n        // flags) ignores case; all other characters are regex-escaped.\n        return apply(field, '$regexp', startsWithPattern(value));\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB2",
+  "run": 17,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 1,
+    "firstTurn": 6
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith':\n        // Case-insensitive prefix match via LIKE. NULL fields never match.\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$like',\n          value + '%',\n        );\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB2",
+  "run": 18,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": "      case 'startsWith':\n        // Case-insensitive prefix match (LIKE is case-insensitive for the\n        // normalised string comparison used by the AQL compiler)\n        return apply(field, '$like', value + '%');\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(",
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB3",
+  "run": 13,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB3",
+  "run": 14,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB3",
+  "run": 15,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB3",
+  "run": 16,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB3",
+  "run": 17,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB3",
+  "run": 18,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB4",
+  "run": 13,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB4",
+  "run": 14,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB4",
+  "run": 15,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB4",
+  "run": 16,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB4",
+  "run": 17,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB4",
+  "run": 18,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };\n      case 'contains':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB5",
+  "run": 13,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        if (type === 'date') {\n          const [dateLow, dateHigh] = sortNumbers(value.from, value.to);\n          return {\n            $and: [{ date: { $gte: dateLow } }, { date: { $lte: dateHigh } }],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB5",
+  "run": 14,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        if (type === 'date') {\n          return {\n            $and: [\n              { date: { $gte: value.from } },\n              { date: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB5",
+  "run": 15,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        if (type === 'date') {\n          // `value.from`/`value.to` are already ordered and exact dates\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB5",
+  "run": 16,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        if (type === 'date') {\n          const [dateLow, dateHigh] = sortNumbers(value.from, value.to);\n          return {\n            date: { $gte: dateLow, $lte: dateHigh },\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB5",
+  "run": 17,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        if (type === 'date') {\n          return {\n            [field]: [{ $gte: value.from }, { $lte: value.to }],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`\n        const [low, high] = sortNumbers(value.num1, value.num2);\n        return {\n          [field]: [{ $gte: low }, { $lte: high }],\n        };"
+  }
+ },
+ {
+  "arm": "I-ts-gencontracts",
+  "task": "AB5",
+  "run": 18,
+  "cmds": {},
+  "outputs": {
+   "sawUnicodeContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "sawUnicodeLike": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql2": null,
+   "aql5": "      case 'isbetween':\n        if (type === 'date') {\n          // `value` is already normalized to { from, to } with from <= to\n          return {\n            $and: [\n              { [field]: { $gte: value.from } },\n              { [field]: { $lte: value.to } },\n            ],\n          };\n        }\n        // This operator is only applicable to the specific `between`\n        // number type so we don't use `apply`"
+  }
+ }
+]
