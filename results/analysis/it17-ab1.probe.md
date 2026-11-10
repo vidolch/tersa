@@ -1,0 +1,26 @@
+| Arm | Task | Run |  | cmpFixed |
+|---|---|---|---|
+| A-ts-baseline | AB1 | 82 |  | no |
+| A-ts-baseline | AB1 | 83 |  | yes |
+| A-ts-baseline | AB1 | 84 |  | yes |
+| A-ts-baseline | AB1 | 85 |  | no |
+| A-ts-baseline | AB1 | 86 |  | no |
+| A-ts-baseline | AB1 | 87 |  | no |
+| A-ts-baseline | AB1 | 88 |  | no |
+| A-ts-baseline | AB1 | 89 |  | no |
+| A-ts-baseline | AB1 | 90 |  | yes |
+| A-ts-baseline | AB1 | 91 |  | no |
+| A-ts-baseline | AB1 | 92 |  | no |
+| A-ts-baseline | AB1 | 93 |  | yes |
+| I-ts-gencontracts | AB1 | 1 |  | yes |
+| I-ts-gencontracts | AB1 | 2 |  | yes |
+| I-ts-gencontracts | AB1 | 3 |  | no |
+| I-ts-gencontracts | AB1 | 4 |  | yes |
+| I-ts-gencontracts | AB1 | 5 |  | yes |
+| I-ts-gencontracts | AB1 | 6 |  | yes |
+| I-ts-gencontracts | AB1 | 7 |  | yes |
+| I-ts-gencontracts | AB1 | 8 |  | yes |
+| I-ts-gencontracts | AB1 | 9 |  | yes |
+| I-ts-gencontracts | AB1 | 10 |  | no |
+| I-ts-gencontracts | AB1 | 11 |  | yes |
+| I-ts-gencontracts | AB1 | 12 |  | yes |
