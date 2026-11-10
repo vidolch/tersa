@@ -1,0 +1,266 @@
+[
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 6,
+    "firstTurn": 1
+   },
+   "agreeFailed": {
+    "count": 2,
+    "firstTurn": 12
+   },
+   "likeWritten": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 1,
+    "firstTurn": 21
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "likeWritten": {
+    "count": 1,
+    "firstTurn": 29
+   }
+  },
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 1,
+    "firstTurn": 14
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "likeWritten": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 3,
+    "firstTurn": 1
+   },
+   "agreeFailed": {
+    "count": 2,
+    "firstTurn": 13
+   },
+   "likeWritten": {
+    "count": 1,
+    "firstTurn": 15
+   }
+  },
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "likeWritten": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 1,
+    "firstTurn": 9
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "likeWritten": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "likeWritten": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "likeWritten": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 9,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 1,
+    "firstTurn": 16
+   },
+   "agreeFailed": {
+    "count": 1,
+    "firstTurn": 16
+   },
+   "likeWritten": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 10,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 1,
+    "firstTurn": 4
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "likeWritten": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 11,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "agreeFailed": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "likeWritten": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 12,
+  "cmds": {},
+  "outputs": {
+   "agreeRan": {
+    "count": 2,
+    "firstTurn": 13
+   },
+   "agreeFailed": {
+    "count": 2,
+    "firstTurn": 13
+   },
+   "likeWritten": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {},
+  "extracts": {}
+ }
+]
