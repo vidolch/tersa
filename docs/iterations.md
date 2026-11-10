@@ -762,3 +762,34 @@ Records: `results/P-pi-baseline/AB*/run-1..18.json`, `results/Q-pi-contracts/AB*
 3. On the features HN3 and HN4, Q costs about the same as P (a small tax).
 
 **Run.** `claude-haiku-5-5`, `effort=low`, all four tasks, 8 runs per task per arm, same period: A runs 1–8, P runs 1–8, Q runs 1–8.
+
+**Result** (Hono, `claude-haiku-5-5`, `effort=low`, 8 runs per task per arm, same period; mean cost per run, permutation test):
+
+| Task | A (Claude Code) pass, cost per pass, turns | P (pi) | Q (pi + contracts on read) | P vs A | Q vs P |
+|---|---|---|---|---|---|
+| HN1 | 8/8, $0.0020, 5.6 | 8/8, $0.0019, 5.0 | 8/8, $0.0023, 5.6 | p = 0.79 | **+21%, p = 0.03** |
+| HN2 | 8/8, $0.0028, 7.6 | 8/8, $0.0026, 5.1 | 8/8, $0.0024, 5.0 | p = 0.57 | p = 0.60 |
+| HN3 | 7/8, $0.0244, 22.1 | 8/8, $0.0090, 12.0 | 8/8, $0.0116, 13.1 | **−63%, p = 0.03** | p = 0.51 |
+| HN4 | 8/8, $0.0019, 5.6 | 8/8, $0.0013, 3.0 | 8/8, $0.0015, 3.1 | **−32%, p < 0.001** | **+15%, p = 0.009** |
+| **All** | **31/32, $0.0072** | **32/32, $0.0037** | **32/32, $0.0045** | **−49%** | **+22%** |
+
+Probe (`results/analysis/it21-hono.probe.json`): **all 48 seeded-bug runs (HN1, HN2, every arm) fixed the cause itself**, restoring the upstream comparator in 5–8 turns. Contracts were delivered in all 32 Q runs, and the decisive contract (`Node.search`, `parseAccept`) was shown in every HN1 and HN2 run. A's one failure is HN3 R5 (one router differs).
+
+**Conclusion, against the pre-registered expectations.**
+1. **Harness: confirmed, and stronger.** pi costs 49% less per passing task than Claude Code on Hono (−15 to −22% on Actual), at the same or better pass rate. The gap is largest on the hardest task, HN3 (22 turns → 12).
+2. **Contracts: "no effect possible".** Agents never treated Hono's seeded bugs as intended, so there was nothing for contracts to fix. On a codebase where nothing is misread, they are a **tax of about 22%** per pass (significant on HN1 and HN4).
+3. Features: Q costs about the same as P on HN3 and slightly more on HN4, as expected.
+
+**Why the seeded bugs behaved so differently from AB1 (hypotheses, not tested).** In Hono the intended behaviour was legible from three places, while AB1 had none:
+- *the spec*: HN1's report says the other routers behave correctly, so they serve as the oracle; AB1's says only "applied in the wrong order";
+- *names*: the trie's sort key is `score: ++order`, so "ascending = registration order" is in the code;
+- *comments with examples*: `parseAccept`'s `requiresSort` comment gives a descending example ("text/html, application/json;q=0.9, */*;q=0.8").
+
+AB1's `_rankRules` had none of these, and its flipped order had a plausible alternative reading ("most specific first" for display). If that's the explanation, then contracts are **insurance**: very valuable where intent is not legible (AB1: up to 40× lower cost per pass), a ~20% tax where it already is (Hono).
+
+**What this changes.**
+- The robust, codebase-independent result is the harness: pi is cheaper on both codebases, by 15–49%.
+- The contracts result is real but conditional. Delivering every contract on every read isn't the right default; it pays only where intent is missing. A better mechanism would show a contract only when it adds information the code doesn't already carry. In a language, that's cheap to decide: a contract that merely restates what names and types already say adds nothing and needn't be shown.
+- For Tersa, the lesson is sharper than "contracts everywhere": **intent must be legible at the point of change**, from names, types, examples or a contract, whichever is shortest. The language should make the cheapest of these mandatory (named keys and parameters, examples that are checked) and treat prose contracts as the fallback.
+
+Records: `results/{A-ts-baseline,P-pi-baseline,Q-pi-contracts}/HN*/run-1..8.json`.
