@@ -1,0 +1,1622 @@
+[
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 1,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 5,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 2,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 4,
+    "firstTurn": 3,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 3,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 5,
+    "firstTurn": 4,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 4,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 5,
+    "firstTurn": 4,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 5,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 5,
+    "firstTurn": 3,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 6,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 3,
+    "anyError": true,
+    "lastError": true
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB2",
+  "run": 1,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB2",
+  "run": 2,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 4,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB2",
+  "run": 3,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB2",
+  "run": 4,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 4,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB2",
+  "run": 5,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 4,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB2",
+  "run": 6,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB3",
+  "run": 1,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB3",
+  "run": 2,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB3",
+  "run": 3,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB3",
+  "run": 4,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB3",
+  "run": 5,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB3",
+  "run": 6,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB4",
+  "run": 1,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB4",
+  "run": 2,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB4",
+  "run": 3,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB4",
+  "run": 4,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB4",
+  "run": 5,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB4",
+  "run": 6,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB5",
+  "run": 1,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB5",
+  "run": 2,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 5,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB5",
+  "run": 3,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB5",
+  "run": 4,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB5",
+  "run": 5,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB5",
+  "run": 6,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 4,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 1,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 4,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 2,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 3,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 5,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 4,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 5,
+    "anyError": true,
+    "lastError": true
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 5,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 5,
+    "firstTurn": 4,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 6,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 5,
+    "firstTurn": 4,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 4
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 4
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 1,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 8
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 2,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 3,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 4,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 4,
+    "firstTurn": 4,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 5,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 6,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 1,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 2,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 3,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 4,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 5,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 6,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 1,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 2,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 3,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 2,
+    "firstTurn": 3
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 4,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 5,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 2
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 6,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 1,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 2,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 3,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 4,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 5,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 6,
+  "cmds": {
+   "readsRuleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ }
+]
