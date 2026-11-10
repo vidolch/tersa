@@ -18,6 +18,7 @@ Everything is measured by the benchmark in this repo, so each idea has to prove 
 | **F** `F-ts-exhaustive` | TypeScript, with one language rule applied by hand: dispatch over a closed set is exhaustive (`assertNever`, typed operator lists), so adding a member breaks the build at every place that must handle it (`arms/F-ts-exhaustive/patches/`, behaviour-preserving, AB2 only) | Claude Code's standard tools | iteration 13 |
 | **G** `G-ts-agreement` | TypeScript, plus one test standing in for the language rule "one definition per operator": every operator listed in the code is run through both the rule matcher and the filter query on the same data, and must agree (`arms/G-ts-agreement/patches/`: AB2 = string operators, iteration 14; AB5 = the generic, pre-registered version for all types, iteration 15) | Claude Code's standard tools | iteration 14 |
 | **H** `H-ts-contracts` | TypeScript, plus a one-line contract comment on every function of the module the task touches (`arms/H-ts-contracts/patches/`, AB1 only; comments only) | Claude Code's standard tools | iteration 16 |
+| **I** `I-ts-gencontracts` | TypeScript, plus contract comments for every function of the task's relevant files, written by a model from the correct code without seeing the task (`query/src/contracts.ts`, `contracts` workflow; AB1 only) | Claude Code's standard tools | iteration 17 |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
 **B vs A** isolates the query layer. **F vs A** and **G vs A** each test one language rule without building the language. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
@@ -60,6 +61,7 @@ Everything runs in GitHub Actions; no local machine is needed.
 | `validate-actual` | push to the Actual suite, harness or query layer | every Actual task: the start state fails exactly as expected and the reference fix passes; the query layer reaches every task's core files | free |
 | `bench-baseline` | manual | arm A batch: suite × tasks × runs | API credits |
 | `bench-query` | manual | arm B or B2 batch, same steps (`_bench.yml` is shared) | API credits |
+| `contracts` | Generates model-written contract comments for given files of the pristine code and commits them as an arm's code patch |
 | `summary` | after each batch, or a push to `results/` | rebuilds `results/summary.md` (one at a time, so batches never conflict) | free |
 
 Run **both arms in the same period**: providers can update a model behind the same name, and a same-day baseline rules that out as an explanation.
