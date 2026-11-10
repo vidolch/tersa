@@ -1,0 +1,578 @@
+[
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 46,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 6,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 7,
+    "anyError": true,
+    "lastError": true
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 47,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 13,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 48,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 49,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 50,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 7,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 51,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 52,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 53,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 14,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 54,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 11,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 11,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 55,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 26,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 7,
+    "firstTurn": 18,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 56,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 57,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 1,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 14,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 5,
+    "firstTurn": 15,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 2,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 7,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 7,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 3,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 11,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 11,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 4,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 16,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 5,
+    "firstTurn": 17,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 5,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 15,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 15,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 6,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 16,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 7,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 10,
+    "anyError": true,
+    "lastError": true
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 8,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 7,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 7,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 9,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 10,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 8,
+    "anyError": true,
+    "lastError": false
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 11,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 11,
+    "anyError": true,
+    "lastError": true
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 12,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "union": true,
+   "eval": true,
+   "aql": true
+  }
+ }
+]
