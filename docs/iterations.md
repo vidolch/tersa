@@ -664,3 +664,14 @@ Records: `results/A-ts-baseline/AB*/run-100..105.json`, `results/I-ts-gencontrac
 - Pilots (not counted): `results/P-pi-baseline/AB4/run-900` (pass, 6 turns, $0.0025), `AB1/run-900` (fail, the usual workaround).
 
 **Run.** All five tasks, `claude-haiku-5-5`, `effort=low`, 6 runs per task, same period: A runs 106–111, P runs 1–6.
+
+## Iteration 20 — Modified pi: contracts delivered where code is read (arm Q)
+
+**Hypothesis.** Iteration 18's contracts helped where they contradicted the code being edited (AB1), cost 40–50% where nothing was wrong (they made every file longer, on every read), and did nothing where the relevant contract sat in a file nobody opened (AB2). Delivering contracts through the harness, next to the code being read and each only once, should keep the AB1 effect and cut the tax. It also tests whether contracts of *called* functions, shown at the call site, reach code the agent doesn't open.
+
+**Change: arm Q** = arm P (pi) + a pi extension, `arms/Q-pi-contracts/contracts-on-read.ts`, loaded via `piExtension` in the arm's agent.json:
+- On every tool result that shows one source file (pi's `read`, or a single-file `cat`/`sed`/`head`/`tail`/`nl` through `bash`; under pi, Haiku reads almost only through bash), it appends the contracts of the functions whose declarations appear in the shown text, and of functions called in it that are defined elsewhere (looked up by name, only if the name is unique). Each contract is shown at most once per session, at most 12 per result, under a header saying it is documentation and not part of the file.
+- Contracts: `arms/Q-pi-contracts/contracts.json`, the union of arm I's blind, model-written contracts (264 functions in 15 files). Files are not changed, so edits never see contracts and re-reading unchanged code costs nothing extra.
+- Known limit, stated before the run: AB2's trap is reached through a string (`'$like'` in an AQL query), not a function call, so a call-site lookup can't find `unicodeLike`'s contract. AB2 is not expected to improve.
+
+**Run.** All five tasks, `claude-haiku-5-5`, `effort=low`, 6 runs per task, in the same period as iteration 19: Q runs 1–6.
