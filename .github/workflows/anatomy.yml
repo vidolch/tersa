@@ -11,6 +11,9 @@ on:
       label:
         description: File name for the analysis (e.g. it10-haiku)
         required: true
+      probe:
+        description: Optional probe.ts options as a JSON array, e.g. ["--cmd","tc=typecheck","--file","x=path:regex"]
+        default: ""
       price_model:
         description: Model in harness/prices.json used for the cost split
         default: claude-haiku-5-5
@@ -42,10 +45,16 @@ jobs:
           find /tmp/logs -name transcript.jsonl | wc -l
       - name: Analyze
         working-directory: harness/runner
+        env:
+          PROBE_ARGS: ${{ inputs.probe }}
         run: |
           mkdir -p ../../results/analysis
           node src/anatomy.ts /tmp/logs --price "${{ inputs.price_model }}" \
             --json "../../results/analysis/${{ inputs.label }}.json" | tee "../../results/analysis/${{ inputs.label }}.md"
+          if [[ -n "$PROBE_ARGS" ]]; then
+            node src/probe.ts /tmp/logs --json "../../results/analysis/${{ inputs.label }}.probe.json" \
+              | tee "../../results/analysis/${{ inputs.label }}.probe.md"
+          fi
           cat "../../results/analysis/${{ inputs.label }}.md" >> "$GITHUB_STEP_SUMMARY"
       - name: Commit
         run: |
