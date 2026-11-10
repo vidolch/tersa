@@ -1,0 +1,106 @@
+// @ts-strict-ignore
+// Every rule condition operator has two implementations: `Condition.eval` (rule matching, in
+// memory) and `conditionsToAQL` (filters, as a database query). They must agree.
+//
+// This test runs every operator listed in CONDITION_TYPES (including any added later) for one
+// field of each type through both implementations, on the same transactions, and fails on any
+// difference. Sample values come from SAMPLE_VALUES; an operator for which none of the samples
+// is a valid value fails with a request to add one, so no operator goes unchecked.
+import { aqlQuery } from '#server/aql';
+import * as db from '#server/db';
+import { loadMappings } from '#server/db/mappings';
+import { q } from '#shared/query';
+
+import { Condition, CONDITION_TYPES } from '../rules/condition';
+
+import { conditionsToAQL, resetState } from './transaction-rules';
+
+/** One field per condition type. */
+const FIELDS: Record<string, string[]> = {
+  string: ['notes', 'imported_payee'],
+  number: ['amount'],
+  date: ['date'],
+  boolean: ['cleared'],
+};
+
+const TRANSACTIONS = [
+  { date: '2026-10-01', amount: -100, notes: 'Rent October', imported_payee: 'LIDL SOFIA', cleared: true },
+  { date: '2026-10-15', amount: 100, notes: 'rent november', imported_payee: 'My Lidl', cleared: false },
+  { date: '2026-10-31', amount: 0, notes: 'Not rent', imported_payee: 'lidl', cleared: true },
+  { date: '2026-11-01', amount: -200, notes: 'RENT', imported_payee: 'Straße 1', cleared: false },
+  { date: '2026-09-30', amount: 12345, notes: 'renting', imported_payee: null, cleared: true },
+  { date: '2025-10-01', amount: 350, notes: 'October rent payment', imported_payee: 'Kaufland', cleared: false },
+  { date: '2026-10-02', amount: -12345, notes: 'Straße', imported_payee: 'lidl sofia', cleared: true },
+  { date: '2026-12-31', amount: 1, notes: '', imported_payee: '', cleared: false },
+  { date: '2026-01-01', amount: -1, notes: null, imported_payee: 'oct', cleared: true },
+];
+
+/**
+ * Candidate values per condition type; each operator is checked with every candidate it accepts.
+ * Add candidates here when an operator accepts none of them.
+ * (LIKE wildcards `%` `_` are left out of strings: `contains` already disagrees on them at this
+ * commit, which is outside this check.)
+ */
+const SAMPLE_VALUES: Record<string, unknown[]> = {
+  string: ['rent', 'Rent', 'oct', 'straße', 'ent', 'lidl', ['rent'], ['RENT', 'oct'], '#rent'],
+  number: [0, 100, -100, 12345, -200, 1, { num1: -200, num2: 100 }, { num1: 100, num2: -200 }],
+  date: ['2026-10-01', '2026-10-31', '2026-10', '2026', '2025-10-01'],
+  boolean: [true, false],
+};
+
+beforeEach(async () => {
+  await global.emptyDatabase()();
+  resetState();
+  await loadMappings();
+});
+
+async function insertTransactions() {
+  const account = await db.insertAccount({ name: 'bank' });
+  for (const [i, t] of TRANSACTIONS.entries()) {
+    await db.insertTransaction({ id: `t${i}`, account, ...t });
+  }
+}
+
+async function idsByQuery(cond: Condition): Promise<string[]> {
+  const { filters } = conditionsToAQL([cond.serialize()]);
+  const { data } = await aqlQuery(q('transactions').filter({ $and: filters }).select('id'));
+  return data.map(t => t.id).sort();
+}
+
+function idsInMemory(cond: Condition): string[] {
+  return TRANSACTIONS.flatMap((t, i) => (cond.eval({ ...t }) ? [`t${i}`] : [])).sort();
+}
+
+function validConditions(op: string, field: string, type: string): Condition[] {
+  const out: Condition[] = [];
+  for (const value of SAMPLE_VALUES[type] ?? []) {
+    try {
+      out.push(new Condition(op, field, value, null));
+    } catch {
+      // not a valid value for this operator
+    }
+  }
+  return out;
+}
+
+describe('rule matching and filters agree, for every operator', () => {
+  for (const [type, fields] of Object.entries(FIELDS)) {
+    for (const op of CONDITION_TYPES[type].ops) {
+      test(`${type} ${op}`, async () => {
+        // Some operators are allowed on only some fields of a type; each must be valid on one.
+        const conds = fields.flatMap(field => validConditions(op, field, type));
+        expect(
+          conds.length,
+          `no sample value is valid for "${op}" on ${type} fields: add one to SAMPLE_VALUES.${type}`,
+        ).toBeGreaterThan(0);
+        await insertTransactions();
+        for (const cond of conds) {
+          expect(
+            await idsByQuery(cond),
+            `${cond.field} ${op} ${JSON.stringify(cond.unparsedValue)}`,
+          ).toEqual(idsInMemory(cond));
+        }
+      });
+    }
+  }
+});

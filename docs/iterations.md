@@ -519,3 +519,13 @@ How the test acted (`results/analysis/it14-ab2-G.probe.json`, new `--output` opt
 - Iterations 13 and 14 together: guaranteeing that every place is *touched* (exhaustiveness) didn't help, because the agents already found every place. Guaranteeing that the places *agree* did help. Agents' weak point here is semantics, not navigation.
 
 Records: `results/A-ts-baseline/AB2/run-58..69.json`, `results/G-ts-agreement/AB2/run-1..12.json`.
+
+## Iteration 15 — Does the rule generalise? (pre-registered)
+
+**Why not "run the check automatically" first.** G is already at 11/12 on AB2; an automatic check could add one pass at most, which 12 runs can't detect. The more important question is whether iteration 14 generalises, because the AB2 check was written knowing exactly how agents fail there.
+
+**Protocol (fixed before any agent runs on the new task):**
+1. A **generic** agreement check, `arms/G-ts-agreement/condition-agreement.generic.test.ts`, committed now and not changed afterwards. It covers every operator in `CONDITION_TYPES` for every condition type with a database-backed field (string: `notes`, `imported_payee`; number: `amount`; date: `date`; boolean: `cleared`), on 9 transactions and fixed sample values per type, comparing `Condition.eval` with the `conditionsToAQL` query. An operator for which no sample value is valid fails with "add one to SAMPLE_VALUES", so a new operator can't pass unchecked. Checked: 23/23 pass at the start state; the AB2 reference passes (24/24); the iteration-13 `$like` variant fails (`string startsWith`). Excluded, as in iteration 14: LIKE wildcards in string values (existing `contains` disagreement).
+2. A **new task AB5**, written after this commit, that adds behaviour to a condition operator on a different type from AB2, with hidden acceptance tests and a reference solution validated the usual way. Its acceptance tests are written from the spec, not from agent behaviour.
+3. Runs: AB5, `claude-haiku-5-5`, `effort=low`, arm A vs arm G (G's AB5 patch adds exactly this generic file), 12 runs each, same period. Default-effort arm A, 6 runs, as a reference point.
+4. Reported whatever the outcome; success = G passes clearly more often than A at low effort, or the check visibly catches a disagreement in G runs (probe). If A already passes AB5 at low effort, the task has no semantic trap and the result is "no effect possible", reported as such.
