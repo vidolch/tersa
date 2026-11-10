@@ -19,6 +19,7 @@ Everything is measured by the benchmark in this repo, so each idea has to prove 
 | **G** `G-ts-agreement` | TypeScript, plus one test standing in for the language rule "one definition per operator": every operator listed in the code is run through both the rule matcher and the filter query on the same data, and must agree (`arms/G-ts-agreement/patches/`: AB2 = string operators, iteration 14; AB5 = the generic, pre-registered version for all types, iteration 15) | Claude Code's standard tools | iteration 14 |
 | **H** `H-ts-contracts` | TypeScript, plus a one-line contract comment on every function of the module the task touches (`arms/H-ts-contracts/patches/`, AB1 only; comments only) | Claude Code's standard tools | iteration 16 |
 | **I** `I-ts-gencontracts` | TypeScript, plus contract comments for every function of the task's relevant files, written by a model from the correct code without seeing the task (`query/src/contracts.ts`, `contracts` workflow; all tasks) | Claude Code's standard tools | iterations 17–18 |
+| **P** `P-pi-baseline` | TypeScript | arm A's setup on the [pi](https://github.com/earendil-works/pi) coding agent instead of Claude Code: ~600-token system prompt, tools read/bash/edit/write (`harness/runner/src/agent-pi.ts`) | iteration 19 |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
 **B vs A** isolates the query layer. **F vs A** and **G vs A** each test one language rule without building the language. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
@@ -173,7 +174,8 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 16: AB1 always fails because agents treat the bug as intended; contract comments (arm H) → 12/12 vs 1/12, 40× lower cost per pass
 - [x] Iteration 17: model-generated contracts, blind to the task (arm I): 10/12 vs 1/12, 19× lower cost per pass
 - [x] Iteration 18: arm I vs A on all five tasks: a wash overall (win on AB1, tax on AB3/AB4, unread on AB2)
-- [ ] Iteration 19: contracts delivered at the call site (what the agent already reads)
+- [ ] Iteration 19: harness alone: arm A's setup on pi vs Claude Code, all tasks
+- [ ] Iteration 20: modified pi: contracts of called functions appended where they're used
 - [ ] Later: run the agreement check automatically (as the toolchain would) instead of relying on the agent running tests
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next

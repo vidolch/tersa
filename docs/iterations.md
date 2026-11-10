@@ -651,3 +651,16 @@ Probe and anatomy (`results/analysis/it18.*`):
 The next test of that, in TypeScript: put contracts into what the agent already reads. One option is a typecheck-visible form (named types or branded parameters); another is a hook that appends the contracts of the functions a file calls when the agent reads it.
 
 Records: `results/A-ts-baseline/AB*/run-100..105.json`, `results/I-ts-gencontracts/AB*/run-13..18.json`.
+
+## Iteration 19 — Same agent, different harness: pi vs Claude Code (arm P)
+
+**Question (from Vicho: "is this a harness issue? what if we try a modified pi?").** Delivering contracts at the call site is a question of what the harness puts in front of the model, and Claude Code offers little control over tool output. [pi](https://github.com/earendil-works/pi) is a minimal open-source coding agent: a system prompt of ~600 tokens, four tools (read, bash, edit, write), an SDK, and extensions that can rewrite any tool result. Before modifying it, this iteration measures the harness alone. How much of everything measured so far is Claude Code itself?
+
+**Change: arm P** = arm A's prompt, profile, model, effort, caps and sandbox, run on pi 1.5.1 (`@earendil-works/pi-coding-agent`) instead of Claude Code:
+- `harness/runner/src/agent-pi.ts` (new): an in-memory pi session; nothing discovered from disk (no extensions, skills, templates or context files: the Actual repo has an AGENTS.md and a CLAUDE.md, which neither harness loads); `effort=low` maps to pi's thinking level `low`, which pi sends to Haiku 5.5 as adaptive thinking with effort `low`, the same setting as the Claude Code runs. Turn, budget and wall-clock caps are the runner's.
+- pi's events are translated into the Claude Agent SDK's message shapes (tool names mapped to Read/Bash/Edit/Write), so all metrics, transcripts, `anatomy.ts` and `probe.ts` work unchanged; unit tests in `test/agent-pi.test.ts`.
+- Sandbox: same user, same iptables rules, same provider-only proxy (Node's `fetch` needs an explicit proxy dispatcher, set from `HTTPS_PROXY`).
+- Also: the bench job now keeps the agent's console output in each run's logs, and `anatomy` commits their tails (`results/analysis/<label>.logs.txt`), because job logs can't be read from outside Actions. That's how the first pilot's failure (a version lookup after the run) was found.
+- Pilots (not counted): `results/P-pi-baseline/AB4/run-900` (pass, 6 turns, $0.0025), `AB1/run-900` (fail, the usual workaround).
+
+**Run.** All five tasks, `claude-haiku-5-5`, `effort=low`, 6 runs per task, same period: A runs 106–111, P runs 1–6.
