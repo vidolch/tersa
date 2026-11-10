@@ -622,3 +622,32 @@ Records: `results/A-ts-baseline/AB1/run-82..93.json`, `results/I-ts-gencontracts
 **Change.** Contracts generated the same way for every task's relevant `.ts` files (`contracts` workflow, one run per task; now in batches of 20 functions per request, after two first attempts failed on large files): AB2 57 contracts in 6 files, AB3 170 in 6, AB4 33 in 3, AB5 55 in 5 (AB1: 53 in 3, iteration 17). Where a task's reference solution doesn't apply on top of the comments (a new function inserted next to a commented one), `harness/rebase-reference.sh` (new) rebases it for validation; `ARM=I-ts-gencontracts harness/validate-actual.sh` passes for all five tasks.
 
 **Run.** All five tasks, `claude-haiku-5-5`, `effort=low`, 6 runs per task per arm, same period: A runs 100–105, I runs 13–18 (one run range for all tasks; AB1 runs 1–12 are iteration 17).
+
+**Result** (`node src/compare.ts "A low=results/A-ts-baseline@100-105" "I low=results/I-ts-gencontracts@13-18" --suite actual --model claude-haiku-5-5`; mean cost per run, permutation test):
+
+| Task | Pass A / I | Cost per pass A → I | Mean cost per run, p | Turns A → I |
+|---|---|---|---|---|
+| AB1 | 0/6 / **4/6** | – → $0.0093 | $0.0092 → $0.0062, p = 0.08 | 19.8 → 13.5 |
+| AB2 | 4/6 / 2/6 | $0.0173 → $0.0313 | $0.0115 → $0.0104, p = 0.43 | 19.0 → 22.0 |
+| AB3 | 6/6 / 6/6 | $0.0056 → $0.0078 (+39%) | p = 0.12 | 10.3 → 13.3 |
+| AB4 | 6/6 / 6/6 | $0.0027 → $0.0041 (+52%) | p = 0.002 | 6.3 → 8.0 |
+| AB5 | 6/6 / 5/6 | $0.0108 → $0.0150 | $0.0108 → $0.0125, p = 0.78 | 16.0 → 19.5 |
+| **All** | **22/30 / 23/30** | **$0.0109 → $0.0107** | | |
+
+Probe and anatomy (`results/analysis/it18.*`):
+- **AB2: the contract that describes the trap is never read.** It sits on `unicodeLike` in `platform/server/sqlite/unicodeLike.ts`; agents write `$like` in `transaction-rules.ts` and don't open the implementation behind it. Only 1 of 6 I runs had that contract in a tool result, and that run passed; all 4 I failures are `$like`, as in A. AB2's 2/6 vs 4/6 is within noise (Fisher p ≈ 0.57).
+- **AB3, AB4: a reading tax.** Old tool output carried in context goes from 50k to 92k tokens (AB3) and 20k to 48k (AB4): the files are longer (AB3's files got 170 contracts), and every Read pays for it, on every later turn.
+- AB5's one failure sorts the date ends with `sortNumbers` (a numeric helper) in the filter path. A one-off, not a pattern.
+
+**Conclusion.** Across all five tasks, generated contracts are a wash: one more pass (23 vs 22 of 30) at the same cost per pass. That average hides three distinct effects:
+1. **A large win where the code being edited contradicts its contract** (AB1: 0/6 → 4/6 here, 1/12 → 10/12 in iteration 17).
+2. **A 40–50% tax where nothing is wrong**, paid in reading: every contract is text the agent reads and re-sends.
+3. **No help where the needed contract is somewhere the agent doesn't look** (AB2): a contract on the implementation of `$like` doesn't reach code that only *uses* `$like`.
+
+**For Tersa.** Contracts are worth having, but not as more comments in files. The language form should do two things the comments can't:
+- **Bring the callee's contract to the call site**, the way a type does. The agent should see "`$like`: unanchored, matches anywhere" where it writes `$like`, not in a file it never opens. The query layer from iterations 3–9 had the right delivery mechanism (show what's relevant without opening files), but the wrong payload: it delivered code, where it should have delivered contracts.
+- **Keep them terse and machine-checkable**, so they cost little to read and can't silently go stale.
+
+The next test of that, in TypeScript: put contracts into what the agent already reads. One option is a typecheck-visible form (named types or branded parameters); another is a hook that appends the contracts of the functions a file calls when the agent reads it.
+
+Records: `results/A-ts-baseline/AB*/run-100..105.json`, `results/I-ts-gencontracts/AB*/run-13..18.json`.
