@@ -1,0 +1,674 @@
+[
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 28,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 !== score2) {\n      const higherFirst = score1 > score2 ? -1 : 1;\n      return ascending ? -higherFirst : higherFirst;\n    }\n    const id1 = r1.getId();\n    const id2 = r2.getId();\n    return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n  });\n}\n\nfunction splitByStage(rules: Iterable<Rule>): {",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  const { pre, normal, post } = splitByStage(rules);\n\n  return _rankRules(pre).concat(_rankRules(normal)).concat(_rankRules(post));\n}\n\n// Order in which rules must be *executed*. Each matching rule's `set`\n// actions overwrite earlier ones, so the most specific rule has to run\n// last to have the final say. Stages still run in order (pre, normal,\n// post); only the ranking within each stage is reversed.\nexport function rankRulesForExecution(rules: Iterable<Rule>): Rule[] {\n  const { pre, normal, post } = splitByStage(rules);",
+   "run": null,
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 29,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return dir;\n    } else if (score1 < score2) {\n      return -dir;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": null,
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 30,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 !== score2) {\n      const firstFirst = ascending ? score1 < score2 : score1 > score2;\n      return firstFirst ? -1 : 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}\n",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  const { pre, normal, post } = splitByStage(rules);\n  return _rankRules(pre).concat(_rankRules(normal)).concat(_rankRules(post));\n}\n\n// Execution order. Rules run in sequence and a later rule overwrites a field\n// set by an earlier one, so within each stage the least specific rule runs\n// first and the most specific runs last, letting it win. Stages keep their\n// order: pre, then default, then post.\nexport function rankRulesForExecution(rules: Iterable<Rule>): Rule[] {\n  const { pre, normal, post } = splitByStage(rules);\n  return _rankRules(pre, true)",
+   "run": null,
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 31,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 !== score2) {\n      const higherFirst = score1 > score2 ? -1 : 1;\n      return descending ? higherFirst : -higherFirst;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}\n",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  const { pre, normal, post } = splitByStage(rules);\n  return _rankRules(pre).concat(_rankRules(normal)).concat(_rankRules(post));\n}\n\n// Execution order used when running rules against a transaction. Rules run\n// in sequence and a later rule's `set` overwrites an earlier one, so the\n// least specific rule must run first and the most specific rule last.\n// Within each stage, lower scores run first; `post` still runs after all\n// default-stage rules and `pre` runs before them.\nexport function rankRulesForApplication(rules: Iterable<Rule>): Rule[] {\n  const { pre, normal, post } = splitByStage(rules);",
+   "run": null,
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 32,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 33,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return ascending ? 1 : -1;\n    } else if (score1 < score2) {\n      return ascending ? -1 : 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  return rankRulesInStages(rules, false);\n}\n\n/**\n * Orders rules for execution. Every matching rule is applied in sequence and\n * later writes overwrite earlier ones, so the least specific rule must come\n * first and the most specific last for the most specific rule to win.\n */\nexport function rankRulesForApplication(rules: Iterable<Rule>): Rule[] {\n  return rankRulesInStages(rules, true);\n}",
+   "run": null,
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 34,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return ascending ? 1 : -1;\n    } else if (score1 < score2) {\n      return ascending ? -1 : 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  const { pre, normal, post } = splitByStage(rules);\n  return _rankRules(pre)\n    .concat(_rankRules(normal))\n    .concat(_rankRules(post));\n}\n\n// Ordering for application: within each stage the least specific rule comes\n// first and the most specific rule comes last. Rule actions overwrite each\n// other in sequence, so the most specific rule must run last to win.\nexport function rankRulesForApplication(rules: Iterable<Rule>): Rule[] {\n  const { pre, normal, post } = splitByStage(rules);",
+   "run": null,
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 35,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return -1;\n    } else if (score1 < score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": null,
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 36,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return -1;\n    } else if (score1 < score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": null,
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 37,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return -1;\n    } else if (score1 < score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": null,
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 38,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return -1;\n    } else if (score1 < score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 39,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return -1;\n    } else if (score1 < score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": null,
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 28,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 29,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 30,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 31,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 32,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 33,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 34,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 35,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 36,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 37,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 38,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 39,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 28,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 29,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 30,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 31,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 32,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 33,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 34,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 35,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 36,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 37,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 38,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 39,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 28,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 29,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 30,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 31,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 32,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 33,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 34,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 35,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 36,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 37,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 38,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 39,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}",
+   "rank": "export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\n  let normal = [];\n  let post = [];\n\n  for (const rule of rules) {\n    switch (rule.stage) {\n      case 'pre':\n        pre.push(rule);\n        break;\n      case 'post':\n        post.push(rule);",
+   "run": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input.",
+   "app": "  return rankRules(rules.getRules()).map(rule => rule.serialize());\n}\n\nasync function runRules({\n  transaction,\n}: {\n  transaction: TransactionEntity;\n}): Promise<TransactionEntity> {\n  return rules.runRules(transaction);\n}\n"
+  }
+ }
+]
