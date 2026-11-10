@@ -1,0 +1,578 @@
+[
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 7,
+  "cmds": {
+   "ruleUtils": {
+    "count": 3,
+    "firstTurn": 4,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-7/workspace && grep -rn \"rankRules\" packages/loot-core/src --include=*.ts | head; f=$(grep -rln \"export function rankRules\" packages/loot-core/src); echo $f; cat $f; grep -n \"getSpecificity\\|function \\|score\" packages/loot-core/src/server/rules/rule-utils.ts 2>/dev/null | head -40",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-7/workspace && python3 - <<'EOF'\np='packages/loot-core/src/server/rules/rule-utils.ts'\ns=open(p).read()\ns=s.replace(\"\"\"export function rankRules(rules: Iterable<Rule>): Rule[] {\n  let pre = [];\"\"\",\"\"\"export function rankRules(rules: Iterable<Rule>): Rule[] {\n  const { pre, normal, post } = splitByStage(rules);\n  return _rankRules(pre)\n    .concat(_rankRules",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-7/workspace && python3 - <<'EOF'\np='packages/loot-core/src/server/rules/rule-utils.ts'\ns=open(p).read()\ns=s.replace(\"\"\"function _rankRules(rules: Rule[]): Rule[] {\"\"\",\"\"\"function _rankRules(rules: Rule[], ascending = false): Rule[] {\"\"\")\ns=s.replace(\"\"\"    if (score1 > score2) {\n      return -1;\n    } else if (score1 < score2) {\n      return 1;\"\"\",\"\"\"    if"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 8,
+  "cmds": {
+   "ruleUtils": {
+    "count": 4,
+    "firstTurn": 3,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-8/workspace/packages/loot-core/src; grep -n \"pecific\\|compare\\|sort\" server/rules/rule.ts server/rules/rule-indexer.ts server/transactions/transaction-rules.ts shared/rules.ts server/rules/rule-utils.ts | head -60",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-8/workspace/packages/loot-core/src; sed -n 1,140p server/rules/rule-utils.ts; grep -n \"\" server/rules/rule-indexer.ts | head -5; grep -n \"rankRules\\|sortRules\\|orderRules\\|Rules(\" server/rules/rule.ts | head -30",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-8/workspace/packages/loot-core/src; grep -rn \"getRulesForPayee\\|rankRules\" --include=*.ts --include=*.tsx .. ../../api 2>/dev/null | grep -v node_modules; grep -n \"rankRules\" -A30 server/rules/rule-utils.test.ts | head -80",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-8/workspace/packages/loot-core/src; python3 - <<'EOF'\np='server/rules/rule-utils.ts'\ns=open(p).read()\ns=s.replace(\"\"\"function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\"\"\",\"\"\"function _rankRules(rules: Rule[], ascending = false): Rule[] {\n  const scores = new Map"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 9,
+  "cmds": {
+   "ruleUtils": {
+    "count": 6,
+    "firstTurn": 2,
+    "anyError": true,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-9/workspace; sed -n 60,140p packages/loot-core/src/server/rules/rule-utils.ts; grep -n \"orderRules\\|sort\\|compareSpec\\|Specific\\|specific\" -i packages/loot-core/src/server/rules/rule.ts packages/loot-core/src/server/rules/index.ts | head -40",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-9/workspace; sed -n 1,60p packages/loot-core/src/server/rules/rule-utils.ts; grep -rn \"rankRules\" packages/loot-core/src | grep -v test",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-9/workspace; sed -n 430,460p packages/loot-core/src/server/transactions/transaction-rules.ts; grep -n \"rankRules\\|sort\" -B2 -A8 packages/loot-core/src/server/rules/rule-utils.test.ts 2>/dev/null | head -80; ls packages/loot-core/src/server/rules/",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-9/workspace; python3 - <<'EOF'\nimport re\np='packages/loot-core/src/server/rules/rule-utils.ts'\ns=open(p).read()\ns=s.replace(\"\"\"export function rankRules(rules: Iterable<Rule>): Rule[] {\"\"\",\"\"\"// Returns the order in which rules must be *executed*. Rules are applied\n// sequentially and later `set` actions overwrite earlier ones, so the most\n// specific rule ",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-9/workspace; python3 - <<'EOF'\np='packages/loot-core/src/server/rules/rule-utils.ts'\ns=open(p).read()\ns=s.replace(\"\"\"  const byStage = (stage: Rule['stage']) =>\n    ranked.filter(rule => (rule.stage ?? null) === stage).reverse();\n\"\"\",\"\")\nopen(p,'w').write(s)\nEOF\nnode .yarn/releases/yarn-4.17.1.cjs prettier --write packages/loot-core/src/server/rules/rule-ut",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-9/workspace; python3 - <<'EOF'\np='packages/loot-core/src/server/rules/rule-utils.ts'\ns=open(p).read()\ns=s.replace(\"function _rankRules(rules: Rule[]): Rule[] {\",\"function _rankRules(rules: Rule[], ascending = false): Rule[] {\")\ns=s.replace(\"\"\"    if (score1 > score2) {\n      return -1;\n    } else if (score1 < score2) {\n      return 1;\"\"\",\"\"\"    if (score1 >"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 10,
+  "cmds": {
+   "ruleUtils": {
+    "count": 5,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-10/workspace; sed -n 60,140p packages/loot-core/src/server/rules/rule-utils.ts; grep -n \"compare\\|sort\\|Specific\\|specific\" packages/loot-core/src/server/rules/rule.ts packages/loot-core/src/server/rules/*.ts | head -40",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-10/workspace; sed -n 1,60p packages/loot-core/src/server/rules/rule-utils.ts",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-10/workspace; grep -rln \"rankRules\" packages | grep -v node_modules; grep -rn \"rankRules\" -A12 packages/loot-core/src/server/rules/rule-utils.test.ts 2>/dev/null | head -60",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-10/workspace; python3 - <<'EOF'\np='packages/loot-core/src/server/rules/rule-utils.ts'\ns=open(p).read()\ns=s.replace(\"\"\"export function rankRules(rules: Iterable<Rule>): Rule[] {\"\"\",\"\"\"// Returns the rules in the order they should be *executed*. Later rules\n// overwrite earlier ones, so within each stage the least specific rule must\n// run first and the most ",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-10/workspace; python3 - <<'EOF'\np='packages/loot-core/src/server/rules/rule-utils.ts'\ns=open(p).read()\nold=s[s.index(\"export function executionOrderRules\"):s.index(\"export function rankRules\")]\nnew='''export function executionOrderRules(rules: Iterable<Rule>): Rule[] {\n  const ranked = rankRules(rules);\n  const pre = ranked.filter(r => r.stage === 'pre');\n "
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 11,
+  "cmds": {
+   "ruleUtils": {
+    "count": 1,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-11/workspace; sed -n 1,130p packages/loot-core/src/server/rules/rule-utils.ts"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 12,
+  "cmds": {
+   "ruleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-12/workspace && sed -n 1,140p packages/loot-core/src/server/rules/rule-utils.ts; grep -rn \"rankRules\\|sortRules\\|specificity\" packages/loot-core/src --include=*.ts | grep -v test | head",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-12/workspace && python3 - <<'EOF'\np='packages/loot-core/src/server/rules/rule-utils.ts'\ns=open(p).read()\ns=s.replace(\"\"\"export function rankRules(rules: Iterable<Rule>): Rule[] {\"\"\",\"\"\"// Returns the rules in the order they should be *executed*. Rules are applied\n// in sequence and later rules overwrite earlier ones, so within each stage the\n// most specifi",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB1/run-12/workspace && python3 - <<'EOF'\np='packages/loot-core/src/server/rules/rule-utils.ts'\ns=open(p).read()\nold=s[s.index(\"export function rankRulesForExecution\"):s.index(\"export function rankRules(rules\")]\nnew='''export function rankRulesForExecution(rules: Iterable<Rule>): Rule[] {\n  const stageOrder = (rule: Rule) =>\n    rule.stage === 'pre' ? 0 : rule.stag"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 7,
+  "cmds": {
+   "ruleUtils": {
+    "count": 3,
+    "firstTurn": 4,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-7/workspace/packages/loot-core/src && sed -n 135,150p server/rules/condition.ts; sed -n 290,320p server/rules/condition.ts; sed -n 240,300p server/rules/condition.ts | grep -n \"lower\\|toLower\" ; sed -n 640,700p server/transactions/transaction-rules.ts; grep -n \"contains\\|doesNotContain\" server/rules/rule-utils.ts server/transactions/transaction-rules.ts ser",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-7/workspace/packages/loot-core/src && sed -n 15,45p server/rules/rule-utils.ts; sed -n 240,262p server/rules/condition.ts; sed -n 335,360p server/transactions/transaction-rules.ts; grep -rn \"\\$regexp\\|\\$like\\|\\$notlike\" server/aql/*.ts server/db/*.ts 2>/dev/null | grep -v test | head; grep -rln \"'\\$like'\" server | grep -v test",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-7/workspace/packages/loot-core/src && python3 - <<'EOF'\nimport re\ndef rep(path, old, new, count=1):\n    s=open(path).read()\n    assert s.count(old)==count, (path, old[:60], s.count(old))\n    s=s.replace(old,new)\n    open(path,'w').write(s)\n\nrep('types/models/rule.ts', \"\"\"      'notes',\n      | 'is'\n      | 'isNot'\n      | 'contains'\n\"\"\", \"\"\"      'notes',\n "
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 8,
+  "cmds": {
+   "ruleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-8/workspace/packages/loot-core/src && cat shared/rules.ts | head -80; sed -n 50,140p server/rules/condition.ts; sed -n 300,380p server/rules/condition.ts; sed -n 640,700p server/transactions/transaction-rules.ts; sed -n 20,40p server/rules/rule-utils.ts; grep -n \"contains\\|doesNotContain\" types/models/rule.ts; grep -rn \"'contains'\\|\\\"contains\\\"\" server/aql ",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-8/workspace/packages/loot-core/src && python3 - <<'EOF'\nimport re\ndef edit(path, old, new, count=1):\n    s=open(path).read()\n    assert s.count(old)==count, (path, old[:60], s.count(old))\n    s=s.replace(old,new)\n    open(path,'w').write(s)\n\n# shared/rules.ts\nedit('shared/rules.ts', \"\"\"  string: {\n    ops: [\n      'is',\n      'contains',\n      'matches',\n  "
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 9,
+  "cmds": {
+   "ruleUtils": {
+    "count": 2,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-9/workspace/packages/loot-core/src/server/rules && sed -n 10,30p rule-utils.ts",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-9/workspace/packages/loot-core/src/server/rules && sed -i 's/^  doesNotContain: 0,$/  doesNotContain: 0,\\n  startsWith: 0,/' rule-utils.ts && cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-9/workspace && node .yarn/releases/yarn-4.17.1.cjs workspace @actual-app/core run typecheck 2>&1 | tail -3; grep -rn \"matchesAccountCondition\\|'doesNotContain'\" packages/loot-c"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 10,
+  "cmds": {
+   "ruleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-10/workspace/packages/loot-core/src && sed -n 1,140p shared/rules.ts; echo ----; sed -n 55,140p server/rules/condition.ts; echo ----; sed -n 300,380p server/rules/condition.ts; echo ----; sed -n 10,70p server/rules/rule-utils.ts; sed -n 120,200p server/rules/rule-utils.ts; echo ----; sed -n 30,60p server/rules/rule-indexer.ts; echo ---; grep -rn \"'contains'",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-10/workspace/packages/loot-core/src && python3 - <<'EOF'\nimport re\ndef edit(path, pairs):\n    s=open(path).read()\n    for old,new,count in pairs:\n        n=s.count(old)\n        assert n==count,(path,old[:60],n)\n        s=s.replace(old,new)\n    open(path,'w').write(s)\n\n# shared/rules.ts\nedit('shared/rules.ts',[\n(\"\"\"      'doesNotContain',\n      'notOneOf',\n "
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 11,
+  "cmds": {
+   "ruleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-11/workspace/packages/loot-core/src; cat shared/rules.ts | head -80; sed -n 50,140p server/rules/condition.ts; sed -n 300,380p server/rules/condition.ts; sed -n 15,45p server/rules/rule-utils.ts; grep -n \"contains\" -B3 -A10 server/aql/*.ts server/rules/rule-utils.ts server/rules/index.ts 2>/dev/null | head -80; grep -rn \"'contains'\\|\\\"contains\\\"\" server/ sh",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-11/workspace/packages/loot-core/src\npython3 - <<'EOF'\nimport re\ndef edit(path, old, new, count=1):\n    s=open(path).read()\n    n=s.count(old)\n    assert n==count, (path, old[:60], n)\n    s=s.replace(old,new)\n    open(path,'w').write(s)\n\n# shared/rules.ts: string ops\nedit('shared/rules.ts', \"      'contains',\\n      'matches',\\n      'oneOf',\\n      'isNot',"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB2",
+  "run": 12,
+  "cmds": {
+   "ruleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-12/workspace/packages/loot-core/src && cat shared/rules.ts | head -120; sed -n 1,200p server/rules/condition.ts; sed -n 300,380p server/rules/condition.ts; sed -n 20,40p server/rules/rule-utils.ts; sed -n 640,700p server/transactions/transaction-rules.ts; grep -n \"contains\\|doesNotContain\" types/models/rule.ts",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB2/run-12/workspace/packages/loot-core/src && python3 - <<'EOF'\nimport re\ndef edit(path, old, new, count=1):\n    s=open(path).read()\n    n=s.count(old)\n    assert n==count, (path, n, old[:60])\n    s=s.replace(old,new)\n    open(path,'w').write(s)\n\n# shared/rules.ts: string ops + disallow on payee_name\nedit('shared/rules.ts', \"\"\"      'doesNotContain',\n      'notOne"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 7,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 8,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 9,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 10,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 11,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB3",
+  "run": 12,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 7,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 8,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 9,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 10,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 11,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB4",
+  "run": 12,
+  "cmds": {
+   "ruleUtils": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null,
+    "commands": []
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 7,
+  "cmds": {
+   "ruleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-7/workspace/packages/loot-core/src && grep -n \"isbetween\" -B3 -A12 shared/rules.ts server/rules/condition.ts types/models/rule.ts server/api-models.ts server/rules/rule-utils.ts; grep -n \"isbetween\\|between\" -i shared/rules.ts | head; grep -n \"Date\\|date\" shared/rules.ts | head -60",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-7/workspace/packages/loot-core/src && sed -n 150,300p server/rules/rule-utils.ts; sed -n 600,700p server/transactions/transaction-rules.ts; grep -n \"isbetween\\|'gte'\\|case 'date'\\|date\" server/transactions/transaction-rules.ts | head -40; grep -n \"make-filters-from-conditions\" -A30 server/*.ts server/*/*.ts | head -60",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-7/workspace/packages/loot-core/src && grep -n \"function conditionSpecialCases\" -A30 server/transactions/transaction-rules.ts; sed -n 150,160p shared/rules.ts; sed -n 1,30p server/rules/rule-utils.ts | grep -n import"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 8,
+  "cmds": {
+   "ruleUtils": {
+    "count": 2,
+    "firstTurn": 3,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-8/workspace/packages/loot-core/src && sed -n 560,620p server/transactions/transaction-rules.ts; sed -n 1,80p server/rules/rule-utils.ts; grep -n \"parseDateString\" -A25 server/rules/rule-utils.ts | head -60; grep -n \"make-filters-from-conditions\" -r server | head; grep -n \"isValidOp\" -A12 shared/rules.ts | head -30; grep -n \"date\" server/api.ts | head -60",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-8/workspace/packages/loot-core/src && grep -n \"export function parseBetweenAmount\" -A30 server/rules/rule-utils.ts; sed -n 1095,1150p server/api.ts; sed -n 520,560p server/transactions/transaction-rules.ts; sed -n 55,75p server/main.ts; grep -n \"make-filters\\|makeFilters\" -r server --include=*.ts | head; grep -n \"sortNumbers\" -A8 shared/rules.ts | head -12"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 9,
+  "cmds": {
+   "ruleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-9/workspace/packages/loot-core/src; grep -n \"isbetween\\|between\" -i shared/rules.ts server/rules/condition.ts server/api.ts types/models/rule.ts server/rules/rule-utils.ts server/api-models.ts; grep -n \"\" server/rules/condition.ts | sed -n 1,400p",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-9/workspace/packages/loot-core/src; sed -n 1,80p shared/rules.ts; sed -n 200,300p server/rules/rule-utils.ts; grep -n \"make-filters-from-conditions\" -r . | head; grep -n \"\" server/rules/condition.ts | sed -n 400,470p; sed -n 30,60p types/models/rule.ts; sed -n 85,105p types/models/rule.ts"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 10,
+  "cmds": {
+   "ruleUtils": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-10/workspace/packages/loot-core/src && grep -n \"isbetween\\|OPS\\|ops\\|date\" shared/rules.ts | head -80; echo ---; grep -n \"isbetween\\|between\\|Date\\|date\" server/rules/condition.ts | head -80; echo ---; grep -n \"isbetween\" -B3 -A10 types/models/rule.ts server/rules/rule-utils.ts server/api-models.ts server/transactions/transaction-rules.ts server/budget/sche",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-10/workspace/packages/loot-core/src && grep -n \"export function parseDateString\\|export function parseBetweenAmount\\|export function parseRecurDate\" -A30 server/rules/rule-utils.ts | head -120; echo ---; sed -n 262,300p server/rules/condition.ts; echo ---; sed -n 540,600p server/transactions/transaction-rules.ts; grep -n \"sortNumbers\" -A6 shared/rules.ts; g"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 11,
+  "cmds": {
+   "ruleUtils": {
+    "count": 1,
+    "firstTurn": 3,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-11/workspace/packages/loot-core/src; cat server/rules/rule-utils.ts; sed -n 560,600p server/transactions/transaction-rules.ts; sed -n 1,30p server/transactions/transaction-rules.ts | grep -n import; grep -n \"isValidOp\\|sortNumbers\" -A12 shared/rules.ts | head -60; grep -rn \"make-filters-from-conditions\" -A30 server/*.ts server/*/*.ts | grep -v test | head -"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB5",
+  "run": 12,
+  "cmds": {
+   "ruleUtils": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-12/workspace/packages/loot-core/src && grep -n \"isbetween\" -B3 -A12 shared/rules.ts server/rules/condition.ts types/models/rule.ts server/api-models.ts server/api.ts server/rules/rule-utils.ts; grep -n \"isbetween\\|Between\" -i shared/rules.ts | head; grep -n \"date\" -i server/rules/condition.ts | head -60",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-12/workspace/packages/loot-core/src && cat server/rules/rule-utils.ts | head -150; grep -n \"isValidOp\\|FIELD_TYPES\" -A8 shared/rules.ts | head -60; grep -n \"isbetween\\|between\" -i server/rules/rule-utils.ts server/api.ts server/transactions/transaction-rules.ts; grep -rn \"make-filters-from-conditions\" --include=*.ts . | head; grep -n \"sortNumbers\" -A6 share",
+     "cd /tmp/tersa-raw/Q-pi-contracts/AB5/run-12/workspace/packages/loot-core/src && sed -n 255,300p server/rules/rule-utils.ts; grep -n \"parseDateString\" -A25 server/rules/rule-utils.ts | head -40; sed -n 600,700p server/transactions/transaction-rules.ts; grep -n \"make-filters-from-conditions\" -A40 server/main.ts | head -60; grep -n \"export function\\|isbetween\\|mapping\\|'between'\" server/transactions/"
+    ]
+   }
+  },
+  "outputs": {},
+  "files": {},
+  "extracts": {}
+ }
+]
