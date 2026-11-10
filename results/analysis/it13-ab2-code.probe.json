@@ -1,0 +1,266 @@
+[
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 46,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored regexp match on the lowercased field (string fields\n        // are lowercased by `apply`); the value is escaped so it is literal.\n        return apply(\n          field,\n          '$regexp',\n          '^' + String(value).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 47,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Case-insensitive prefix match, expressed as an anchored regexp\n        // with each letter expanded to both of its cases.\n        return apply(field, '$regexp', buildStartsWithPattern(value));\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 48,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // LIKE is case-insensitive here (see unicodeLike). Escape the LIKE\n        // wildcards in the user's value so they match literally.\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$like',\n          value.replace(/[\\\\%?]/g, '\\\\$&') + '%',\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 49,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "  startsWithRegex,\n} from '#shared/rules';\nimport { extractTagsForFilter, makeTagAqlRegex } from '#shared/tags';\nimport { ungroupTransaction } from '#shared/transactions';\nimport { fastSetMerge, partitionByField } from '#shared/util';\nimport type {\n  RuleActionEntity,\n  RuleEntity,\n  TransactionEntity,\n} from '#types/models';\n\nimport { batchUpdateTransactions } from '.';",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        // fieldValue and this.value are both lowercased already\n        return String(fieldValue).startsWith(String(this.value));\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 50,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Case-insensitive prefix match (UNICODE_LIKE is case-insensitive)\n        return apply(field, '$like', value + '%');\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 51,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        return apply(field, '$like', value + '%');\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$notlike',\n          '%' + value + '%',\n        );\n      case 'oneOf':\n        const values = value;",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 52,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        return apply(field, '$like', value + '%');\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n\n      case 'hasTags': {\n        const tagValues = extractTagsForFilter(value);",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 53,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Escape LIKE wildcards so the value is matched literally, then\n        // anchor it to the start of the field (LIKE is case-insensitive)\n        return apply(\n          field,\n          '$like',\n          value.replace(/[\\\\%?]/g, '\\\\$&') + '%',\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 54,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Lowercasing is applied to both sides for string fields; a\n        // `$like` pattern anchored at the end matches only a prefix.\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$like',\n          value + '%',\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 55,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // LIKE is not anchored in this codebase, so use an anchored,\n        // escaped regexp against the (lowercased) field value instead\n        return apply(\n          field,\n          '$regexp',\n          '^' +\n            String(value)\n              .toLowerCase()\n              .replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'doesNotContain':",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 56,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        return apply(field, '$like', value + '%');\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n\n      case 'hasTags': {\n        const tagValues = extractTagsForFilter(value);",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 57,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$like',\n          value + '%',\n        );\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 1,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Compare lowercased field against an anchored, escaped regex so\n        // the match only applies at the start of the value.\n        return {\n          [field]: {\n            $transform: '$lower',\n            $regexp:\n              '^' + value.toLowerCase().replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n          },\n        };\n      case 'matches':\n        // Running contains with id will automatically reach into",
+   "eval": "      case 'startsWith':\n        // fieldValue and this.value are both already lowercased\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 2,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // LIKE is case-insensitive for ASCII; NULL fields never match\n        return apply(field, '$like', value + '%');\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n\n      case 'hasTags': {",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue)\n          .toLowerCase()\n          .startsWith(String(this.value).toLowerCase());\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 3,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Like `contains`, but anchored to the start of the field\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$like',\n          value + '%',\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).toLowerCase().startsWith(\n          String(this.value).toLowerCase(),\n        );\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 4,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "  startsWithRegex,\n} from '#server/rules';\nimport {\n  collectFormulasFromActions,\n  extractBalanceOfLiterals,\n  resolveAccountIdForBalanceOf,\n} from '#server/rules/balanceOfFormula';\nimport { addSyncListener, batchMessages } from '#server/sync';\nimport {\n  addDays,\n  currentDay,\n  dayFromDate,",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        // fieldValue is already lowercased above; this.value is lowercased at parse time\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 5,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "// Builds a case-insensitive, anchored regex for `startsWith`. Literal\n// characters are escaped and letters are expanded into both cases, so\n// `%`/`_` and regex metacharacters in the value are matched literally.\nfunction makeStartsWithAqlRegex(value: string): string {\n  const body = [...String(value).toLowerCase()]\n    .map(ch => {\n      const upper = ch.toUpperCase();\n      if (upper !== ch && [...upper].length === 1) {\n        return `[${ch}${upper}]`;\n      }\n      if (ch === '$') {\n        // AQL unescapes `\\$`, so use a character class (as makeTagAqlRegex does)",
+   "eval": "      case 'startsWith':\n        // Both sides are already lowercased above and in the constructor\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(String(this.value));\n\n      case 'hasTags':\n        if (fieldValue === null) {\n          return false;\n        }\n        const normalizedFieldValue = String(fieldValue);"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 6,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Case-insensitive prefix match. REGEXP is case-sensitive, so each\n        // letter of the (already lowercased) value is expanded to a\n        // character class covering both cases.\n        return apply(\n          field,\n          '$regexp',\n          '^' + caseInsensitiveRegexpLiteral(String(value)),\n        );\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 7,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Case-insensitive prefix match, expressed as an anchored regexp\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$regexp',\n          makeCaseInsensitivePrefixRegex(value),\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).toLowerCase().startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 8,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // LIKE is case-insensitive for ASCII; NULL notes never match\n        return apply(field, '$like', value + '%');\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n\n      case 'hasTags': {",
+   "eval": "      case 'startsWith':\n        // fieldValue is already lowercased and this.value is non-empty,\n        // so missing/empty notes never match.\n        if (fieldValue === null || fieldValue === '') {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 9,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Case-insensitive prefix match; $like normalises both sides\n        return apply(field, '$like', value + '%');\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue)\n          .toLowerCase()\n          .startsWith(String(this.value).toLowerCase());\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 10,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // LIKE is case-insensitive for ASCII in SQLite; the value is\n        // already lowercased by the condition parser\n        return apply(field, '$like', value + '%');\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n\n      case 'hasTags':"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 11,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Case-insensitive prefix match (UNICODE_LIKE is case-insensitive)\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$like',\n          value + '%',\n        );\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);\n      case 'doesNotContain':",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        // Both sides are already lowercased (see parse / fieldValue above)\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n"
+  }
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 12,
+  "cmds": {},
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored, case-insensitive regexp (LIKE would treat `%`/`_` in the\n        // value as wildcards)\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$regexp',\n          makeStartsWithRegex(value),\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing",
+   "eval": "      case 'startsWith':\n        if (fieldValue === null) {\n          return false;\n        }\n        // fieldValue and this.value are both lowercased above/in parse\n        return String(fieldValue).startsWith(this.value);\n      case 'oneOf':\n        if (fieldValue === null) {\n          return false;\n        }\n        return this.value.indexOf(fieldValue) !== -1;\n"
+  }
+ }
+]

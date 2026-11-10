@@ -1,0 +1,578 @@
+[
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 46,
+  "requests": 9,
+  "startContext": 6158,
+  "input": 185285,
+  "output": 6667,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 1003.5332471365627,
+   "shellEdit": 1350.4667528634373,
+   "shell": 4313,
+   "editTool": 0,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 55422,
+   "ownOutput": 19905,
+   "toolResults": 109958
+  },
+  "visibleChars": 9886,
+  "thinkingBlocks": 6
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 47,
+  "requests": 17,
+  "startContext": 6158,
+  "input": 364002,
+  "output": 10200,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 1022.5191899947037,
+   "shellEdit": 2686.147476671963,
+   "shell": 6491.333333333334,
+   "editTool": 0,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 104686,
+   "ownOutput": 69348,
+   "toolResults": 189968
+  },
+  "visibleChars": 14201,
+  "thinkingBlocks": 12
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 48,
+  "requests": 16,
+  "startContext": 6158,
+  "input": 339023,
+  "output": 8794,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 2262.3040647636863,
+   "shellEdit": 641,
+   "shell": 5890.695935236314,
+   "editTool": 0,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 98528,
+   "ownOutput": 56978,
+   "toolResults": 183517
+  },
+  "visibleChars": 12175,
+  "thinkingBlocks": 9
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 49,
+  "requests": 15,
+  "startContext": 6158,
+  "input": 332386,
+  "output": 9624,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 641,
+   "shellEdit": 988,
+   "shell": 7995,
+   "editTool": 0,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 92370,
+   "ownOutput": 65952,
+   "toolResults": 174064
+  },
+  "visibleChars": 12223,
+  "thinkingBlocks": 10
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 50,
+  "requests": 11,
+  "startContext": 6158,
+  "input": 262392,
+  "output": 7069,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 682.3540046264746,
+   "shellEdit": 1281.296514404667,
+   "shell": 4307.038505359102,
+   "editTool": 0,
+   "otherTool": 798.310975609756
+  },
+  "carried": {
+   "start": 67738,
+   "ownOutput": 30771,
+   "toolResults": 163883
+  },
+  "visibleChars": 10032,
+  "thinkingBlocks": 8
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 51,
+  "requests": 11,
+  "startContext": 6158,
+  "input": 246777,
+  "output": 6574,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 754,
+   "shellEdit": 0,
+   "shell": 5820,
+   "editTool": 0,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 67738,
+   "ownOutput": 25711,
+   "toolResults": 153328
+  },
+  "visibleChars": 8820,
+  "thinkingBlocks": 6
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 52,
+  "requests": 11,
+  "startContext": 6158,
+  "input": 243131,
+  "output": 7479,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 1610.829100233827,
+   "shellEdit": 809.7609561752988,
+   "shell": 4498.409943590874,
+   "editTool": 0,
+   "otherTool": 560
+  },
+  "carried": {
+   "start": 67738,
+   "ownOutput": 28463,
+   "toolResults": 146930
+  },
+  "visibleChars": 11250,
+  "thinkingBlocks": 5
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 53,
+  "requests": 17,
+  "startContext": 6158,
+  "input": 339556,
+  "output": 9142,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 466,
+   "shellEdit": 955,
+   "shell": 7383,
+   "editTool": 0,
+   "otherTool": 338
+  },
+  "carried": {
+   "start": 104686,
+   "ownOutput": 65799,
+   "toolResults": 169071
+  },
+  "visibleChars": 11454,
+  "thinkingBlocks": 11
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 54,
+  "requests": 14,
+  "startContext": 6158,
+  "input": 313295,
+  "output": 8523,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 897.3903086495163,
+   "shellEdit": 1473.3760794559344,
+   "shell": 6152.2336118945495,
+   "editTool": 0,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 86212,
+   "ownOutput": 42884,
+   "toolResults": 184199
+  },
+  "visibleChars": 12868,
+  "thinkingBlocks": 9
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 55,
+  "requests": 33,
+  "startContext": 6158,
+  "input": 1022497,
+  "output": 15841,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 1165.578773603724,
+   "shellEdit": 0,
+   "shell": 14675.421226396275,
+   "editTool": 0,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 203214,
+   "ownOutput": 259654,
+   "toolResults": 559629
+  },
+  "visibleChars": 21068,
+  "thinkingBlocks": 18
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 56,
+  "requests": 10,
+  "startContext": 6158,
+  "input": 178021,
+  "output": 6721,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 1031.3973851345681,
+   "shellEdit": 0,
+   "shell": 5506.602614865433,
+   "editTool": 0,
+   "otherTool": 183
+  },
+  "carried": {
+   "start": 61580,
+   "ownOutput": 21767,
+   "toolResults": 94674
+  },
+  "visibleChars": 8946,
+  "thinkingBlocks": 7
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 57,
+  "requests": 9,
+  "startContext": 6158,
+  "input": 228192,
+  "output": 7058,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 962.8839132305692,
+   "shellEdit": 0,
+   "shell": 411.0161662817552,
+   "editTool": 2075.0999204876757,
+   "otherTool": 3609
+  },
+  "carried": {
+   "start": 55422,
+   "ownOutput": 21925,
+   "toolResults": 150845
+  },
+  "visibleChars": 8110,
+  "thinkingBlocks": 7
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 1,
+  "requests": 27,
+  "startContext": 6160,
+  "input": 737333,
+  "output": 16302,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 1820.9679012092893,
+   "shellEdit": 2886.8168272306207,
+   "shell": 11594.215271560088,
+   "editTool": 0,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 166320,
+   "ownOutput": 190564,
+   "toolResults": 380449
+  },
+  "visibleChars": 19367,
+  "thinkingBlocks": 16
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 2,
+  "requests": 8,
+  "startContext": 6160,
+  "input": 136476,
+  "output": 5904,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 738.2303948135826,
+   "shellEdit": 0,
+   "shell": 4986.769605186417,
+   "editTool": 0,
+   "otherTool": 179
+  },
+  "carried": {
+   "start": 49280,
+   "ownOutput": 16124,
+   "toolResults": 71072
+  },
+  "visibleChars": 8663,
+  "thinkingBlocks": 5
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 3,
+  "requests": 13,
+  "startContext": 6160,
+  "input": 353886,
+  "output": 8163,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 811.021054398157,
+   "shellEdit": 812.9250814332247,
+   "shell": 391.05386416861825,
+   "editTool": 2373.3481424741476,
+   "otherTool": 3774.6518575258524
+  },
+  "carried": {
+   "start": 80080,
+   "ownOutput": 45475,
+   "toolResults": 228331
+  },
+  "visibleChars": 9305,
+  "thinkingBlocks": 9
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 4,
+  "requests": 23,
+  "startContext": 6160,
+  "input": 525995,
+  "output": 15683,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 1134.9130706013607,
+   "shellEdit": 2739.610256826697,
+   "shell": 11464.476672571942,
+   "editTool": 0,
+   "otherTool": 344
+  },
+  "carried": {
+   "start": 141680,
+   "ownOutput": 140137,
+   "toolResults": 244178
+  },
+  "visibleChars": 21943,
+  "thinkingBlocks": 15
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 5,
+  "requests": 19,
+  "startContext": 6160,
+  "input": 560108,
+  "output": 11546,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 2837.801796290745,
+   "shellEdit": 0,
+   "shell": 955.5214460784314,
+   "editTool": 4070.4330349069396,
+   "otherTool": 3682.2437227238834
+  },
+  "carried": {
+   "start": 117040,
+   "ownOutput": 103030,
+   "toolResults": 340038
+  },
+  "visibleChars": 13257,
+  "thinkingBlocks": 12
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 6,
+  "requests": 18,
+  "startContext": 6160,
+  "input": 411973,
+  "output": 11272,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 656.5408163265306,
+   "shellEdit": 0,
+   "shell": 10270.459183673469,
+   "editTool": 0,
+   "otherTool": 345
+  },
+  "carried": {
+   "start": 110880,
+   "ownOutput": 93200,
+   "toolResults": 207893
+  },
+  "visibleChars": 14349,
+  "thinkingBlocks": 11
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 7,
+  "requests": 13,
+  "startContext": 6160,
+  "input": 284481,
+  "output": 7879,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 553,
+   "shellEdit": 2200,
+   "shell": 5126,
+   "editTool": 0,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 80080,
+   "ownOutput": 41182,
+   "toolResults": 163219
+  },
+  "visibleChars": 11569,
+  "thinkingBlocks": 8
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 8,
+  "requests": 10,
+  "startContext": 6160,
+  "input": 194320,
+  "output": 6744,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 888.955869149162,
+   "shellEdit": 863.2541720154044,
+   "shell": 4991.789958835434,
+   "editTool": 0,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 61600,
+   "ownOutput": 25625,
+   "toolResults": 107095
+  },
+  "visibleChars": 10396,
+  "thinkingBlocks": 7
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 9,
+  "requests": 13,
+  "startContext": 6160,
+  "input": 267819,
+  "output": 7530,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 1266.4953784194795,
+   "shellEdit": 636,
+   "shell": 5627.5046215805205,
+   "editTool": 0,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 80080,
+   "ownOutput": 42673,
+   "toolResults": 145066
+  },
+  "visibleChars": 10490,
+  "thinkingBlocks": 7
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 10,
+  "requests": 13,
+  "startContext": 6160,
+  "input": 259475,
+  "output": 7456,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 773.9069093112328,
+   "shellEdit": 1227.0120096076862,
+   "shell": 5074.081081081081,
+   "editTool": 0,
+   "otherTool": 381
+  },
+  "carried": {
+   "start": 80080,
+   "ownOutput": 39199,
+   "toolResults": 140196
+  },
+  "visibleChars": 11248,
+  "thinkingBlocks": 8
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 11,
+  "requests": 12,
+  "startContext": 6160,
+  "input": 282379,
+  "output": 8091,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 1656.0314856733828,
+   "shellEdit": 0,
+   "shell": 444.7350966881529,
+   "editTool": 3822.228950060932,
+   "otherTool": 2168.004467577532
+  },
+  "carried": {
+   "start": 73920,
+   "ownOutput": 43052,
+   "toolResults": 165407
+  },
+  "visibleChars": 10520,
+  "thinkingBlocks": 9
+ },
+ {
+  "arm": "F-ts-exhaustive",
+  "task": "AB2",
+  "run": 12,
+  "requests": 13,
+  "startContext": 6160,
+  "input": 295934,
+  "output": 10060,
+  "outputByKind": {
+   "thinking": 0,
+   "text": 864.485094281955,
+   "shellEdit": 1336.7853154426284,
+   "shell": 7516.729590275416,
+   "editTool": 0,
+   "otherTool": 342
+  },
+  "carried": {
+   "start": 80080,
+   "ownOutput": 54193,
+   "toolResults": 161661
+  },
+  "visibleChars": 12448,
+  "thinkingBlocks": 10
+ }
+]

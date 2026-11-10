@@ -1,0 +1,26 @@
+| Arm | Task | Run |  |  |
+|---|---|---|
+| A-ts-baseline | AB2 | 46 |  |  |
+| A-ts-baseline | AB2 | 47 |  |  |
+| A-ts-baseline | AB2 | 48 |  |  |
+| A-ts-baseline | AB2 | 49 |  |  |
+| A-ts-baseline | AB2 | 50 |  |  |
+| A-ts-baseline | AB2 | 51 |  |  |
+| A-ts-baseline | AB2 | 52 |  |  |
+| A-ts-baseline | AB2 | 53 |  |  |
+| A-ts-baseline | AB2 | 54 |  |  |
+| A-ts-baseline | AB2 | 55 |  |  |
+| A-ts-baseline | AB2 | 56 |  |  |
+| A-ts-baseline | AB2 | 57 |  |  |
+| F-ts-exhaustive | AB2 | 1 |  |  |
+| F-ts-exhaustive | AB2 | 2 |  |  |
+| F-ts-exhaustive | AB2 | 3 |  |  |
+| F-ts-exhaustive | AB2 | 4 |  |  |
+| F-ts-exhaustive | AB2 | 5 |  |  |
+| F-ts-exhaustive | AB2 | 6 |  |  |
+| F-ts-exhaustive | AB2 | 7 |  |  |
+| F-ts-exhaustive | AB2 | 8 |  |  |
+| F-ts-exhaustive | AB2 | 9 |  |  |
+| F-ts-exhaustive | AB2 | 10 |  |  |
+| F-ts-exhaustive | AB2 | 11 |  |  |
+| F-ts-exhaustive | AB2 | 12 |  |  |
