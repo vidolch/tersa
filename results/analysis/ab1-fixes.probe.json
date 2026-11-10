@@ -1,0 +1,770 @@
+[
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 28,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[], ascending = false): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  return rankRules([...rules]);\n}\n\nfunction* getIsSetterRules(\n  stage,\n  condField,\n  actionField,\n  { condValue, actionValue }: { condValue?: string; actionValue?: string },\n) {\n  const rules = getRules();\n  for (let i = 0; i < rules.length; i++) {\n    const rule = rules[i];"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 29,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[], ascending = false): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  const dir = ascending ? 1 : -1;\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {",
+   "usage": "  return rankRules([...rules]);\n}\n\nfunction* getIsSetterRules(\n  stage,\n  condField,\n  actionField,\n  { condValue, actionValue }: { condValue?: string; actionValue?: string },\n) {\n  const rules = getRules();\n  for (let i = 0; i < rules.length; i++) {\n    const rule = rules[i];"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 30,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[], ascending = false): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  return rankRules([...rules]);\n}\n\nfunction* getIsSetterRules(\n  stage,\n  condField,\n  actionField,\n  { condValue, actionValue }: { condValue?: string; actionValue?: string },\n) {\n  const rules = getRules();\n  for (let i = 0; i < rules.length; i++) {\n    const rule = rules[i];"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 31,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[], descending = true): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  return rankRules([...rules]);\n}\n\nfunction* getIsSetterRules(\n  stage,\n  condField,\n  actionField,\n  { condValue, actionValue }: { condValue?: string; actionValue?: string },\n) {\n  const rules = getRules();\n  for (let i = 0; i < rules.length; i++) {\n    const rule = rules[i];"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 32,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // Rules are applied in this order and later rules overwrite the effects of\n  // earlier ones, so the lowest-scoring rule comes first and the most specific\n  // (highest-scoring) rule comes last and wins.\n  //\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 33,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[], ascending = false): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  return rankRules([...rules]);\n}\n\nfunction* getIsSetterRules(\n  stage,\n  condField,\n  actionField,\n  { condValue, actionValue }: { condValue?: string; actionValue?: string },\n) {\n  const rules = getRules();\n  for (let i = 0; i < rules.length; i++) {\n    const rule = rules[i];"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 34,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[], ascending = false): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  return rankRules([...rules]);\n}\n\nfunction* getIsSetterRules(\n  stage,\n  condField,\n  actionField,\n  { condValue, actionValue }: { condValue?: string; actionValue?: string },\n) {\n  const rules = getRules();\n  for (let i = 0; i < rules.length; i++) {\n    const rule = rules[i];"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 35,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  return rankRules([...rules]);\n}\n\nfunction* getIsSetterRules(\n  stage,\n  condField,\n  actionField,\n  { condValue, actionValue }: { condValue?: string; actionValue?: string },\n) {\n  const rules = getRules();\n  for (let i = 0; i < rules.length; i++) {\n    const rule = rules[i];"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 36,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "    rankRules(\n      fastSetMerge(\n        firstcharIndexer.getApplicableRules(trans),\n        payeeIndexer.getApplicableRules(trans),\n      ),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 37,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  return rankRules([...rules]);\n}\n\nfunction* getIsSetterRules(\n  stage,\n  condField,\n  actionField,\n  { condValue, actionValue }: { condValue?: string; actionValue?: string },\n) {\n  const rules = getRules();\n  for (let i = 0; i < rules.length; i++) {\n    const rule = rules[i];"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 38,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 39,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  return rankRules([...rules]);\n}\n\nfunction* getIsSetterRules(\n  stage,\n  condField,\n  actionField,\n  { condValue, actionValue }: { condValue?: string; actionValue?: string },\n) {\n  const rules = getRules();\n  for (let i = 0; i < rules.length; i++) {\n    const rule = rules[i];"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 28,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 29,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 30,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 31,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 32,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 33,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 34,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 35,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 36,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 37,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 38,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 39,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 28,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 29,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 30,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 31,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 32,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 33,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 34,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 35,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 36,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 37,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 38,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 39,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 28,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 29,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 30,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 31,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 32,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 33,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 34,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 35,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 36,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 37,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 38,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 39,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true,
+   "reverseInRules": false,
+   "reverseInUtils": false
+  },
+  "extracts": {
+   "rank": "function _rankRules(rules: Rule[]): Rule[] {\n  const scores = new Map();\n  rules.forEach(rule => {\n    scores.set(rule, computeScore(rule));\n  });\n\n  // No matter the order of rules, this must always return exactly the same\n  // order. That's why rules have ids: if two rules have the same score, it\n  // sorts by id\n  return [...rules].sort((r1, r2) => {\n    const score1 = scores.get(r1);\n    const score2 = scores.get(r2);",
+   "usage": "  const rules = rankRules(\n    fastSetMerge(\n      firstcharIndexer.getApplicableRules(trans),\n      payeeIndexer.getApplicableRules(trans),\n    ),\n  );\n\n  // Bank sync and the client can leave `payee` or `category` out entirely\n  // when the transaction has none. A condition never matches a missing\n  // field, so a \"payee is nothing\" rule would silently skip such a\n  // transaction. Match against null instead, and drop the field again\n  // afterwards so the returned shape matches the input."
+  }
+ }
+]
