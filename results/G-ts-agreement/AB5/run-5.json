@@ -1,0 +1,99 @@
+{
+  "suite": "actual",
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 5,
+  "chained": false,
+  "startState": "actual/AB5",
+  "specSha256": "b651f9c1f7c00e6e661e7532d0d6dacff172223ea531f6f0d9b0fc69c263ee8e",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 28,
+    "cacheRead": 399574,
+    "cacheWrite": 37692,
+    "output": 7844,
+    "toolResultTokens": 17161,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 26,
+    "toolCalls": 25,
+    "toolCallsByName": {
+      "Grep": 2,
+      "Read": 9,
+      "Bash": 8,
+      "Edit": 6
+    },
+    "fileReads": 9,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": 9,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 79493,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB5 R1": true,
+      "AB5 R2": true,
+      "AB5 R3": true,
+      "AB5 R4": true,
+      "AB5 R5": true,
+      "AB5 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 45,
+    "readChars": 67522,
+    "relevantChars": 47310,
+    "coreChars": 26366,
+    "precision": 0.7006605254583691,
+    "coreRecall": 1,
+    "readTokens": 16881
+  },
+  "costUsd": 0.01263204,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.01263204,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Grep": {
+      "calls": 2,
+      "outTokens": 2432,
+      "carriedTokens": 29462
+    },
+    "Read": {
+      "calls": 9,
+      "outTokens": 11498,
+      "carriedTokens": 129049
+    },
+    "Bash": {
+      "calls": 8,
+      "outTokens": 2956,
+      "carriedTokens": 16986
+    },
+    "Edit": {
+      "calls": 6,
+      "outTokens": 279,
+      "carriedTokens": 1275
+    }
+  }
+}

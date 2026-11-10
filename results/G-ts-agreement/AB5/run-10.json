@@ -1,0 +1,99 @@
+{
+  "suite": "actual",
+  "arm": "G-ts-agreement",
+  "task": "AB5",
+  "run": 10,
+  "chained": false,
+  "startState": "actual/AB5",
+  "specSha256": "b651f9c1f7c00e6e661e7532d0d6dacff172223ea531f6f0d9b0fc69c263ee8e",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "claude-agent-sdk",
+    "version": "0.3.310"
+  },
+  "usage": {
+    "inputUncached": 30,
+    "cacheRead": 409589,
+    "cacheWrite": 35736,
+    "output": 7799,
+    "toolResultTokens": 16092,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 24,
+    "toolCalls": 23,
+    "toolCallsByName": {
+      "Grep": 3,
+      "Read": 7,
+      "Edit": 8,
+      "Bash": 5
+    },
+    "fileReads": 7,
+    "repeatReads": 0,
+    "failedEdits": 1,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": 7,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 271795,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB5 R1": true,
+      "AB5 R2": true,
+      "AB5 R3": true,
+      "AB5 R4": true,
+      "AB5 R5": true,
+      "AB5 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 30,
+    "readChars": 62946,
+    "relevantChars": 44294,
+    "coreChars": 24006,
+    "precision": 0.7036825215263877,
+    "coreRecall": 1,
+    "readTokens": 15737
+  },
+  "costUsd": 0.01246539,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.01246539,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Grep": {
+      "calls": 3,
+      "outTokens": 4116,
+      "carriedTokens": 44262
+    },
+    "Read": {
+      "calls": 7,
+      "outTokens": 10316,
+      "carriedTokens": 125298
+    },
+    "Edit": {
+      "calls": 8,
+      "outTokens": 356,
+      "carriedTokens": 2082
+    },
+    "Bash": {
+      "calls": 5,
+      "outTokens": 1307,
+      "carriedTokens": 4108
+    }
+  }
+}
