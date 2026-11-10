@@ -1,0 +1,26 @@
+| Arm | Task | Run |  | cmpFixed |
+|---|---|---|---|
+| A-ts-baseline | AB1 | 70 |  | no |
+| A-ts-baseline | AB1 | 71 |  | no |
+| A-ts-baseline | AB1 | 72 |  | no |
+| A-ts-baseline | AB1 | 73 |  | no |
+| A-ts-baseline | AB1 | 74 |  | no |
+| A-ts-baseline | AB1 | 75 |  | no |
+| A-ts-baseline | AB1 | 76 |  | yes |
+| A-ts-baseline | AB1 | 77 |  | no |
+| A-ts-baseline | AB1 | 78 |  | no |
+| A-ts-baseline | AB1 | 79 |  | no |
+| A-ts-baseline | AB1 | 80 |  | no |
+| A-ts-baseline | AB1 | 81 |  | no |
+| H-ts-contracts | AB1 | 1 |  | no |
+| H-ts-contracts | AB1 | 2 |  | yes |
+| H-ts-contracts | AB1 | 3 |  | yes |
+| H-ts-contracts | AB1 | 4 |  | yes |
+| H-ts-contracts | AB1 | 5 |  | yes |
+| H-ts-contracts | AB1 | 6 |  | yes |
+| H-ts-contracts | AB1 | 7 |  | yes |
+| H-ts-contracts | AB1 | 8 |  | yes |
+| H-ts-contracts | AB1 | 9 |  | yes |
+| H-ts-contracts | AB1 | 10 |  | yes |
+| H-ts-contracts | AB1 | 11 |  | yes |
+| H-ts-contracts | AB1 | 12 |  | yes |

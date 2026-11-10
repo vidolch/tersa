@@ -1,0 +1,314 @@
+[
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 70,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return sign;\n    } else if (score1 < score2) {\n      return -sign;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 71,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 === score2) {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n    const diff = score1 > score2 ? -1 : 1;\n    return ascending ? -diff : diff;\n  });\n}\n\nexport function rankRules(rules: Iterable<Rule>): Rule[] {"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 72,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return -1;\n    } else if (score1 < score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 73,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return -1;\n    } else if (score1 < score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 74,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return -1;\n    } else if (score1 < score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 75,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 !== score2) {\n      const higherFirst = score1 > score2 ? -1 : 1;\n      return leastSpecificFirst ? -higherFirst : higherFirst;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 76,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 77,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 !== score2) {\n      const higherFirst = score1 > score2 ? -1 : 1;\n      return ascending ? -higherFirst : higherFirst;\n    }\n    const id1 = r1.getId();\n    const id2 = r2.getId();\n    return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n  });\n}\n\nfunction partitionByStage(rules: Iterable<Rule>): {"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 78,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return direction;\n    } else if (score1 < score2) {\n      return -direction;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 79,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return -1;\n    } else if (score1 < score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 80,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 !== score2) {\n      // Descending for display and normal use; ascending for application\n      return (score1 > score2) !== ascending ? -1 : 1;\n    }\n    const id1 = r1.getId();\n    const id2 = r2.getId();\n    return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n  });\n}\n\nfunction splitAndRank("
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 81,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return dir;\n    } else if (score1 < score2) {\n      return -dir;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 1,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 > score2) {\n      return 1;\n    } else if (score1 < score2) {\n      return -1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 2,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 3,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 4,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 5,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 6,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 7,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 8,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 9,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 10,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 11,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ },
+ {
+  "arm": "H-ts-contracts",
+  "task": "AB1",
+  "run": 12,
+  "cmds": {},
+  "outputs": {},
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {
+   "cmp": "    const score2 = scores.get(r2);\n    if (score1 < score2) {\n      return -1;\n    } else if (score1 > score2) {\n      return 1;\n    } else {\n      const id1 = r1.getId();\n      const id2 = r2.getId();\n      return id1 < id2 ? -1 : id1 > id2 ? 1 : 0;\n    }\n  });\n}"
+  }
+ }
+]
