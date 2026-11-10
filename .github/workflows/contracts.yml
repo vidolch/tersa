@@ -6,6 +6,9 @@ name: contracts
 on:
   workflow_dispatch:
     inputs:
+      suite:
+        description: Suite whose pristine code is documented
+        default: actual
       arm:
         description: Arm that gets the patch (arms/<arm>/patches/<task>.patch)
         default: I-ts-gencontracts
@@ -42,7 +45,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           FILES: ${{ inputs.files }}
         run: |
-          P=$(bash suites/actual/scripts/pristine.sh)
+          P=$(bash "suites/${{ inputs.suite }}/scripts/pristine.sh")
           mkdir -p "arms/${{ inputs.arm }}/patches"
           (cd query && node src/contracts.ts "$P" $FILES --model "${{ inputs.model }}" \
             --json "../arms/${{ inputs.arm }}/patches/${{ inputs.task }}.contracts.json")

@@ -1,0 +1,13 @@
+diff --git a/src/router/trie-router/node.ts b/src/router/trie-router/node.ts
+index 2fa9dfd..580b859 100644
+--- a/src/router/trie-router/node.ts
++++ b/src/router/trie-router/node.ts
+@@ -212,7 +212,7 @@ export class Node<T> {
+ 
+     if (handlerSets[1]) {
+       handlerSets.sort((a, b) => {
+-        return b.score - a.score
++        return a.score - b.score
+       })
+     }
+ 

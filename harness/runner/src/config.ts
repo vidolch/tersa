@@ -6,7 +6,7 @@ export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..")
 export const TASKS = ["T1", "T2", "T3", "T4", "T5"] as const;
 /** Task ids are unique across suites (T* = urlshort, AB* = actual). */
 export type Task = string;
-export const SUITES = ["urlshort", "actual"] as const;
+export const SUITES = ["urlshort", "actual", "hono"] as const;
 export type Suite = (typeof SUITES)[number];
 export const ARMS = ["A-ts-baseline", "B-ts-query", "B2-ts-query-shell", "C-tersa-lang", "D-ts-bundle", "F-ts-exhaustive", "G-ts-agreement", "H-ts-contracts", "I-ts-gencontracts", "P-pi-baseline", "Q-pi-contracts"] as const;
 export type Arm = (typeof ARMS)[number];

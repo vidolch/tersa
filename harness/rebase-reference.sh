@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # Rebases a task's reference solution onto an arm's code patch, for validation:
 # writes arms/<ARM>/patches/<TASK>.reference.patch (used by validate-actual.sh).
-# Usage: harness/rebase-reference.sh <ARM> <TASK>
+# Usage: [SUITE=hono] harness/rebase-reference.sh <ARM> <TASK>
 set -euo pipefail
 ARM=${1:?ARM}; TASK=${2:?TASK}
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
-S=$ROOT/suites/actual
+S=$ROOT/suites/${SUITE:-actual}
 PRISTINE=$("$S/scripts/pristine.sh")
 T=$(mktemp -d); trap 'rm -rf "$T"' EXIT
-git -C "$PRISTINE" archive HEAD packages | tar -x -C "$T"
+git -C "$PRISTINE" archive HEAD | tar -x -C "$T"
 cd "$T" && git init -q && git add -A && git -c user.name=b -c user.email=b@l commit -qm pristine
 START=$(node -p "require('$S/tasks/$TASK/task.json').startPatch || ''")
 [[ -n "$START" ]] && git apply "$S/tasks/$TASK/$START"

@@ -1,0 +1,29 @@
+{
+  "id": "HN1",
+  "type": "bug",
+  "startPatch": "start.patch",
+  "referencePatch": "reference.patch",
+  "regression": {
+    "dirs": [
+      "src/router",
+      "src/hono.test.ts"
+    ]
+  },
+  "relevant": {
+    "core": [
+      "src/router/trie-router/node.ts"
+    ],
+    "supporting": [
+      "src/router/trie-router/router.ts",
+      "src/router/smart-router/router.ts",
+      "src/hono-base.ts",
+      "src/compose.ts"
+    ]
+  },
+  "expectStartFailing": [
+    "HN1 R1",
+    "HN1 R2",
+    "HN1 R3",
+    "HN1 regression"
+  ]
+}

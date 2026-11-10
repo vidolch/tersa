@@ -1,0 +1,25 @@
+diff --git a/src/hono-base.ts b/src/hono-base.ts
+index fc95565..957a239 100644
+--- a/src/hono-base.ts
++++ b/src/hono-base.ts
+@@ -29,6 +29,11 @@ import { COMPOSED_HANDLER } from './utils/constants'
+ import { createMountedRequest } from './utils/mount'
+ import { getPath, getPathNoStrict, mergePath } from './utils/url'
+ 
++// `/files/*path`: a named wildcard as the last segment captures the rest of the path
++// (at least one character) as the param `path`. Every router already supports this as
++// a regexp param, so it's rewritten once here.
++const NAMED_WILDCARD = /\/\*([A-Za-z_$][\w$]*)$/
++
+ const notFoundHandler: NotFoundHandler = (c) => {
+   return c.text('404 Not Found', 404)
+ }
+@@ -407,7 +412,7 @@ class Hono<
+       method,
+       handler,
+     }
+-    this.router.add(method, path, [handler, r])
++    this.router.add(method, path.replace(NAMED_WILDCARD, '/:$1{.+}'), [handler, r])
+     this.routes.push(r)
+   }
+ 

@@ -1,0 +1,13 @@
+diff --git a/src/utils/accept.ts b/src/utils/accept.ts
+index 28a785c..18ba20b 100644
+--- a/src/utils/accept.ts
++++ b/src/utils/accept.ts
+@@ -233,7 +233,7 @@ export const parseAccept = (acceptHeader: string): Accept[] => {
+     }
+   }
+   if (requiresSort) {
+-    values.sort((a, b) => a.q - b.q)
++    values.sort((a, b) => b.q - a.q)
+   }
+ 
+   return values

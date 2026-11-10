@@ -1,0 +1,8 @@
+{
+  "name": "hono",
+  "repo": "https://github.com/honojs/hono",
+  "commit": "v4.13.17",
+  "commitFull": "61f7c59e50244ab4d2dd83c151928cf7ea448510",
+  "tasks": ["HN1", "HN2", "HN3", "HN4"],
+  "note": "Black-box acceptance through Hono apps built from the workspace's own source (app.request); regression = the repo's own tests at the pinned commit for the task's scope, copied over the workspace before running."
+}

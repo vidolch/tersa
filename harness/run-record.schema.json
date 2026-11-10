@@ -28,7 +28,7 @@
     "task": {
       "type": "string",
       "pattern": "^[A-Z]+\\d+$",
-      "description": "task id, unique across suites (T* urlshort, AB* actual)"
+      "description": "task id, unique across suites (T* urlshort, AB* actual, HN* hono)"
     },
     "run": {
       "type": "integer",
@@ -247,7 +247,8 @@
     "suite": {
       "enum": [
         "urlshort",
-        "actual"
+        "actual",
+        "hono"
       ]
     },
     "reading": {

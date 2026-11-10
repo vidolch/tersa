@@ -1,0 +1,32 @@
+{
+  "id": "HN3",
+  "type": "feature",
+  "startPatch": null,
+  "referencePatch": "reference.patch",
+  "regression": {
+    "dirs": [
+      "src/router",
+      "src/hono.test.ts",
+      "src/utils/url.test.ts"
+    ]
+  },
+  "relevant": {
+    "core": [
+      "src/hono-base.ts",
+      "src/utils/url.ts"
+    ],
+    "supporting": [
+      "src/router/reg-exp-router/node.ts",
+      "src/router/trie-router/node.ts",
+      "src/router/pattern-router/router.ts",
+      "src/router/linear-router/router.ts",
+      "src/request.ts"
+    ]
+  },
+  "expectStartFailing": [
+    "HN3 R1",
+    "HN3 R3",
+    "HN3 R4",
+    "HN3 R5"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "HN2",
+  "type": "bug",
+  "startPatch": "start.patch",
+  "referencePatch": "reference.patch",
+  "regression": {
+    "dirs": [
+      "src/utils/accept.test.ts",
+      "src/helper/accepts",
+      "src/middleware/language"
+    ]
+  },
+  "relevant": {
+    "core": [
+      "src/utils/accept.ts"
+    ],
+    "supporting": [
+      "src/middleware/language/language.ts",
+      "src/helper/accepts/accepts.ts"
+    ]
+  },
+  "expectStartFailing": [
+    "HN2 R1",
+    "HN2 R2",
+    "HN2 regression"
+  ]
+}

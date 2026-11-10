@@ -1,0 +1,9 @@
+{
+  "id": "HN4",
+  "type": "feature",
+  "startPatch": null,
+  "referencePatch": "reference.patch",
+  "regression": { "dirs": ["src/middleware/cors"] },
+  "relevant": { "core": ["src/middleware/cors/index.ts"], "supporting": [] },
+  "expectStartFailing": ["HN4 R1"]
+}

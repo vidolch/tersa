@@ -1,0 +1,31 @@
+diff --git a/src/middleware/cors/index.ts b/src/middleware/cors/index.ts
+index d02ae92..acf496e 100644
+--- a/src/middleware/cors/index.ts
++++ b/src/middleware/cors/index.ts
+@@ -19,6 +19,7 @@ type CORSOptions = {
+   maxAge?: number
+   credentials?: boolean
+   exposeHeaders?: string[]
++  allowPrivateNetwork?: boolean
+ }
+ 
+ /**
+@@ -33,6 +34,7 @@ type CORSOptions = {
+  * @param {number} [options.maxAge] - The value of "Access-Control-Max-Age" CORS header.
+  * @param {boolean} [options.credentials] - The value of "Access-Control-Allow-Credentials" CORS header.
+  * @param {string[]} [options.exposeHeaders=[]] - The value of "Access-Control-Expose-Headers" CORS header.
++ * @param {boolean} [options.allowPrivateNetwork=false] - Answer Private Network Access preflights ("Access-Control-Request-Private-Network: true") with "Access-Control-Allow-Private-Network: true".
+  * @returns {MiddlewareHandler} The middleware handler function.
+  *
+  * @example
+@@ -144,6 +146,10 @@ export const cors = (options?: CORSOptions): MiddlewareHandler => {
+         c.res.headers.append('Vary', 'Access-Control-Request-Headers')
+       }
+ 
++      if (opts.allowPrivateNetwork && c.req.header('Access-Control-Request-Private-Network') === 'true') {
++        set('Access-Control-Allow-Private-Network', 'true')
++      }
++
+       c.res.headers.delete('Content-Length')
+       c.res.headers.delete('Content-Type')
+ 

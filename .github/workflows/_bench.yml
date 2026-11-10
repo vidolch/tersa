@@ -169,7 +169,7 @@ jobs:
         run: |
           (cd eval/acceptance && npm ci --no-audit --no-fund)
           (cd eval/harness/runner && npm ci --no-audit --no-fund)
-          if [ "${{ inputs.suite }}" = actual ]; then (cd eval/suites/actual/acceptance && npm ci --no-audit --no-fund); fi
+          if [ -f "eval/suites/${{ inputs.suite }}/acceptance/package.json" ]; then (cd "eval/suites/${{ inputs.suite }}/acceptance" && npm ci --no-audit --no-fund); fi
       - name: Evaluate
         working-directory: eval/harness/runner
         env:

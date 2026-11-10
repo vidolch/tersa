@@ -8,8 +8,8 @@
  *   - the functions called in the output that are defined elsewhere (looked up by name),
  * each at most once per session, at most MAX_PER_RESULT per result.
  *
- * Contracts come from contracts.json next to this file: the blind, model-written contracts of
- * arm I (iterations 17–18), keyed by file and function name. Nothing is written to the files,
+ * Contracts come from contracts.<suite>.json next to this file: blind, model-written contracts
+ * (`contracts` workflow; for actual, arm I's from iterations 17–18), keyed by file and function name. Nothing is written to the files,
  * so reads of unchanged code cost nothing extra the second time and edits never see contracts.
  */
 import { existsSync, readFileSync } from "node:fs";
@@ -133,8 +133,8 @@ export function contractsFor(
   return out;
 }
 
-export default function contractsOnRead(pi: any, ctx: { workspace: string; rawDir: string }) {
-  const db = loadDb(join(dirname(fileURLToPath(import.meta.url)), "contracts.json"));
+export default function contractsOnRead(pi: any, ctx: { workspace: string; rawDir: string; suite: string }) {
+  const db = loadDb(join(dirname(fileURLToPath(import.meta.url)), `contracts.${ctx.suite}.json`));
   const shown = new Set<string>();
   let appended = 0;
   pi.on("tool_result", async (event: any) => {
