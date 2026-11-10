@@ -18,7 +18,7 @@ Everything is measured by the benchmark in this repo, so each idea has to prove 
 | **F** `F-ts-exhaustive` | TypeScript, with one language rule applied by hand: dispatch over a closed set is exhaustive (`assertNever`, typed operator lists), so adding a member breaks the build at every place that must handle it (`arms/F-ts-exhaustive/patches/`, behaviour-preserving, AB2 only) | Claude Code's standard tools | iteration 13 |
 | **G** `G-ts-agreement` | TypeScript, plus one test standing in for the language rule "one definition per operator": every operator listed in the code is run through both the rule matcher and the filter query on the same data, and must agree (`arms/G-ts-agreement/patches/`: AB2 = string operators, iteration 14; AB5 = the generic, pre-registered version for all types, iteration 15) | Claude Code's standard tools | iteration 14 |
 | **H** `H-ts-contracts` | TypeScript, plus a one-line contract comment on every function of the module the task touches (`arms/H-ts-contracts/patches/`, AB1 only; comments only) | Claude Code's standard tools | iteration 16 |
-| **I** `I-ts-gencontracts` | TypeScript, plus contract comments for every function of the task's relevant files, written by a model from the correct code without seeing the task (`query/src/contracts.ts`, `contracts` workflow; AB1 only) | Claude Code's standard tools | iteration 17 |
+| **I** `I-ts-gencontracts` | TypeScript, plus contract comments for every function of the task's relevant files, written by a model from the correct code without seeing the task (`query/src/contracts.ts`, `contracts` workflow; all tasks) | Claude Code's standard tools | iterations 17–18 |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
 **B vs A** isolates the query layer. **F vs A** and **G vs A** each test one language rule without building the language. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
@@ -171,6 +171,7 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 15 (pre-registered): new task AB5 had no trap; both arms 12/12, the check costs +14%; generalisation unanswered
 - [x] Iteration 16: AB1 always fails because agents treat the bug as intended; contract comments (arm H) → 12/12 vs 1/12, 40× lower cost per pass
 - [x] Iteration 17: model-generated contracts, blind to the task (arm I): 10/12 vs 1/12, 19× lower cost per pass
+- [ ] Iteration 18: arm I vs A on all five tasks
 - [ ] Later: run the agreement check automatically (as the toolchain would) instead of relying on the agent running tests
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next

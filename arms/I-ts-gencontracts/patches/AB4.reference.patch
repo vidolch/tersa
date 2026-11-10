@@ -1,0 +1,13 @@
+diff --git a/packages/loot-core/src/server/budget/envelope.ts b/packages/loot-core/src/server/budget/envelope.ts
+index dd25e8e..0ef5fc0 100644
+--- a/packages/loot-core/src/server/budget/envelope.ts
++++ b/packages/loot-core/src/server/budget/envelope.ts
+@@ -180,7 +180,7 @@ export function createSummary(groups, categories, prevSheetName, sheetName) {
+       data = unflatten2(data);
+       return safeNumber(
+         data.reduce((total, [leftover, carryover]) => {
+-          if (!carryover) {
++          if (carryover) {
+             return total;
+           }
+           return total + Math.min(0, number(leftover));

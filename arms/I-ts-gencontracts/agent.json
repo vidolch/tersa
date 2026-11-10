@@ -11,6 +11,10 @@
   "mcpServers": {},
   "contextFiles": [],
   "codePatches": {
-    "AB1": "patches/AB1.patch"
+    "AB1": "patches/AB1.patch",
+    "AB2": "patches/AB2.patch",
+    "AB3": "patches/AB3.patch",
+    "AB4": "patches/AB4.patch",
+    "AB5": "patches/AB5.patch"
   }
 }

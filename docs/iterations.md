@@ -614,3 +614,11 @@ Passes: Fisher p = 0.0006. Probe (`results/analysis/it17-ab1.probe.json`): all 1
 **For Tersa.** Two of the three rules tested have a measured effect, and this one is cheap to apply to existing code: generating contracts cost a few cents and needed no knowledge of where bugs are. In the language, the contract is part of the function's signature and written when the function is written; the toolchain can then also check that it still describes the code. That keeps contracts current when code changes, and it stops a contract from being "fixed" to match a bug. In TypeScript today, the measured effect is available as plain comments.
 
 Records: `results/A-ts-baseline/AB1/run-82..93.json`, `results/I-ts-gencontracts/AB1/run-1..12.json`; contracts: `arms/I-ts-gencontracts/patches/AB1.contracts.json`.
+
+## Iteration 18 — Generated contracts on every task (arm I, AB1–AB5)
+
+**Question.** Iteration 17 showed blind, model-written contracts fixing AB1. Do they help, or cost, on the other tasks? There, nothing contradicts a contract, so the contracts are just more text to read. On AB2 they might help: the generated contract for `unicodeLike` says the LIKE pattern is translated "with no anchors" and "matches anywhere within `value`", which is exactly the trap of iterations 12–14.
+
+**Change.** Contracts generated the same way for every task's relevant `.ts` files (`contracts` workflow, one run per task; now in batches of 20 functions per request, after two first attempts failed on large files): AB2 57 contracts in 6 files, AB3 170 in 6, AB4 33 in 3, AB5 55 in 5 (AB1: 53 in 3, iteration 17). Where a task's reference solution doesn't apply on top of the comments (a new function inserted next to a commented one), `harness/rebase-reference.sh` (new) rebases it for validation; `ARM=I-ts-gencontracts harness/validate-actual.sh` passes for all five tasks.
+
+**Run.** All five tasks, `claude-haiku-5-5`, `effort=low`, 6 runs per task per arm, same period: A runs 100–105, I runs 13–18 (one run range for all tasks; AB1 runs 1–12 are iteration 17).
