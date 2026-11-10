@@ -60,7 +60,9 @@ Everything runs in GitHub Actions; no local machine is needed.
 | `ci` | every push | self-check of the urlshort suite through the real pipeline; query-layer typecheck and tests | free |
 | `validate-actual` | push to the Actual suite, harness or query layer | every Actual task: the start state fails exactly as expected and the reference fix passes; the query layer reaches every task's core files | free |
 | `bench-baseline` | manual | arm A batch: suite × tasks × runs | API credits |
-| `bench-query` | manual | arm B or B2 batch, same steps (`_bench.yml` is shared) | API credits |
+| `bench-query` | manual | treatment arm batch (B, B2, D, F, G, H, I), same steps (`_bench.yml` is shared); both bench forms take `model_options` (e.g. `effort=low`) | API credits |
+| `anatomy` | manual | token anatomy and `probe.ts` checks (commands run, outputs seen, final code) of finished batches, from their uploaded transcripts; writes `results/analysis/` | Actions minutes |
+| `contracts` | manual | model-written contract comments for given files of the pristine code (`query/src/contracts.ts`), committed as an arm's code patch | API credits (cents) |
 | `contracts` | Generates model-written contract comments for given files of the pristine code and commits them as an arm's code patch |
 | `summary` | after each batch, or a push to `results/` | rebuilds `results/summary.md` (one at a time, so batches never conflict) | free |
 
