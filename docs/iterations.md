@@ -490,3 +490,32 @@ Checks: at the start state 31/31 cases pass. With the `$like` implementation fro
 **Run.** AB2 only, `claude-haiku-5-5`, `effort=low`, 12 runs per arm, same period: A runs 58–69, G runs 1–12.
 
 **Expected if the hypothesis holds.** G passes R5 clearly more often than A (A: 4/12 and 2/6 in earlier low-effort batches), at similar or slightly higher cost (an extra test run and a fix). The probe will show whether G's agents ran the agreement test at all; if they mostly didn't, the check only helps when the harness or the language runs it, not when it merely exists.
+
+**Result** (`node src/compare.ts "A low (it.14)=results/A-ts-baseline@58-69" "G low (it.14)=results/G-ts-agreement@1-12" --suite actual --model claude-haiku-5-5`):
+
+| Arm, `effort=low` | Pass | Cost per pass | Mean cost per run | Turns per run |
+|---|---|---|---|---|
+| A (runs 58–69) | 6/12 | $0.0231 | $0.0115 | 18.4 |
+| G (runs 1–12) | **11/12** | **$0.0144 (−38%)** | $0.0132 (+15%, p = 0.34) | 22.1 (p = 0.22) |
+
+Passes, same period: Fisher p = 0.069. Pooled with the earlier low-effort arm A batches on AB2 (iterations 12–14, 14/30), G's 11/12 gives p ≈ 0.006, with the caveat that the pooled batches aren't all from the same period. For reference, default effort without the test: 6/6 at $0.030 per pass (iteration 12), so **G at low effort is about half the cost of default effort at nearly the same pass rate.**
+
+Same mechanism as iteration 13: every A failure uses `$like`, every pass an anchored regexp. In G, 11 runs use a regexp and 1 uses `$like` (run 8, the only failure). The agreement test file was left unchanged in all 12 G runs.
+
+How the test acted (`results/analysis/it14-ab2-G.probe.json`, new `--output` option of `probe.ts`: tool results that mention the test, and those showing it failing):
+
+| G runs | What happened | Outcome |
+|---|---|---|
+| 1, 4, 9, 12 | ran the test, saw `startsWith` cases fail (turns 12–16), fixed the filter | pass |
+| 2, 3, 6, 10 | saw the test file in output (listing or a test run), never saw it fail | pass |
+| 5, 7, 11 | never saw it in tool output (may have read it with Read, which this probe can't tell) | pass |
+| 8 | never saw it, used `$like` | **fail** |
+
+**Conclusion.** Hypothesis supported, with a clear mechanism. A check that the two evaluators of an operator agree turned the `$like` trap from a silent failure into a test failure, and at least 4 of 12 low-effort runs were rescued by it directly. The one failure is a run that never ran it. The cheap setting then keeps most of its saving: −38% cost per pass against low-effort A, about −50% against default effort.
+
+**For Tersa:**
+- The language rule behind this (one definition per operator, with every evaluator derived from it, or at least checked against it) is the first rule in this project with a measured effect on cost per passing task.
+- The remaining failure is an agent that didn't run the check. In the language, the check wouldn't be optional: either it holds by construction (one definition), or the toolchain runs it as part of the build, the way the typechecker runs. The next harness-level test of that is to run the agreement check automatically after edits instead of leaving it in the test suite.
+- Iterations 13 and 14 together: guaranteeing that every place is *touched* (exhaustiveness) didn't help, because the agents already found every place. Guaranteeing that the places *agree* did help. Agents' weak point here is semantics, not navigation.
+
+Records: `results/A-ts-baseline/AB2/run-58..69.json`, `results/G-ts-agreement/AB2/run-1..12.json`.
