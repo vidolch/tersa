@@ -6,13 +6,14 @@
  * --cmd   counts Bash commands matching regex; reports how many, the turn of the first, and whether
  *         any/the last output contained "error" lines (TS errors, test failures).
  * --file  whether the final file at relpath (inside the run's workspace) matches regex.
+ * --extract  the 12 lines starting at the first match of regex in the final file at relpath (JSON output only).
  * Finds runs as .../<arm>/<task>/run-<n>/transcript.jsonl under <dir>.
  */
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 
 interface CmdStat { count: number; firstTurn: number | null; anyError: boolean; lastError: boolean | null }
-export interface Probe { arm: string; task: string; run: number; cmds: Record<string, CmdStat>; files: Record<string, boolean | null> }
+export interface Probe { arm: string; task: string; run: number; cmds: Record<string, CmdStat>; files: Record<string, boolean | null>; extracts: Record<string, string | null> }
 
 const ERROR_LINE = /error TS\d+|\bFAIL\b|✗|AssertionError|Error:/;
 
@@ -85,11 +86,13 @@ function main() {
   const dir = args[0];
   const cmds: Record<string, RegExp> = {};
   const files: Record<string, { rel: string; re: RegExp }> = {};
+  const extracts: Record<string, { rel: string; re: RegExp }> = {};
   let jsonOut: string | null = null;
   for (let i = 1; i < args.length; i++) {
     const v = args[i + 1] ?? "";
     if (args[i] === "--cmd") { const [k, ...r] = v.split("="); cmds[k] = new RegExp(r.join("=")); i++; }
     else if (args[i] === "--file") { const [k, ...r] = v.split("="); const s = r.join("="); const c = s.indexOf(":"); files[k] = { rel: s.slice(0, c), re: new RegExp(s.slice(c + 1)) }; i++; }
+    else if (args[i] === "--extract") { const [k, ...r] = v.split("="); const s = r.join("="); const c = s.indexOf(":"); extracts[k] = { rel: s.slice(0, c), re: new RegExp(s.slice(c + 1)) }; i++; }
     else if (args[i] === "--json") { jsonOut = v; i++; }
   }
   const rows: Probe[] = [];
@@ -101,7 +104,15 @@ function main() {
       arm: parts[n - 4], task: parts[n - 3], run: Number(parts[n - 2].replace("run-", "")),
       cmds: probeTranscript(readFileSync(t, "utf8").split("\n"), cmds),
       files: {},
+      extracts: {},
     };
+    for (const [k, f] of Object.entries(extracts)) {
+      const p = findFile(runDir, f.rel);
+      if (!p) { row.extracts[k] = null; continue; }
+      const lines = readFileSync(p, "utf8").split("\n");
+      const i = lines.findIndex((l) => f.re.test(l));
+      row.extracts[k] = i < 0 ? null : lines.slice(i, i + 12).join("\n");
+    }
     for (const [k, f] of Object.entries(files)) {
       const p = findFile(runDir, f.rel);
       row.files[k] = p ? f.re.test(readFileSync(p, "utf8")) : null;
