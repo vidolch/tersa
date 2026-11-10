@@ -1,0 +1,1394 @@
+[
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 28,
+  "cmds": {
+   "typecheck": {
+    "count": 6,
+    "firstTurn": 20,
+    "anyError": true,
+    "lastError": false
+   },
+   "tests": {
+    "count": 9,
+    "firstTurn": 13,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 29,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 18,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 11,
+    "firstTurn": 18,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 30,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 22,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 10,
+    "firstTurn": 12,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 31,
+  "cmds": {
+   "typecheck": {
+    "count": 3,
+    "firstTurn": 19,
+    "anyError": true,
+    "lastError": false
+   },
+   "tests": {
+    "count": 6,
+    "firstTurn": 14,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 32,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 17,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 33,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 16,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 4,
+    "firstTurn": 13,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 34,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 35,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 6,
+    "firstTurn": 9,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 36,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 16,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 7,
+    "firstTurn": 10,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 37,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 22,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 11,
+    "firstTurn": 12,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 38,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 19,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 5,
+    "firstTurn": 12,
+    "anyError": true,
+    "lastError": true
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB1",
+  "run": 39,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 6,
+    "firstTurn": 8,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 28,
+  "cmds": {
+   "typecheck": {
+    "count": 3,
+    "firstTurn": 22,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 6,
+    "firstTurn": 21,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 3,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // `value` is already lowercased by the condition parser and the\n        // field is lowercased via `$lower` in `apply`. The LIKE helper is\n        // not anchored, so use an anchored, escaped regexp instead.\n        return apply(\n          field,\n          '$regexp',\n          '^' + value.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 29,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 35,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 6,
+    "firstTurn": 24,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored, escaped regex on the lowercased field (the value is\n        // already lowercased by the condition parser). A `$like` pattern\n        // would treat `%` and `_` in the user's text as wildcards.\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$regexp',\n          '^' + escapeRegExp(value),\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 30,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 14,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 4,
+    "firstTurn": 14,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored regex rather than LIKE so `%` and `_` in the value are\n        // matched literally. The `$lower` transform applied by `apply` for\n        // string fields lowercases the column, and the value is already\n        // lowercased at parse time.\n        return apply(\n          field,\n          '$regexp',\n          '^' + value.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n\n      case 'notOneOf':"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 31,
+  "cmds": {
+   "typecheck": {
+    "count": 3,
+    "firstTurn": 20,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 4,
+    "firstTurn": 18,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 2,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        return apply(field, '$regexp', makeStartsWithAqlRegex(value));\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$notlike',\n          '%' + value + '%',\n        );\n      case 'oneOf':\n        const values = value;"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 32,
+  "cmds": {
+   "typecheck": {
+    "count": 7,
+    "firstTurn": 16,
+    "anyError": true,
+    "lastError": true
+   },
+   "tests": {
+    "count": 8,
+    "firstTurn": 24,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 2,
+    "firstTurn": 11,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored at the start of the field; `$like` can't be used here\n        // because its matching is not anchored.\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$regexp',\n          makeStartsWithRegex(value),\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 33,
+  "cmds": {
+   "typecheck": {
+    "count": 4,
+    "firstTurn": 16,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 9,
+    "firstTurn": 15,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 3,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored, case-insensitive prefix match. The SQL LIKE helper is\n        // not anchored, so a case-insensitive regexp is used instead.\n        return apply(field, '$regexp', startsWithRegExpSource(value));\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 34,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 4,
+    "firstTurn": 9,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith': {\n        // Anchored, case-insensitive regex built from the literal value so\n        // that LIKE wildcards (`_`, `%`) in the value are matched literally.\n        const pattern =\n          '^' +\n          Array.from(String(value))\n            .map(ch => {\n              const lower = ch.toLowerCase();\n              const upper = ch.toUpperCase();\n              if (lower !== upper) {\n                return `[${lower}${upper}]`;\n              }"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 35,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 12,
+    "anyError": true,
+    "lastError": true
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 14,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 1,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Case-insensitive prefix match. Like `contains`, this uses the\n        // normalised LIKE comparison.\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$like',\n          value + '%',\n        );\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply("
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 36,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // `value` is already lowercased and `apply` lowercases the field\n        // via `$lower`, so a case-sensitive anchored regex gives a\n        // case-insensitive prefix match.\n        return apply(\n          field,\n          '$regexp',\n          '^' + String(value).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 37,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 11,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 4,
+    "firstTurn": 11,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 1,
+    "firstTurn": 7,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Case-insensitive prefix match. `apply` lowercases the field, so\n        // the pattern is lowercased and regex-escaped to match literally.\n        return apply(\n          field,\n          '$regexp',\n          '^' + String(value).toLowerCase().replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply("
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 38,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith':\n        return apply(field, '$like', value + '%');\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n\n      case 'hasTags': {\n        const tagValues = extractTagsForFilter(value);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 39,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 12,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": "      case 'startsWith': {\n        // The value is already lowercased by the condition parser and the\n        // field is lowercased by `$lower`, so an anchored regex gives a\n        // case-insensitive prefix match. Escape the value so that regex\n        // metacharacters are matched literally.\n        const escaped = String(value).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\n        return apply(field, '$regexp', '^' + escaped);\n      }\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply("
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 28,
+  "cmds": {
+   "typecheck": {
+    "count": 4,
+    "firstTurn": 10,
+    "anyError": true,
+    "lastError": false
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 14,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 29,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 9,
+    "anyError": true,
+    "lastError": true
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 19,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 30,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 4,
+    "firstTurn": 9,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 31,
+  "cmds": {
+   "typecheck": {
+    "count": 3,
+    "firstTurn": 13,
+    "anyError": true,
+    "lastError": false
+   },
+   "tests": {
+    "count": 4,
+    "firstTurn": 9,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 32,
+  "cmds": {
+   "typecheck": {
+    "count": 3,
+    "firstTurn": 15,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 20,
+    "anyError": true,
+    "lastError": true
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 33,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 12,
+    "anyError": true,
+    "lastError": false
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 15,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 34,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 5,
+    "anyError": true,
+    "lastError": true
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 5,
+    "anyError": true,
+    "lastError": true
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 35,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 8,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 36,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": true,
+    "lastError": true
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 9,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 37,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 10,
+    "anyError": true,
+    "lastError": true
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 11,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 38,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 6,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 7,
+    "anyError": true,
+    "lastError": true
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB3",
+  "run": 39,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 6,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 6,
+    "anyError": true,
+    "lastError": true
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 28,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 14,
+    "firstTurn": 5,
+    "anyError": true,
+    "lastError": true
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 29,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 7,
+    "firstTurn": 5,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 30,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 6,
+    "firstTurn": 5,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 31,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 9,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 32,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 10,
+    "firstTurn": 13,
+    "anyError": true,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 33,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 4,
+    "firstTurn": 5,
+    "anyError": false,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 34,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 4,
+    "anyError": true,
+    "lastError": true
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 35,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 5,
+    "anyError": false,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 36,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 4,
+    "anyError": true,
+    "lastError": true
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 37,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 4,
+    "anyError": false,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 38,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 5,
+    "anyError": false,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB4",
+  "run": 39,
+  "cmds": {
+   "typecheck": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 5,
+    "anyError": false,
+    "lastError": false
+   },
+   "readlike": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   }
+  },
+  "files": {},
+  "extracts": {
+   "aql": null
+  }
+ }
+]
