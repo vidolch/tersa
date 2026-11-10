@@ -1,0 +1,2402 @@
+[
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN1",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN1",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN1",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN1",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN1",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN1",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN1",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN1",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN2",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN2",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN2",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN2",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN2",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN2",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN2",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN2",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN3",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN3",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN3",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN3",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN3",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN3",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN3",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN3",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN4",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN4",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN4",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN4",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN4",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN4",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN4",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "HN4",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN1",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN1",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN1",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN1",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN1",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN1",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN1",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN1",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN2",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN2",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN2",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN2",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN2",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN2",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN2",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN2",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN3",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN3",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN3",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN3",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN3",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN3",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN3",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN3",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN4",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN4",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN4",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN4",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN4",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN4",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN4",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "HN4",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN1",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN1",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN1",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN1",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN1",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN1",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN1",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN1",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN2",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 2,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN2",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 2,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 1,
+    "firstTurn": 1
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN2",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 2,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 1,
+    "firstTurn": 1
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN2",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 2
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN2",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 2,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 1,
+    "firstTurn": 1
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN2",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 2
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN2",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 2,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 1,
+    "firstTurn": 1
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN2",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 2,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 1,
+    "firstTurn": 1
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN3",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 6,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN3",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN3",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN3",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN3",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 2,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN3",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 6,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN3",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 8,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN3",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN4",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN4",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN4",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN4",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN4",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN4",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN4",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "HN4",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "searchContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "acceptContract": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "trieFixed": true,
+   "acceptFixed": true
+  },
+  "extracts": {}
+ }
+]
