@@ -13,10 +13,9 @@
  * default export is an extension factory); it runs inside pi and can rewrite tool results.
  */
 import { createWriteStream, existsSync, mkdirSync, mkdtempSync, readFileSync } from "node:fs";
-import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   createAgentSession,
   DefaultResourceLoader,
@@ -30,11 +29,9 @@ import { paths } from "./config.ts";
 import { MetricsCollector } from "./metrics.ts";
 
 export function piVersion(): string {
-  const require = createRequire(import.meta.url);
-  const main = require.resolve("@earendil-works/pi-coding-agent");
-  let dir = dirname(main);
-  while (!existsSync(join(dir, "package.json"))) dir = dirname(dir);
-  return JSON.parse(readFileSync(join(dir, "package.json"), "utf8")).version;
+  // The package exports no ./package.json and no "main"; read it from node_modules directly.
+  const pkg = join(dirname(fileURLToPath(import.meta.url)), "..", "node_modules", "@earendil-works", "pi-coding-agent", "package.json");
+  return existsSync(pkg) ? JSON.parse(readFileSync(pkg, "utf8")).version : "unknown";
 }
 
 export const PI_TOOLS = ["read", "bash", "edit", "write"];
