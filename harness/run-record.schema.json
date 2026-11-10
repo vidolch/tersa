@@ -22,7 +22,7 @@
         "B-ts-query",
         "B2-ts-query-shell",
         "C-tersa-lang",
-        "D-ts-bundle", "F-ts-exhaustive", "G-ts-agreement"
+        "D-ts-bundle", "F-ts-exhaustive", "G-ts-agreement", "H-ts-contracts"
       ]
     },
     "task": {

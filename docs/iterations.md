@@ -554,3 +554,15 @@ Probe (`results/analysis/it15-ab5.probe.json`): 10 of 12 G runs ran the check, g
 **Limit of the method.** Writing a task with a trap in it after seeing the check would bias the test, and writing one without knowing whether it has a trap (as here) can come out empty. A fairer source of traps is disagreements that already exist upstream: the generic check found one at the pinned commit (`contains` with `%`/`_`, iteration 14). A task that touches that code would be a trap nobody designed.
 
 Records: `results/A-ts-baseline/AB5/run-1..18.json`, `results/G-ts-agreement/AB5/run-1..12.json`.
+
+## Iteration 16 — Why AB1 always fails, and stated contracts (arm H)
+
+**AB1 failure analysis (no new runs).** AB1 has failed in nearly every run of every arm and setting (0–1/6). The probe on iteration 12's AB1 runs (`results/analysis/ab1-fixes*.probe.json`) shows what agents do. They find the seeded comparator flip in `_rankRules` (most specific first), but **decide it is intended**: "most specific first" reads like a sensible display order. Then they add a separate execution order, an `ascending`/`descending` flag or a reversed copy at the `runRules` call site, with comments like "Order in which rules must be *executed*… the most specific rule has to run last". The API-visible symptom is fixed (R1–R4 pass), but `rankRules` still returns the wrong order to its other callers (the API's `getRules`, the rules list), which the restored upstream test (`rules are deterministically ranked`) catches. Only run 32 of 12 fixed the comparator itself.
+
+The cause is the **missing contract**: nothing in the code says which direction `rankRules` returns. Its only comment says the order must be deterministic. The one place that stated the direction was the upstream test that the task removes. So agents have to infer intent, and the seeded bug looks like intent.
+
+**Hypothesis.** If functions carry their contract (a Tersa rule: every function states what it returns, as part of its signature), the agent can see that the implementation violates the contract and fixes the implementation rather than working around it.
+
+**Change: arm H** = arm A plus contract comments on **every** function in `rule-utils.ts` (9 functions: `assert`, `computeScore`, `_rankRules`, `rankRules`, `migrateIds`, `iterateIds`, `parseRecurDate`, `parseDateString`, `parseBetweenAmount`), each a short "Contract:" doc comment describing upstream behaviour (`arms/H-ts-contracts/patches/AB1.patch`, comments only). All functions, not just the one with the bug, so the treatment is "the module documents its contracts", not a pointed hint. Still, the honest framing is that this measures **the value of a stated contract when the implementation contradicts it**, not whether agents can infer unstated intent. `ARM=H-ts-contracts harness/validate-actual.sh AB1` passes.
+
+**Run.** AB1, `claude-haiku-5-5`, `effort=low`, 12 runs per arm, same period: A runs 70–81, H runs 1–12.
