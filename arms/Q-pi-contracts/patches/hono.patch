@@ -1,0 +1,1141 @@
+diff --git a/src/compose.ts b/src/compose.ts
+index b1d4508..9ece009 100644
+--- a/src/compose.ts
++++ b/src/compose.ts
+@@ -12,6 +12,16 @@ import type { Env, ErrorHandler, Next, NotFoundHandler } from './types'
+  *
+  * @returns {(context: Context, next?: Next) => Promise<Context>} - A composed middleware function.
+  */
++/**
++ * Contract: Takes a middleware array of `[[handler, ...], param]` tuples and optional error
++ * and not-found handlers, and returns a function `(context, next?) => Promise<Context>`
++ * without invoking any middleware. The returned function runs the middleware in array order
++ * starting at index 0; each dispatch index must strictly exceed the previous one or it throws
++ * `'next() called multiple times'`, the current index is written to `context.req.routeIndex`,
++ * and the resolved value is the same `context`, with a truthy handler result assigned to
++ * `context.res` only while `context.finalized` is false or after an error was handled by
++ * `onError`.
++ */
+ export const compose = <E extends Env = Env>(
+   middleware: [[Function, unknown], unknown][] | [[Function]][],
+   onError?: ErrorHandler<E>,
+diff --git a/src/helper/accepts/accepts.ts b/src/helper/accepts/accepts.ts
+index 1d5fbef..cc9e752 100644
+--- a/src/helper/accepts/accepts.ts
++++ b/src/helper/accepts/accepts.ts
+@@ -18,6 +18,13 @@ export interface acceptsOptions extends acceptsConfig {
+   match?: (accepts: Accept[], config: acceptsConfig) => string
+ }
+ 
++/**
++ * Contract: Takes an Accept entry type and a supported type and returns a boolean after
++ * lowercasing both. It returns true when they are equal, returns false when the accept type is
++ * `* /*` or `*`, and returns true for an accept type ending in `/*` only when its main type
++ * matches the supported type's main type. Any other pair returns false, and a wildcard on the
++ * supported side is never matched.
++ */
+ const matchType = (acceptType: string, supportedType: string): boolean => {
+   // Media types and language tags are both case-insensitive (RFC 9110 §8.3.1,
+   // RFC 4647 §2.1), so compare them case-folded. `defaultMatch` returns the
+@@ -39,6 +46,11 @@ const matchType = (acceptType: string, supportedType: string): boolean => {
+   return false
+ }
+ 
++/**
++ * Contract: Takes a media range string and returns 1 for `* /*` or `*`, 2 for a type ending in
++ * `/*`, and 3 for any other value. The comparison is case-sensitive and the input is not
++ * normalized.
++ */
+ const getSpecificity = (type: string): number => {
+   if (type === '*/*' || type === '*') {
+     return 1
+@@ -49,6 +61,15 @@ const getSpecificity = (type: string): number => {
+   return 3
+ }
+ 
++/**
++ * Contract: Takes parsed Accept entries and a config and returns one string from
++ * `config.supports` (preserving its original casing) or `config.default` when nothing matches.
++ * Exact types, including those with q=0, are collected case-folded so that a subtype wildcard
++ * cannot match a supported value the client explicitly listed. Entries with q greater than 0
++ * are then ordered by descending q and, for equal q, by descending specificity, and the first
++ * entry that matches a supported value wins. The `default` value is returned without being
++ * checked against `supports`.
++ */
+ export const defaultMatch = (accepts: Accept[], config: acceptsConfig): string => {
+   const { supports, default: defaultSupport } = config
+   // An exact media type determines its quality even when a subtype wildcard
+@@ -96,6 +117,12 @@ export const defaultMatch = (accepts: Accept[], config: acceptsConfig): string =
+  * })
+  * ```
+  */
++/**
++ * Contract: Takes a context and options and returns a string. It reads the request header
++ * named by `options.header`, and if that header is missing or empty it returns
++ * `options.default`. Otherwise it parses the header with `parseAccept` and returns the result
++ * of `options.match` if provided, or of `defaultMatch` if not, without validating that result.
++ */
+ export const accepts = (c: Context, options: acceptsOptions): string => {
+   const acceptHeader = c.req.header(options.header)
+   if (!acceptHeader) {
+diff --git a/src/hono-base.ts b/src/hono-base.ts
+index fc95565..0089b5a 100644
+--- a/src/hono-base.ts
++++ b/src/hono-base.ts
+@@ -29,10 +29,19 @@ import { COMPOSED_HANDLER } from './utils/constants'
+ import { createMountedRequest } from './utils/mount'
+ import { getPath, getPathNoStrict, mergePath } from './utils/url'
+ 
++/**
++ * Contract: Takes a Context and returns a text Response with the body '404 Not Found' and
++ * status 404. It does not modify the context beyond creating that response.
++ */
+ const notFoundHandler: NotFoundHandler = (c) => {
+   return c.text('404 Not Found', 404)
+ }
+ 
++/**
++ * Contract: Takes an error and a Context. If the error has a 'getResponse' property, it
++ * returns a new Response built from that response's body and init. Otherwise it logs the error
++ * with console.error and returns a text Response 'Internal Server Error' with status 500.
++ */
+ const errorHandler: ErrorHandler = (err, c) => {
+   if ('getResponse' in err) {
+     const res = err.getResponse()
+@@ -140,6 +149,14 @@ class Hono<
+ 
+   routes: RouterRoute[] = []
+ 
++  /**
++   * Contract: Takes an optional options object (default {}). It defines a method on the instance
++   * for each HTTP method and for 'all', `on`, and `use`, where a string first argument sets the
++   * current path and other arguments register routes under that path. It removes `strict` from
++   * the options, assigns the remaining options onto the instance, and sets `getPath` to
++   * `options.getPath ?? getPath` when strict is true or omitted, or to `getPathNoStrict` when
++   * strict is false.
++   */
+   constructor(options: HonoOptions<E> = {}) {
+     // Implementation of app.get(...handlers[]) or app.get(path, ...handlers[])
+     const allMethods = [...METHODS, METHOD_NAME_ALL_LOWERCASE]
+@@ -191,6 +208,12 @@ class Hono<
+     this.getPath = (strict ?? true) ? (options.getPath ?? getPath) : getPathNoStrict
+   }
+ 
++  /**
++   * Contract: Takes no arguments and returns a new Hono instance that shares this instance's
++   * router and getPath, copies its errorHandler and #notFoundHandler, and references the same
++   * routes array. The clone's base path is not copied and remains '/'. The original instance is
++   * not modified.
++   */
+   #clone(): Hono<E, S, BasePath, CurrentPath> {
+     const clone = new Hono<E, S, BasePath, CurrentPath>({
+       router: this.router,
+@@ -224,6 +247,13 @@ class Hono<
+    * app.route("/api", app2) // GET /api/user
+    * ```
+    */
++  /**
++   * Contract: Takes a path and another Hono instance, and for each route in that instance's
++   * routes array registers it on this instance under the path prefix via a basePath-derived
++   * clone. A route's handler is used directly if the sub-app uses the default errorHandler;
++   * otherwise it is wrapped so errors go through the sub-app's errorHandler and the original
++   * handler is tagged with COMPOSED_HANDLER. Returns this instance.
++   */
+   route<
+     SubPath extends string,
+     SubEnv extends Env,
+@@ -263,6 +293,10 @@ class Hono<
+    * const api = new Hono().basePath('/api')
+    * ```
+    */
++  /**
++   * Contract: Takes a path and returns a new cloned Hono instance whose _basePath is the merge
++   * of this instance's _basePath and the given path. The receiver is not modified.
++   */
+   basePath<SubPath extends string>(
+     path: SubPath
+   ): Hono<E, S, MergePath<BasePath, SubPath>, MergePath<BasePath, SubPath>> {
+@@ -346,6 +380,14 @@ class Hono<
+    * })
+    * ```
+    */
++  /**
++   * Contract: Takes a path, an application request handler, and optional options, and registers
++   * an ALL-method middleware at the path followed by '*'. Options may supply an optionHandler
++   * and/or replaceRequest (false means the request is passed unchanged); otherwise the extra
++   * arguments are [env, executionCtx]. On each request the middleware calls the application
++   * handler with the (possibly replaced) request and those extra arguments, returns its Response
++   * if truthy, and otherwise calls next. Returns this instance.
++   */
+   mount(
+     path: string,
+     applicationHandler: (request: Request, ...args: any) => Response | Promise<Response>,
+@@ -398,6 +440,12 @@ class Hono<
+     return this
+   }
+ 
++  /**
++   * Contract: Takes a method, a path, a handler, and an optional base route path. It prefixes
++   * the path with this instance's _basePath, builds a RouterRoute whose basePath is the merged
++   * baseRoutePath when provided or otherwise _basePath, registers [handler, route] with the
++   * router for the method and path, and appends the route to this.routes. Returns nothing.
++   */
+   #addRoute(method: string, path: string, handler: H, baseRoutePath?: string): void {
+     path = mergePath(this._basePath, path)
+     const r: RouterRoute = {
+@@ -411,6 +459,10 @@ class Hono<
+     this.routes.push(r)
+   }
+ 
++  /**
++   * Contract: Takes an unknown error and a Context. If the error is an Error instance, it
++   * returns the result of this.errorHandler(err, c); otherwise it rethrows the value unchanged.
++   */
+   #handleError(err: unknown, c: Context<E>): Response | Promise<Response> {
+     if (err instanceof Error) {
+       return this.errorHandler(err, c)
+@@ -418,6 +470,17 @@ class Hono<
+     throw err
+   }
+ 
++  /**
++   * Contract: Takes a request, an execution context, env bindings, and a method. For 'HEAD' it
++   * returns a Response with a null body built from the 'GET' dispatch result. Otherwise it
++   * resolves the path with getPath, matches the router for method and path, and creates a
++   * Context. With exactly one matched handler it calls that handler directly, substituting the
++   * not-found handler when the result is undefined and the context is not finalized, and routing
++   * thrown or rejected errors to #handleError. With multiple matched handlers it runs them
++   * through compose with errorHandler and notFoundHandler, throws an Error if the resulting
++   * context is not finalized, and otherwise returns context.res, with errors routed to
++   * #handleError.
++   */
+   #dispatch(
+     request: Request,
+     executionCtx: ExecutionContext | FetchEventLike | undefined,
+diff --git a/src/middleware/cors/index.ts b/src/middleware/cors/index.ts
+index d02ae92..8b121f9 100644
+--- a/src/middleware/cors/index.ts
++++ b/src/middleware/cors/index.ts
+@@ -60,6 +60,15 @@ type CORSOptions = {
+  * })
+  * ```
+  */
++/**
++ * Contract: Takes an optional CORSOptions object and returns a MiddlewareHandler without
++ * processing any request. It merges the options over defaults (origin '*', the standard
++ * allowMethods list, empty allowHeaders and exposeHeaders), so an explicitly provided
++ * undefined value overrides its default. It precomputes the comma-joined exposeHeaders and
++ * allowHeaders strings (undefined when empty), and builds the origin resolver (wildcard, exact
++ * string, array membership, or the supplied function) and the methods resolver (joined array,
++ * empty string, or the awaited function result joined with commas).
++ */
+ export const cors = (options?: CORSOptions): MiddlewareHandler => {
+   const opts = {
+     origin: '*',
+diff --git a/src/middleware/language/language.ts b/src/middleware/language/language.ts
+index 2e43926..8debeb5 100644
+--- a/src/middleware/language/language.ts
++++ b/src/middleware/language/language.ts
+@@ -71,6 +71,11 @@ export const DEFAULT_OPTIONS: DetectorOptions = {
+  * @param header Accept-Language header string
+  * @returns Array of parsed languages with quality scores
+  */
++/**
++ * Contract: Takes an Accept-Language header string and returns the entries produced by
++ * `parseAccept`, each mapped from `type` to `lang` and keeping its `q` value, in the same
++ * order.
++ */
+ export function parseAcceptLanguage(header: string): Array<{ lang: string; q: number }> {
+   return parseAccept(header).map(({ type, q }) => ({ lang: type, q }))
+ }
+@@ -81,6 +86,14 @@ export function parseAcceptLanguage(header: string): Array<{ lang: string; q: nu
+  * @param options Detector options
+  * @returns Normalized language code or undefined
+  */
++/**
++ * Contract: Takes a language string (or null/undefined) and detector options and returns the
++ * matching entry from `supportedLanguages`, or undefined. It returns undefined for falsy input
++ * or if an exception is thrown. Otherwise it trims the input, applies
++ * `convertDetectedLanguage` if set, and compares case-insensitively when `ignoreCase` is true.
++ * An exact match is returned first; failing that, it returns the longest supported language
++ * that is a proper prefix of the input followed by '-', with the earliest entry winning ties.
++ */
+ export const normalizeLanguage = (
+   lang: string | null | undefined,
+   options: DetectorOptions
+@@ -134,6 +147,11 @@ export const normalizeLanguage = (
+ /**
+  * Detects language from query parameter
+  */
++/**
++ * Contract: Reads the query parameter named by `lookupQueryString` from the request and
++ * returns its normalized supported language, or undefined if the parameter is absent or does
++ * not normalize.
++ */
+ export const detectFromQuery = (c: Context, options: DetectorOptions): string | undefined => {
+   const query = c.req.query(options.lookupQueryString)
+   return normalizeLanguage(query, options)
+@@ -142,6 +160,10 @@ export const detectFromQuery = (c: Context, options: DetectorOptions): string |
+ /**
+  * Detects language from cookie
+  */
++/**
++ * Contract: Reads the cookie named by `lookupCookie` from the context and returns its
++ * normalized supported language, or undefined if the cookie is absent or does not normalize.
++ */
+ export const detectFromCookie = (c: Context, options: DetectorOptions): string | undefined => {
+   const cookie = getCookie(c, options.lookupCookie)
+   return normalizeLanguage(cookie, options)
+@@ -150,6 +172,12 @@ export const detectFromCookie = (c: Context, options: DetectorOptions): string |
+ /**
+  * Detects language from Accept-Language header
+  */
++/**
++ * Contract: Reads the header named by `lookupFromHeaderKey` and parses it as Accept-Language.
++ * It iterates the parsed entries in their order, skips any entry with q equal to 0, and
++ * returns the first entry that normalizes to a supported language. It returns undefined if the
++ * header is absent, nothing matches, or an exception is thrown.
++ */
+ export function detectFromHeader(c: Context, options: DetectorOptions): string | undefined {
+   try {
+     const acceptLanguage = c.req.header(options.lookupFromHeaderKey)
+@@ -178,6 +206,11 @@ export function detectFromHeader(c: Context, options: DetectorOptions): string |
+ /**
+  * Detects language from URL path
+  */
++/**
++ * Contract: Parses the request URL, splits its pathname on '/' with empty segments removed,
++ * and normalizes the segment at index `lookupFromPathIndex`, returning the supported language
++ * or undefined. The `new URL` call is outside any try block, so an invalid request URL throws.
++ */
+ export function detectFromPath(c: Context, options: DetectorOptions): string | undefined {
+   const url = new URL(c.req.url)
+   const pathSegments = url.pathname.split('/').filter(Boolean)
+@@ -206,6 +239,11 @@ export type Detectors = Record<keyof typeof detectors, DetectorFunction>
+  * @param options Detector options to validate
+  * @throws Error if options are invalid
+  */
++/**
++ * Contract: Takes detector options and returns nothing. It throws an Error if
++ * `fallbackLanguage` is not in `supportedLanguages`, if `lookupFromPathIndex` is negative, or
++ * if any entry in `order` is not a key of `detectors`. Otherwise it completes without effect.
++ */
+ export function validateOptions(options: DetectorOptions): void {
+   if (!options.supportedLanguages.includes(options.fallbackLanguage)) {
+     throw new Error('Fallback language must be included in supported languages')
+@@ -223,6 +261,12 @@ export function validateOptions(options: DetectorOptions): void {
+ /**
+  * Cache detected language
+  */
++/**
++ * Contract: Takes a context, a language string and options, and writes that language to the
++ * cookie named `lookupCookie` using `cookieOptions`, but only when `caches` is an array
++ * containing 'cookie'; otherwise it does nothing. Errors from setting the cookie are
++ * swallowed, and logged to console.error only when `debug` is enabled.
++ */
+ function cacheLanguage(c: Context, language: string, options: DetectorOptions): void {
+   if (!Array.isArray(options.caches) || !options.caches.includes('cookie')) {
+     return
+@@ -240,6 +284,12 @@ function cacheLanguage(c: Context, language: string, options: DetectorOptions):
+ /**
+  * Detect language from request
+  */
++/**
++ * Contract: Takes a context and options and returns a language string. It calls each detector
++ * named in `order` in sequence and stops at the first truthy result, skipping detectors that
++ * throw. It returns that result, or `fallbackLanguage` if none was found. When a language was
++ * detected and `caches` is truthy, it calls `cacheLanguage` with the returned language.
++ */
+ const detectLanguage = (c: Context, options: DetectorOptions): string => {
+   let detectedLang: string | undefined
+ 
+@@ -294,6 +344,13 @@ const detectLanguage = (c: Context, options: DetectorOptions): string => {
+  * })
+  * ```
+  */
++/**
++ * Contract: Factory that takes partial detector options and returns a middleware handler. It
++ * merges the defaults with the user options, merging `cookieOptions` separately, and validates
++ * the result synchronously, so invalid options throw at creation time. The returned middleware
++ * sets the 'language' context variable to the detected language for each request and then
++ * awaits `next()`.
++ */
+ export const languageDetector = (userOptions: Partial<DetectorOptions>): MiddlewareHandler => {
+   const options: DetectorOptions = {
+     ...DEFAULT_OPTIONS,
+diff --git a/src/request.ts b/src/request.ts
+index ed205a2..a5e3eb0 100644
+--- a/src/request.ts
++++ b/src/request.ts
+@@ -66,6 +66,12 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+   path: string
+   bodyCache: BodyCache = {}
+ 
++  /**
++   * Contract: Takes a Request, an optional path (default '/'), and an optional match result
++   * (default `[[]]`). Stores the request as `raw`, the path as `path`, and the match result in
++   * the private `#matchResult` field. `routeIndex` is initialized to 0 and `bodyCache` to an
++   * empty object. No validation is performed.
++   */
+   constructor(
+     request: Request,
+     path: string = '/',
+@@ -96,16 +102,33 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+   ): string | undefined
+   param(key: string): string | undefined
+   param<P2 extends string = P>(): Simplify<UnionToIntersection<ParamKeyToRecord<ParamKeys<P2>>>>
++  /**
++   * Contract: Given a truthy key, returns the decoded value of that path parameter for the
++   * current route. Given no key, returns an object of all decoded path parameters for the
++   * current route. Overload signatures constrain the key and return types.
++   */
+   param(key?: string): unknown {
+     return key ? this.#getDecodedParam(key) : this.#getAllDecodedParams()
+   }
+ 
++  /**
++   * Contract: Looks up the named parameter in the route entry at `routeIndex`, resolves its
++   * value through `#getParamValue`, and returns the value decoded with `tryDecodeURIComponent`.
++   * Returns `undefined` when no value is resolved, and returns the empty string unchanged when
++   * the resolved value is empty.
++   */
+   #getDecodedParam(key: string): string | undefined {
+     const paramKey = this.#matchResult[0][this.routeIndex]?.[1][key]
+     const param = this.#getParamValue(paramKey)
+     return param && tryDecodeURIComponent(param)
+   }
+ 
++  /**
++   * Contract: Creates a new object and, for each parameter key of the route entry at
++   * `routeIndex`, stores the decoded value when the resolved value is not `undefined`. Keys
++   * whose resolved value is `undefined` are omitted. Returns an empty object when there is no
++   * route entry at `routeIndex`.
++   */
+   #getAllDecodedParams(): Record<string, string> {
+     const decoded: Record<string, string> = {}
+ 
+@@ -120,6 +143,10 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+     return decoded
+   }
+ 
++  /**
++   * Contract: If the match result has a second element, returns the entry of that element
++   * indexed by the given key; otherwise returns the given key unchanged as the value.
++   */
+   #getParamValue(paramKey: any): string | undefined {
+     return this.#matchResult[1] ? this.#matchResult[1][paramKey as any] : paramKey
+   }
+@@ -144,6 +171,11 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+    */
+   query(key: string): string | undefined
+   query(): Record<string, string>
++  /**
++   * Contract: Delegates to `getQueryParam` with the request URL. With a key, returns that query
++   * parameter's string value or `undefined` if absent; without a key, returns all query
++   * parameters as a record.
++   */
+   query(key?: string) {
+     return getQueryParam(this.url, key)
+   }
+@@ -163,6 +195,11 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+    */
+   queries(key: string): string[] | undefined
+   queries(): Record<string, string[]>
++  /**
++   * Contract: Delegates to `getQueryParams` with the request URL. With a key, returns the array
++   * of all values for that query parameter or `undefined` if absent; without a key, returns a
++   * record mapping each query name to its array of values.
++   */
+   queries(key?: string) {
+     return getQueryParams(this.url, key)
+   }
+@@ -182,6 +219,12 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+   header(name: RequestHeader): string | undefined
+   header(name: string): string | undefined
+   header(): Record<RequestHeader | (string & CustomHeader), string>
++  /**
++   * Contract: With a non-empty name, returns the value of that request header from
++   * `raw.headers`, or `undefined` if the header is absent. Without a name, returns a
++   * null-prototype object mapping every header name in `raw.headers` to its value. Performs no
++   * mutation of the request.
++   */
+   header(name?: string) {
+     if (name) {
+       return this.raw.headers.get(name) ?? undefined
+@@ -210,6 +253,10 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+     options?: Options
+   ): Promise<T>
+   async parseBody<T extends BodyData>(options?: Partial<ParseBodyOptions>): Promise<T>
++  /**
++   * Contract: Asynchronously delegates to the `parseBody` helper with this request and the
++   * optional options, and resolves to the parsed body produced by that helper.
++   */
+   async parseBody(options?: Partial<ParseBodyOptions>) {
+     return parseBody(this, options)
+   }
+@@ -255,6 +302,10 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+    * })
+    * ```
+    */
++  /**
++   * Contract: Reads the body as text through the body cache and resolves to the result of
++   * `JSON.parse` on that text. The returned promise rejects if the text is not valid JSON.
++   */
+   json<T = any>(): Promise<T> {
+     return this.#cachedBody('text').then((text: string) => JSON.parse(text))
+   }
+@@ -271,6 +322,10 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+    * })
+    * ```
+    */
++  /**
++   * Contract: Resolves to the request body as a string, obtained through the body cache so that
++   * repeated reads return the same body content.
++   */
+   text(): Promise<string> {
+     return this.#cachedBody('text')
+   }
+@@ -287,6 +342,10 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+    * })
+    * ```
+    */
++  /**
++   * Contract: Resolves to the request body as an `ArrayBuffer`, obtained through the body cache
++   * under the `arrayBuffer` key.
++   */
+   arrayBuffer(): Promise<ArrayBuffer> {
+     return this.#cachedBody('arrayBuffer')
+   }
+@@ -303,6 +362,10 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+    * })
+    * ```
+    */
++  /**
++   * Contract: Resolves to a `Uint8Array` wrapping the `ArrayBuffer` obtained from the body cache
++   * under the `arrayBuffer` key.
++   */
+   bytes(): Promise<Uint8Array> {
+     return this.#cachedBody('arrayBuffer').then((buffer: ArrayBuffer) => new Uint8Array(buffer))
+   }
+@@ -317,6 +380,10 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+    * ```
+    * @see https://hono.dev/docs/api/request#blob
+    */
++  /**
++   * Contract: Resolves to the request body as a `Blob`, obtained through the body cache under
++   * the `blob` key.
++   */
+   blob(): Promise<Blob> {
+     return this.#cachedBody('blob')
+   }
+@@ -331,6 +398,10 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+    * ```
+    * @see https://hono.dev/docs/api/request#formdata
+    */
++  /**
++   * Contract: Resolves to the request body as `FormData`, obtained through the body cache under
++   * the `formData` key.
++   */
+   formData(): Promise<FormData> {
+     return this.#cachedBody('formData')
+   }
+@@ -341,6 +412,11 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+    * @param target - The target of the validation.
+    * @param data - The validated data to add.
+    */
++  /**
++   * Contract: Stores the given data under the given validation target in the validated-data
++   * record, creating that record if it does not yet exist. A later call for the same target
++   * replaces the earlier value.
++   */
+   addValidatedData(target: keyof ValidationTargets, data: {}) {
+     ;(this.#validatedData ??= {})[target] = data
+   }
+@@ -354,6 +430,11 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+    * @see https://hono.dev/docs/api/request#valid
+    */
+   valid<T extends keyof I & keyof ValidationTargets>(target: T): InputToDataByTarget<I, T>
++  /**
++   * Contract: Returns the validated data previously stored for the given target by
++   * `addValidatedData`, or `undefined` if none has been stored for that target. Performs no
++   * validation itself.
++   */
+   valid(target: keyof ValidationTargets) {
+     return this.#validatedData?.[target] as unknown
+   }
+@@ -478,6 +559,14 @@ export class HonoRequest<P extends string = '/', I extends Input['out'] = {}> {
+  * )
+  * ```
+  */
++/**
++ * Contract: Asynchronously returns a Request equivalent to the one wrapped by `req`. If the
++ * raw body is unused, returns `raw.clone()`. If it is used, it requires a cached body entry
++ * (the first key of `bodyCache`), otherwise it throws an `HTTPException` with status 500. It
++ * then reads that cached body, builds a new Request with the same URL, method, copied headers
++ * and relevant init properties, re-stringifies JSON bodies and removes `content-length`, and
++ * for `FormData` bodies removes `content-type` and `content-length`.
++ */
+ export const cloneRawRequest = async (req: HonoRequest): Promise<Request> => {
+   if (!req.raw.bodyUsed) {
+     return req.raw.clone()
+diff --git a/src/router/linear-router/router.ts b/src/router/linear-router/router.ts
+index 63a3003..e7230c6 100644
+--- a/src/router/linear-router/router.ts
++++ b/src/router/linear-router/router.ts
+@@ -12,6 +12,12 @@ export class LinearRouter<T> implements Router<T> {
+   name: string = 'LinearRouter'
+   #routes: [string, string, T][] = []
+ 
++  /**
++   * Contract: Takes a method, a path, and a handler, and appends one `[method, path, handler]`
++   * entry to the internal route list for each path returned by `checkOptionalParameter(path)`,
++   * or for the path itself if that returns nothing. Entries are appended in the order given, and
++   * the function returns nothing.
++   */
+   add(method: string, path: string, handler: T) {
+     for (
+       let i = 0, paths = checkOptionalParameter(path) || [path], len = paths.length;
+@@ -22,6 +28,16 @@ export class LinearRouter<T> implements Router<T> {
+     }
+   }
+ 
++  /**
++   * Contract: Takes an HTTP method and a request path and returns `[handlers]`, where `handlers`
++   * is a list of `[handler, params]` pairs for every registered route whose method equals the
++   * request method or is `METHOD_NAME_ALL` and whose path matches, in registration order. Static
++   * routes match only when the path equals the route or the route plus a trailing slash, `*` and
++   * `/*` match any path with empty params, and labeled routes capture each `:label` segment into
++   * `params` with the first captured value winning. A route containing both a label and a star
++   * throws `UnsupportedPathError`, which discards any handlers collected so far, and the routes
++   * list is not modified.
++   */
+   match(method: string, path: string): Result<T> {
+     const handlers: [T, Params][] = []
+     ROUTES_LOOP: for (let i = 0, len = this.#routes.length; i < len; i++) {
+diff --git a/src/router/pattern-router/router.ts b/src/router/pattern-router/router.ts
+index 1b01623..b5876ea 100644
+--- a/src/router/pattern-router/router.ts
++++ b/src/router/pattern-router/router.ts
+@@ -9,6 +9,15 @@ export class PatternRouter<T> implements Router<T> {
+   name: string = 'PatternRouter'
+   #routes: Route<T>[] = []
+ 
++  /**
++   * Contract: Takes an HTTP method, a path pattern, and a handler, and returns nothing. It
++   * compiles the path into an anchored RegExp (trailing `/*` becomes `(?:$|/)`, trailing `*`
++   * becomes no suffix, otherwise `/?$`), converting `:name{pattern}` segments to named groups
++   * with `[^/]+` as the default and `/*` segments to `/[^/]+`. If the path ends in `?`, the
++   * shortened variant (last segment removed) is registered first, recursively, before the full
++   * path is pushed, so routes are appended in that order. If the RegExp cannot be constructed,
++   * it throws `UnsupportedPathError` and nothing is appended.
++   */
+   add(method: string, path: string, handler: T) {
+     const suffix = path.endsWith('/*') ? '(?:$|/)' : path.endsWith('*') ? '' : '/?$'
+     path = path.replace(/\*$/, '')
+@@ -35,6 +44,14 @@ export class PatternRouter<T> implements Router<T> {
+     }
+   }
+ 
++  /**
++   * Contract: Takes an HTTP method and a path and returns a single-element array containing a
++   * list of `[handler, params]` pairs. It scans the stored routes in insertion order and
++   * includes each route whose method equals the given method or is `METHOD_NAME_ALL` and whose
++   * pattern matches the path, using the regex named groups as params or the shared
++   * null-prototype `emptyParams` when there are none. The result list is empty when nothing
++   * matches, and the stored routes are not modified.
++   */
+   match(method: string, path: string): Result<T> {
+     const handlers: [T, Params][] = []
+ 
+diff --git a/src/router/reg-exp-router/node.ts b/src/router/reg-exp-router/node.ts
+index bdd4b82..346b0fd 100644
+--- a/src/router/reg-exp-router/node.ts
++++ b/src/router/reg-exp-router/node.ts
+@@ -20,6 +20,14 @@ const regExpMetaChars = new Set('.\\+*[^]$()')
+  * 3. common label pattern (e.g. :label)
+  * 4. wildcard
+  */
++/**
++ * Contract: Comparator over two child-key strings that returns a negative number if `a` sorts
++ * before `b` and a positive number otherwise. Single-character keys sort before all longer
++ * keys and are ordered among themselves by `<`. Among longer keys, the tail wildcard precedes
++ * the only wildcard, both sort after every other key, the label pattern `[^/]+` sorts after
++ * other non-wildcard keys, and remaining keys are ordered by descending length, then ascending
++ * lexicographically.
++ */
+ function compareKey(a: string, b: string): number {
+   if (a.length === 1) {
+     return b.length === 1 ? (a < b ? -1 : 1) : -1
+@@ -51,6 +59,14 @@ export class Node {
+   #varIndex?: number
+   #children: Record<string, Node> = createNullObject()
+ 
++  /**
++   * Contract: Walks or creates child nodes from this node along `tokens`, pushing each resolved
++   * key onto `keys` and, for each named parameter, a `[name, varIndex]` pair onto `paramMap`
++   * (assigning `varIndex` from `context` on first use). It throws `PATH_ERROR` for an invalid or
++   * ambiguous parameter pattern, for a child key that conflicts with existing siblings, or when
++   * the terminal node already has an index; otherwise it stores `index` on the terminal node and
++   * returns nothing.
++   */
+   insert(
+     tokens: readonly string[],
+     index: number,
+@@ -140,6 +156,14 @@ export class Node {
+     node.#index = index
+   }
+ 
++  /**
++   * Contract: Returns the regular-expression source string for this node's subtree without
++   * mutating it. Child keys are sorted by `compareKey` and each non-empty child contributes
++   * either a capture group `(key)@varIndex` or its escaped/literal key followed by its own
++   * string; a terminal index other than -1 is emitted as `#index` first. The result is an empty
++   * string when nothing is emitted, the single element when only one exists, and otherwise the
++   * elements joined by `|` inside `(?:...)`.
++   */
+   buildRegExpStr(): string {
+     const childKeys = Object.keys(this.#children).sort(compareKey)
+ 
+diff --git a/src/router/smart-router/router.ts b/src/router/smart-router/router.ts
+index 9ec464d..41ff7c3 100644
+--- a/src/router/smart-router/router.ts
++++ b/src/router/smart-router/router.ts
+@@ -6,10 +6,20 @@ export class SmartRouter<T> implements Router<T> {
+   #routers: Router<T>[] = []
+   #routes?: [string, string, T][] = []
+ 
++  /**
++   * Contract: Takes an init object whose `routers` array is stored by reference as the ordered
++   * list of candidate routers, with no routes registered and no validation of the array. The
++   * instance starts with no active router.
++   */
+   constructor(init: { routers: Router<T>[] }) {
+     this.#routers = init.routers
+   }
+ 
++  /**
++   * Contract: Appends the tuple [method, path, handler] to the pending route list and returns
++   * nothing. Throws MESSAGE_MATCHER_IS_ALREADY_BUILT if the pending list has already been
++   * cleared by a successful match.
++   */
+   add(method: string, path: string, handler: T) {
+     if (!this.#routes) {
+       throw new Error(MESSAGE_MATCHER_IS_ALREADY_BUILT)
+@@ -18,6 +28,14 @@ export class SmartRouter<T> implements Router<T> {
+     this.#routes.push([method, path, handler])
+   }
+ 
++  /**
++   * Contract: Tries the candidate routers in their stored order, replaying all pending routes
++   * into each before calling its match and skipping any router that throws UnsupportedPathError
++   * while rethrowing other errors. On the first router that matches without error, it rebinds
++   * `match` to that router, keeps only that router, clears the pending routes, updates `name`,
++   * and returns that router's result. Throws 'Fatal error' if the pending routes are already
++   * cleared or if every candidate router throws UnsupportedPathError.
++   */
+   match(method: string, path: string): Result<T> {
+     if (!this.#routes) {
+       throw new Error('Fatal error')
+diff --git a/src/router/trie-router/node.ts b/src/router/trie-router/node.ts
+index 580b859..b0cf09a 100644
+--- a/src/router/trie-router/node.ts
++++ b/src/router/trie-router/node.ts
+@@ -25,6 +25,15 @@ export class Node<T> {
+   #pattern?: Pattern | string
+   #params: Record<string, string> = emptyParams
+ 
++  /**
++   * Contract: Takes an HTTP method, a route path, and a handler, and mutates the trie by
++   * creating or reusing a child node for each path segment (keyed by literal text or by pattern
++   * name), registering each new pattern child once in `#patterns`. It appends `{ [method]: {
++   * handler, possibleKeys, score } }` to the terminal node's `#methods`, where `possibleKeys`
++   * lists the deduplicated parameter names along the path in first-occurrence order and `score`
++   * is the module-global counter incremented on each call, so scores strictly increase in
++   * insertion order.
++   */
+   insert(method: string, path: string, handler: T): void {
+     // eslint-disable-next-line @typescript-eslint/no-this-alias
+     let curNode: Node<T> = this
+@@ -61,6 +70,15 @@ export class Node<T> {
+     })
+   }
+ 
++  /**
++   * Contract: Takes an accumulator array, a node, a method, and parameter maps, and for each
++   * entry in the node's `#methods` selects the handler set for `method` or else for
++   * `METHOD_NAME_ALL`, appends it to `handlerSets`, and overwrites that set's `params` with a
++   * fresh null-prototype object. For each `possibleKeys` entry, the first key (index 0) takes
++   * `params[key]` when that value is truthy and otherwise `nodeParams[key] ?? params?.[key]`,
++   * while later keys take `nodeParams[key] ?? params?.[key]`. It does not deduplicate, so the
++   * same handler set can be appended more than once across calls.
++   */
+   #pushHandlerSets(
+     handlerSets: HandlerParamsSet<T>[],
+     node: Node<T>,
+@@ -83,6 +101,16 @@ export class Node<T> {
+     }
+   }
+ 
++  /**
++   * Contract: Takes a method and a path, resets `#params` to the shared empty object, and walks
++   * the trie level by level over `splitPath(path)`, matching literal children, `*` and
++   * regex/pattern children, and multi-segment regex matches via offsets into the original path,
++   * mutating each child's `#params` along the way. Matching handler sets are collected into
++   * `handlerSets` at the final segment (or at the wildcard/regex termination points), sorted
++   * ascending by `score` (insertion order) when there are two or more, and returned as a
++   * single-element tuple containing an array of `[handler, params]` pairs in that order, with an
++   * empty array when nothing matches.
++   */
+   search(method: string, path: string): [[T, Params][]] {
+     const handlerSets: HandlerParamsSet<T>[] = []
+     this.#params = emptyParams
+diff --git a/src/router/trie-router/router.ts b/src/router/trie-router/router.ts
+index 403bacb..18f81c0 100644
+--- a/src/router/trie-router/router.ts
++++ b/src/router/trie-router/router.ts
+@@ -6,12 +6,22 @@ export class TrieRouter<T> implements Router<T> {
+   name: string = 'TrieRouter'
+   #node: Node<T> = new Node()
+ 
++  /**
++   * Contract: Takes an HTTP method, a path, and a handler, and returns nothing. It expands the
++   * path into the variants produced by checkOptionalParameter, or uses the path unchanged if
++   * that yields no variants, then inserts the handler under the method for each variant into the
++   * router's internal trie, mutating that trie.
++   */
+   add(method: string, path: string, handler: T) {
+     for (const result of checkOptionalParameter(path) || [path]) {
+       this.#node.insert(method, result, handler)
+     }
+   }
+ 
++  /**
++   * Contract: Takes an HTTP method and a path and returns the Result<T> produced by the internal
++   * trie's search for that method and path. It does not modify the router's state.
++   */
+   match(method: string, path: string): Result<T> {
+     return this.#node.search(method, path)
+   }
+diff --git a/src/utils/accept.ts b/src/utils/accept.ts
+index 18ba20b..c586121 100644
+--- a/src/utils/accept.ts
++++ b/src/utils/accept.ts
+@@ -4,9 +4,18 @@ export interface Accept {
+   q: number
+ }
+ 
++/**
++ * Contract: Takes a character code and returns true only if it is space (32), tab (9), line
++ * feed (10), or carriage return (13).
++ */
+ const isWhitespace = (char: number): boolean =>
+   char === 32 || char === 9 || char === 10 || char === 13
+ 
++/**
++ * Contract: Takes a string and a start index and returns the first index at or after the start
++ * whose character is not space, tab, LF, or CR, or the string length if none exists. It does
++ * not modify the string, and an index at or beyond the length is returned unchanged.
++ */
+ const consumeWhitespace = (acceptHeader: string, startIndex: number): number => {
+   while (startIndex < acceptHeader.length) {
+     if (!isWhitespace(acceptHeader.charCodeAt(startIndex))) {
+@@ -17,6 +26,11 @@ const consumeWhitespace = (acceptHeader: string, startIndex: number): number =>
+   return startIndex
+ }
+ 
++/**
++ * Contract: Takes a string and an end index and returns the index reached by moving left from
++ * that index past any space, tab, LF, or CR characters, stopping at 0. The result is never
++ * greater than the input index and is unchanged if the preceding character is not whitespace.
++ */
+ const ignoreTrailingWhitespace = (acceptHeader: string, startIndex: number): number => {
+   while (startIndex > 0) {
+     if (!isWhitespace(acceptHeader.charCodeAt(startIndex - 1))) {
+@@ -27,6 +41,11 @@ const ignoreTrailingWhitespace = (acceptHeader: string, startIndex: number): num
+   return startIndex
+ }
+ 
++/**
++ * Contract: Scans forward from the start index for the first ';' or ',' and returns a tuple of
++ * the index just after that delimiter and a boolean that is true only when the delimiter is
++ * ';'. If no delimiter is found, it returns the string length and false.
++ */
+ const skipInvalidParam = (acceptHeader: string, startIndex: number): [number, boolean] => {
+   while (startIndex < acceptHeader.length) {
+     const char = acceptHeader.charCodeAt(startIndex)
+@@ -43,6 +62,11 @@ const skipInvalidParam = (acceptHeader: string, startIndex: number): [number, bo
+   return [startIndex, false]
+ }
+ 
++/**
++ * Contract: Scans forward from the start index, treating double-quoted spans as opaque with
++ * backslash escapes inside quotes, and returns the index just after the first unquoted ',' or
++ * the string length if none exists. It does not modify the string.
++ */
+ const skipInvalidAcceptValue = (acceptHeader: string, startIndex: number): number => {
+   let i = startIndex
+   let inQuotes = false
+@@ -63,6 +87,14 @@ const skipInvalidAcceptValue = (acceptHeader: string, startIndex: number): numbe
+   return i
+ }
+ 
++/**
++ * Contract: Parses one parameter beginning at the start index after leading whitespace and
++ * returns a tuple of the next scan index, the key (trimmed, or undefined if empty or a
++ * delimiter comes first), the value (undefined when absent, invalid, or a '=' follows the
++ * key), and whether a ';' separator indicates another parameter follows. Quoted values have
++ * backslash escapes removed, and a value with invalid characters after its closing quote is
++ * discarded and skipped to the next delimiter.
++ */
+ const getNextParam = (
+   acceptHeader: string,
+   startIndex: number
+@@ -156,6 +188,13 @@ const getNextParam = (
+   ]
+ }
+ 
++/**
++ * Contract: Parses one media range beginning at the start index and returns the next scan
++ * index and an Accept object with its trimmed type and the parameters that have both a
++ * non-empty key and value, with q fixed at 1, or undefined when the type is empty. It consumes
++ * parameters in sequence until a parameter reports no following ';' separator, and on an empty
++ * type it skips to the next unquoted comma.
++ */
+ const getNextAcceptValue = (
+   acceptHeader: string,
+   startIndex: number
+@@ -208,6 +247,12 @@ const getNextAcceptValue = (
+   return [i, accept] as [number, Accept]
+ }
+ 
++/**
++ * Contract: Takes an Accept header string and returns an array of Accept objects in their
++ * order of appearance, with each q set from the q or Q parameter via parseQuality, omitting
++ * entries with empty types. Returns an empty array for an empty or falsy input, and sorts the
++ * array by q in descending order only when some entry has a higher q than the entry before it.
++ */
+ export const parseAccept = (acceptHeader: string): Accept[] => {
+   if (!acceptHeader) {
+     return []
+@@ -239,6 +284,11 @@ export const parseAccept = (acceptHeader: string): Accept[] => {
+   return values
+ }
+ 
++/**
++ * Contract: Takes an optional q-parameter string and returns a number in the range 0 to 1:
++ * undefined or empty yields 1, 'NaN' yields 0, a non-numeric value yields 1, negative values
++ * yield 0, values above 1 yield 1, and any other numeric value is returned as is.
++ */
+ const parseQuality = (qVal?: string): number => {
+   if (qVal === undefined) {
+     return 1
+diff --git a/src/utils/url.ts b/src/utils/url.ts
+index 44ba547..a0811ad 100644
+--- a/src/utils/url.ts
++++ b/src/utils/url.ts
+@@ -5,6 +5,11 @@
+ 
+ export type Pattern = readonly [string, string, RegExp | true] | '*'
+ 
++/**
++ * Contract: Takes a path string and splits it on '/', removing the first element only when it
++ * is an empty string (a leading slash), and returns the resulting segments array. The input is
++ * not otherwise modified.
++ */
+ export const splitPath = (path: string): string[] => {
+   const paths = path.split('/')
+   if (paths[0] === '') {
+@@ -13,6 +18,11 @@ export const splitPath = (path: string): string[] => {
+   return paths
+ }
+ 
++/**
++ * Contract: Takes a route path, replaces each `{...}` group with a placeholder marker, splits
++ * the result with splitPath, and restores the original group text into the segments. Returns
++ * the resulting segment array.
++ */
+ export const splitRoutingPath = (routePath: string): string[] => {
+   const { groups, path } = extractGroupsFromPath(routePath)
+ 
+@@ -20,6 +30,11 @@ export const splitRoutingPath = (routePath: string): string[] => {
+   return replaceGroupMarks(paths, groups)
+ }
+ 
++/**
++ * Contract: Takes a path and replaces every `{...}` group with a marker `@<match offset>`,
++ * returning the rewritten path together with an ordered list of [marker, original group text]
++ * pairs in match order.
++ */
+ const extractGroupsFromPath = (path: string): { groups: [string, string][]; path: string } => {
+   const groups: [string, string][] = []
+ 
+@@ -32,6 +47,12 @@ const extractGroupsFromPath = (path: string): { groups: [string, string][]; path
+   return { groups, path }
+ }
+ 
++/**
++ * Contract: Takes a segment array and group pairs, and for each group from last to first
++ * replaces the first occurrence of its marker in the last segment that contains it with the
++ * original group text. Mutates and returns the same segment array; each marker is replaced at
++ * most once.
++ */
+ const replaceGroupMarks = (paths: string[], groups: [string, string][]): string[] => {
+   for (let i = groups.length - 1; i >= 0; i--) {
+     const [mark] = groups[i]
+@@ -48,6 +69,13 @@ const replaceGroupMarks = (paths: string[], groups: [string, string][]): string[
+ }
+ 
+ const patternCache: { [key: string]: Pattern } = {}
++/**
++ * Contract: Takes a label and an optional next segment and returns '*' for the wildcard label,
++ * a cached Pattern tuple for labels of the form `:name` or `:name{regex}`, or null for any
++ * other label. For regex parameters the RegExp is anchored, and when next is a static segment
++ * it adds a lookahead for `/next`; results are cached by `label#next`, so identical inputs
++ * return the same object.
++ */
+ export const getPattern = (label: string, next?: string): Pattern | null => {
+   // *            => wildcard
+   // :id{[0-9]+}  => ([0-9]+)
+@@ -78,6 +106,11 @@ export const getPattern = (label: string, next?: string): Pattern | null => {
+ }
+ 
+ type Decoder = (str: string) => string
++/**
++ * Contract: Takes a string and a decoder function and returns decoder(str) if it succeeds. If
++ * it throws, it returns the string with each run of consecutive %XX sequences decoded
++ * individually, leaving any run that still fails to decode unchanged; it does not throw.
++ */
+ export const tryDecode = (str: string, decoder: Decoder): string => {
+   try {
+     return decoder(str)
+@@ -101,8 +134,18 @@ export const tryDecode = (str: string, decoder: Decoder): string => {
+  * tryDecodeURI('Hello%20World') // 'Hello World'
+  * tryDecodeURI('Hello%20World/%A4%A2') // 'Hello World/%A4%A2'
+  */
++/**
++ * Contract: Takes a string and returns the result of tryDecode applied with decodeURI, so it
++ * decodes fully when possible and otherwise decodes only the valid parts, never throwing.
++ */
+ export const tryDecodeURI = (str: string): string => tryDecode(str, decodeURI)
+ 
++/**
++ * Contract: Takes a Request and returns its pathname: the substring from the first '/' after
++ * the scheme and host up to the first '?' or '#' or end of URL. If the path contains '%',
++ * every '%25' is changed to '%2525' before tryDecodeURI is applied; otherwise the raw slice is
++ * returned without decoding.
++ */
+ export const getPath = (request: Request): string => {
+   const url = request.url
+   const start = url.indexOf('/', url.indexOf(':') + 4)
+@@ -137,6 +180,11 @@ export const getPath = (request: Request): string => {
+  * @deprecated
+  * Use the `URL` API instead.
+  */
++/**
++ * Contract: Deprecated. Takes a URL string and returns the query substring including the
++ * leading '?' up to any '#' that follows it, or '' if there is no '?' or the '#' comes before
++ * it. The search starts at index 8.
++ */
+ export const getQueryStrings = (url: string): string => {
+   const queryIndex = url.indexOf('?', 8)
+   if (queryIndex === -1) {
+@@ -151,6 +199,10 @@ export const getQueryStrings = (url: string): string => {
+       : ''
+ }
+ 
++/**
++ * Contract: Takes a Request, returns getPath's result, and removes one trailing '/' when the
++ * result has length greater than 1 and ends with '/'.
++ */
+ export const getPathNoStrict = (request: Request): string => {
+   const result = getPath(request)
+ 
+@@ -160,6 +212,13 @@ export const getPathNoStrict = (request: Request): string => {
+ 
+ // Cut the rest of the path from the raw pathname, not from the decoded one, so that decoded
+ // characters are never parsed as URL syntax again (`%5C` -> `\\` -> `/`, `%2E%2E` -> `..`).
++/**
++ * Contract: Takes the raw path, the decoded path and a prefix length, and returns the raw path
++ * with its first prefixLength slash-delimited segments removed, or '/' if the raw path has too
++ * few slashes or the remainder is empty. If the raw path ends with '/' but the decoded path
++ * does not, that trailing slash is removed first. Segment boundaries are located in the
++ * decoded path and applied to the raw path.
++ */
+ export const stripPathPrefix = (
+   rawPath: string,
+   decodedPath: string,
+@@ -192,6 +251,11 @@ export const stripPathPrefix = (
+  * mergePath('/api', '/') // '/api'
+  * mergePath('/api/', '/') // '/api/'
+  */
++/**
++ * Contract: Takes a base path followed by one or more sub paths and returns them joined with
++ * exactly one '/' between parts, dropping a duplicate slash at the join and treating a sub
++ * path of '/' as empty. Any additional paths are merged into the sub path recursively first.
++ */
+ export const mergePath: (...paths: string[]) => string = (
+   base: string | undefined,
+   sub: string | undefined,
+@@ -205,6 +269,13 @@ export const mergePath: (...paths: string[]) => string = (
+   }`
+ }
+ 
++/**
++ * Contract: Takes a path and returns null unless it ends with '?' and contains ':'. Otherwise
++ * it returns a deduplicated array (first occurrence kept) of the path variants obtained by
++ * cumulatively including the static and required segments and, at each optional `:param?`
++ * segment, both the base path before it (or '/' if none) and the base path plus that segment
++ * without '?'.
++ */
+ export const checkOptionalParameter = (path: string): string[] | null => {
+   /*
+     If path is `/api/animals/:type?` it will return:
+@@ -242,10 +313,19 @@ export const checkOptionalParameter = (path: string): string[] | null => {
+   return results.filter((v, i, a) => a.indexOf(v) === i)
+ }
+ 
++/**
++ * Contract: Takes a string and returns it unchanged if it contains no '%'; otherwise returns
++ * tryDecode applied with decodeURIComponent_, so it never throws.
++ */
+ export const tryDecodeURIComponent = (str: string): string =>
+   str.indexOf('%') !== -1 ? tryDecode(str, decodeURIComponent_) : str
+ 
+ // Optimized
++/**
++ * Contract: Takes a string, replaces every '+' with a space, and then applies
++ * tryDecodeURIComponent to the result. Despite its name it performs component-style decoding
++ * and never throws.
++ */
+ const _decodeURI = (value: string): string => {
+   if (value.indexOf('+') !== -1) {
+     value = value.replace(/\+/g, ' ')
+@@ -253,6 +333,16 @@ const _decodeURI = (value: string): string => {
+   return tryDecodeURIComponent(value)
+ }
+ 
++/**
++ * Contract: Takes a URL, an optional key and a multiple flag, ignores the fragment, and parses
++ * the query string after the first '?' at or beyond index 8. With a key and no multiple flag
++ * and an unencoded key, it scans for that key directly and returns its value, '' for a key
++ * without '=', or undefined, falling back to the full parse only when the URL contains '%' or
++ * '+'. Otherwise it builds a null-prototype map where names and values are decoded when
++ * encoded, empty names are skipped, the first value wins in single mode, and values are
++ * collected into arrays in multiple mode; it returns the entry for the key if one is given, or
++ * the whole map.
++ */
+ const _getQueryParam = (
+   url: string,
+   key?: string,
+@@ -358,6 +448,11 @@ export const getQueryParam: (
+   key?: string
+ ) => string | undefined | Record<string, string>
+ 
++/**
++ * Contract: Takes a URL and an optional key and returns _getQueryParam in multiple mode: the
++ * string array of values for the key, or a record mapping each name to its array of values
++ * when no key is given, or undefined when the key is absent.
++ */
+ export const getQueryParams = (
+   url: string,
+   key?: string
