@@ -1,0 +1,84 @@
+{
+  "suite": "hono",
+  "arm": "Q-pi-contracts",
+  "task": "HN3",
+  "run": 5,
+  "chained": false,
+  "startState": "hono/HN3",
+  "specSha256": "b370d4635916dc0d9d654604a068add80f7a8e0808370a3d6b5189bc866b480e",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "pi-coding-agent",
+    "version": "1.5.1"
+  },
+  "usage": {
+    "inputUncached": 16,
+    "cacheRead": 53927,
+    "cacheWrite": 11379,
+    "output": 3430,
+    "toolResultTokens": 3648,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 7,
+    "toolCalls": 6,
+    "toolCallsByName": {
+      "Bash": 6
+    },
+    "fileReads": 0,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 3,
+    "compactions": 0,
+    "turnsToFirstEdit": 4,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 68671,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "HN3 R1": true,
+      "HN3 R2": true,
+      "HN3 R3": true,
+      "HN3 R4": true,
+      "HN3 R5": true,
+      "HN3 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 14,
+    "readChars": 14570,
+    "relevantChars": 1975,
+    "coreChars": 414,
+    "precision": 0.13555250514756348,
+    "coreRecall": 0.5,
+    "readTokens": 3643
+  },
+  "costUsd": 0.003678245,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.003678245,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 1,
+    "denied": [
+      "connect registry.npmjs.org:443"
+    ]
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 6,
+      "outTokens": 3650,
+      "carriedTokens": 18427
+    }
+  }
+}
