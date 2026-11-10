@@ -18,7 +18,10 @@ import { findFunctions } from "../../query/src/contracts.ts";
 
 const MAX_PER_RESULT = 12;
 const HEADER = "[contracts: from the project's function documentation; not part of the file]";
-const READ_CMD = /^\s*(?:cd\s+\S+\s*&&\s*)?(cat|sed|head|tail|nl)\b[^|;&]*$/;
+// A command that prints a file: cat/sed -n/head/tail/nl, no in-place edit, no redirection.
+const READ_CMD = /^(cat|sed\s+-n|head|tail|nl)\b(?!.*\s-i\b)[^>]*$/;
+// What may follow it in a pipe without changing which file is shown.
+const PIPE_OK = /^(head|tail|nl|sed\s+-n)\b[^>]*$/;
 const SOURCE = /(?:^|\s|['"])((?:\.{0,2}\/)?[\w@.\-/]+\.(?:tsx?|jsx?|mts|cts))\b/g;
 const CALL = /\b([A-Za-z_$][\w$]*)\s*\(/g;
 const KEYWORDS = new Set(["if", "for", "while", "switch", "return", "function", "catch", "typeof", "new", "await", "import", "super"]);
@@ -48,12 +51,20 @@ export function shownFile(toolName: string, input: any, workspace: string): stri
   };
   if (toolName === "read" && typeof input?.path === "string") return rel(input.path);
   if (toolName !== "bash") return null;
-  const cmd = String(input?.command ?? "");
-  if (!READ_CMD.test(cmd)) return null;
-  const cd = /^\s*cd\s+(\S+)\s*&&/.exec(cmd)?.[1];
-  const files = [...new Set([...cmd.matchAll(SOURCE)].map((m) => m[1]))];
+  // Agents write `cd <dir>; sed -n 1,80p a.ts` or `cd <dir> && cat a.ts | head -50`.
+  let cwd = workspace;
+  const rest: string[] = [];
+  for (const seg of String(input?.command ?? "").split(/\s*(?:&&|;)\s*/).map((x) => x.trim()).filter(Boolean)) {
+    const cd = /^cd\s+(\S+)$/.exec(seg);
+    if (cd) cwd = resolve(cwd, cd[1].replace(/^['"]|['"]$/g, ""));
+    else rest.push(seg);
+  }
+  if (rest.length !== 1) return null;
+  const [first, ...pipes] = rest[0].replace(/\s*2>\s*\/dev\/null/g, "").split(/\s*\|\s*/);
+  if (!READ_CMD.test(first) || !pipes.every((p) => PIPE_OK.test(p))) return null;
+  const files = [...new Set([...first.matchAll(SOURCE)].map((m) => m[1]))];
   if (files.length !== 1) return null;
-  return rel(cd ? resolve(cd, files[0]) : files[0]);
+  return rel(resolve(cwd, files[0]));
 }
 
 /** Contracts to append for one tool result; marks them as shown. */

@@ -665,6 +665,21 @@ Records: `results/A-ts-baseline/AB*/run-100..105.json`, `results/I-ts-gencontrac
 
 **Run.** All five tasks, `claude-haiku-5-5`, `effort=low`, 6 runs per task, same period: A runs 106–111, P runs 1–6.
 
+**Result** (all five tasks, `effort=low`, 6 runs per task, same period; per-task mean cost, permutation test P vs A):
+
+| Task | A (Claude Code) pass, cost per pass, turns | P (pi) pass, cost per pass, turns | p (mean cost) |
+|---|---|---|---|
+| AB1 | 0/6, –, 18.3 | 2/6, $0.0196, 13.0 | 0.06 |
+| AB2 | 4/6, $0.0178, 16.0 | 3/6, $0.0194, 14.2 | 0.46 |
+| AB3 | 6/6, $0.0062, 11.0 | 6/6, $0.0052, 9.5 | 0.45 |
+| AB4 | 6/6, $0.0028, 6.3 | 6/6, $0.0026, 5.2 | 0.41 |
+| AB5 | 6/6, $0.0102, 15.8 | 5/6, $0.0095, 12.2 | 0.014 |
+| **All** | **22/30, $0.0111** | **22/30, $0.0087 (−22%)** | |
+
+Totals: turns per run 13.5 → 10.8, output 6.7k → 5.5k, cache reads 226k → 134k (−41%). No crashes, no network commands.
+
+**Conclusion.** The harness matters, but less than the code does. pi is about **22% cheaper per passing task at the same pass rate**: fewer turns, and much less context re-sent per turn, because its system prompt and tool definitions are ~6× smaller. That is the same size of effect as everything the query-layer iterations tried for and didn't get. The quality failures are the same in both harnesses: AB1's symptom patch and AB2's `$like` trap appear under pi too. The harness changes what each turn costs, not what the agent gets wrong.
+
 ## Iteration 20 — Modified pi: contracts delivered where code is read (arm Q)
 
 **Hypothesis.** Iteration 18's contracts helped where they contradicted the code being edited (AB1), cost 40–50% where nothing was wrong (they made every file longer, on every read), and did nothing where the relevant contract sat in a file nobody opened (AB2). Delivering contracts through the harness, next to the code being read and each only once, should keep the AB1 effect and cut the tax. It also tests whether contracts of *called* functions, shown at the call site, reach code the agent doesn't open.
@@ -675,3 +690,9 @@ Records: `results/A-ts-baseline/AB*/run-100..105.json`, `results/I-ts-gencontrac
 - Known limit, stated before the run: AB2's trap is reached through a string (`'$like'` in an AQL query), not a function call, so a call-site lookup can't find `unicodeLike`'s contract. AB2 is not expected to improve.
 
 **Run.** All five tasks, `claude-haiku-5-5`, `effort=low`, 6 runs per task, in the same period as iteration 19: Q runs 1–6.
+
+**Result: not a test of the hypothesis (delivery failed).** Q passed 22/30 at $0.0090 per pass, the same as P. But the extension appended contracts in only 6 of 30 runs (`results/analysis/it20.*`: one AB1 run, one AB2 run, three AB4 runs). Agents under pi read files as `cd <workspace>; sed -n 60,120p <file>`, with a `;`, and the extension only recognised `cd <dir> && …`. So the treatment didn't reach the agents. The batch is archived (`results/archive/Q-pi-contracts-it20-undelivered/`) and not scored.
+
+Fix: the extension now splits commands on `;` and `&&`, follows `cd`, allows `| head`/`| tail`/`| nl`/`| sed -n` and `2>/dev/null`, and still refuses edits (`sed -i`, `cat >`) and multi-file commands. Unit tests use command shapes taken from the run logs (`harness/runner/test/contracts-on-read.test.ts`). The lesson matches iteration 4: check that a treatment is actually delivered (here, the extension's per-run "contracts appended" count) before reading its effect.
+
+**Rerun (iteration 20b).** Same design, all five tasks, `effort=low`, 6 runs each, same period: A runs 112–117, P runs 7–12, Q runs 7–12.
