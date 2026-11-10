@@ -419,7 +419,7 @@ Anatomy (`results/analysis/it12-haiku.json`, split by run number):
 
 **Conclusion.**
 - **`effort=low` halves cost per passing task**, significant on every task (p ≤ 0.016), and runs 2.7× faster. It does so entirely by halving turns: output per request is unchanged (~520 tokens). Turns are the lever again, as in iterations 7–10.
-- **But it loses completeness:** AB2 drops to 4/6, and both failures are R5, the second code path (`make-filters-from-conditions`) that the spec names explicitly. The low-effort agent implements the operator where it first finds it and stops; nothing in the code tells it there's a second place. AB1 stays at the symptom-patch failure (0–1/6 in every setting).
+- **But it loses correctness:** AB2 drops to 4/6, and both failures are R5, the filter path (`make-filters-from-conditions`). *(Corrected in iteration 13: the original text said the agent never found the second place. It always does; it implements it with `$like`, which is silently unanchored in Actual.)* AB1 stays at the symptom-patch failure (0–1/6 in every setting).
 - **`thinking=disabled` had no effect.** The transcripts still hold ~17 thinking blocks per run, the same as the defaults; the setting doesn't reach the model in this SDK/model combination. That batch is effectively a second default batch, and its +18% (p 0.2–0.9) is a useful check on run-to-run noise. The "hidden thinking is ~60% of output" estimate from iteration 11 is unconfirmed: output tokens per visible character are 0.70–0.78 in all three settings, so the gap may be tool-call encoding rather than thinking.
 
 **What this means for Tersa.** This is the first result that points at the language rather than at tooling. A cheap, low-effort agent is half the price, and its failure is a *missed second place that had to change*. That is the kind of failure a language can prevent: if adding an operator to a closed set made every place that handles operators fail to compile until handled (exhaustive matching, no silent `default`), a low-effort agent would be told by the compiler where R5 is. Next: check how Actual's condition and filter code dispatch on operators, and whether a compile-time exhaustiveness check in plain TS would have flagged R5 (cheap to test as an arm before building any language).
@@ -446,3 +446,31 @@ Harness changes: arms can declare `codePatches` per task (applied by `prepare.sh
 **Run.** AB2 only, `claude-haiku-5-5`, `effort=low`, 12 runs per arm in the same period: A runs 46–57, F runs 1–12.
 
 **Expected if the hypothesis holds.** F misses R5 less often than A, at similar cost. If F's agents don't run the typechecker, or don't add `startsWith` to the union, the rule doesn't help an agent that doesn't consult the compiler. That would be a finding too: the language would have to run the check itself.
+
+**Result** (`node src/compare.ts "A low (it.13)=results/A-ts-baseline@46-57" "F low (it.13)=results/F-ts-exhaustive@1-12" --suite actual --model claude-haiku-5-5`):
+
+| Arm | Pass | Cost per pass | Mean cost per run | Turns per run | Failures |
+|---|---|---|---|---|---|
+| A, `effort=low` (runs 46–57) | 4/12 | $0.0325 | $0.0108 | 16.5 | R5 × 8 |
+| F, `effort=low` (runs 1–12) | 6/12 | $0.0234 | $0.0117 | 18.8 | R5 × 6 |
+
+Passes: Fisher exact p = 0.68. Cost per run: p = 0.60. Turns: p = 0.45. No difference.
+
+**What the agents actually did** (new `harness/runner/src/probe.ts`, run through the `anatomy` workflow on the uploaded transcripts and final workspaces: `results/analysis/it13-ab2.probe.md`, `it13-ab2-code.probe.json`):
+- **Every one of the 24 runs**, in both arms, added `startsWith` to the operator union, to `Condition.eval` and to `conditionsToAQL`, and ran the typechecker (first time at turn 6–26). None ended with type errors.
+- The outcome is decided entirely by **how** the filter case is written:
+
+| Filter implementation | A | F | Result |
+|---|---|---|---|
+| `apply(field, '$like', value + '%')` | 8 | 6 | always fails R5 |
+| anchored `$regexp` (`'^' + escaped value`) | 4 | 6 | always passes |
+
+- Why `$like` fails: Actual's `$like` runs through `unicodeLike` (`platform/server/sqlite/unicodeLike.ts`), which turns the LIKE pattern into a JavaScript regex **without anchors**. `rent%` becomes `/rent.*/i`, which also matches "Not rent". In SQL, `LIKE 'rent%'` is a prefix match; here it isn't. The agents wrote the textbook-correct code against an API whose name promises SQL semantics it doesn't deliver.
+
+**Correction to iteration 12.** Its conclusion said the low-effort agent "implements the operator where it first finds it and stops; nothing in the code tells it there's a second place". That was a guess from the failing rule's name and it is wrong. The second place is always found; the failure is semantic (the `$like` trap). The README finding is corrected. What effort buys here is apparently *checking*: at default effort AB2 passes 6/6 in iterations 10 and 12, so higher-effort runs presumably catch the trap, by reading `unicodeLike` or testing a negative case. Confirming that needs a probe of the default-effort transcripts.
+
+**Conclusion.** Hypothesis rejected for this task, for a clear reason: there was no missed place for the compiler to point at. Exhaustive dispatch is cheap and harmless (F costs the same), but this failure is a **lying primitive**, not an omission. For Tersa that suggests two rules worth more than exhaustiveness here:
+1. **No lying names in the standard vocabulary.** A primitive called `like` must behave like LIKE, or carry its real semantics in its type or signature (e.g. `matchesAnywhere(pattern)`). Tooling can't fix a name that misleads.
+2. **One definition of an operator's meaning.** `startsWith` is implemented twice, once in memory (`Condition.eval`, R2: passed in every run) and once as a query (`conditionsToAQL`, R5: the trap). If the language derived both from one definition, the trap would have nowhere to live. The weaker, testable version is a contract check that the two paths agree on the spec's own examples.
+
+Records: `results/A-ts-baseline/AB2/run-46..57.json`, `results/F-ts-exhaustive/AB2/run-1..12.json`.
