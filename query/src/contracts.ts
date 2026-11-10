@@ -99,6 +99,7 @@ async function askModel(model: string, file: string, text: string, sites: FnSite
     if (r.ok) {
       const j: any = await r.json();
       const t: string = j.content.filter((b: any) => b.type === "text").map((b: any) => b.text).join("");
+      if (j.stop_reason === "max_tokens") throw new Error(`reply cut off at max_tokens for ${file}`);
       const m = /\{[\s\S]*\}/.exec(t);
       if (!m) throw new Error(`no JSON in reply for ${file}: ${t.slice(0, 200)}`);
       return JSON.parse(m[0]);
@@ -121,9 +122,23 @@ async function main() {
     const path = join(root, f);
     const text = readFileSync(path, "utf8");
     const sites = findFunctions(f, text);
-    const contracts = fake
-      ? Object.fromEntries(sites.map((s) => [s.id, `placeholder contract for ${s.name}.`]))
-      : await askModel(model, f, text, sites);
+    let contracts: Record<string, string> = {};
+    if (fake) contracts = Object.fromEntries(sites.map((s) => [s.id, `placeholder contract for ${s.name}.`]));
+    else {
+      // Batches keep each reply well under the output limit; the whole file is context each time.
+      for (let i = 0; i < sites.length; i += 20) {
+        const batch = sites.slice(i, i + 20);
+        for (let attempt = 1; ; attempt++) {
+          try {
+            Object.assign(contracts, await askModel(model, f, text, batch));
+            break;
+          } catch (e) {
+            console.error(`${f} batch ${i / 20 + 1}, attempt ${attempt}: ${(e as Error).message.slice(0, 300)}`);
+            if (attempt >= 3) throw e;
+          }
+        }
+      }
+    }
     const missing = sites.filter((s) => !contracts[s.id]).map((s) => s.id);
     console.log(`${f}: ${sites.length} functions, ${sites.length - missing.length} contracts${missing.length ? ` (missing: ${missing.join(", ")})` : ""}`);
     writeFileSync(path, insertContracts(text, sites, contracts));
