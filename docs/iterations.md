@@ -710,3 +710,28 @@ On AB1, contracts reached 3 of 6 Q runs, and the decisive one (`_rankRules`: "so
 Fix 2: the extension collects every source file a bash command names, in any segment and following `cd`, plus `path:line:` prefixes in grep-style output. For each of those files it appends the contracts whose declarations appear in the output. Commands that write (`sed -i`, redirection, heredoc scripts) are skipped. Tests use the batched commands from the 20b logs.
 
 **Rerun (20c).** All five tasks, `effort=low`, 6 runs each, same period: P runs 13–18, Q runs 13–18. Delivery is checked first: Q runs where the AB1 agent saw `_rankRules`' contract.
+
+**Result of 20c (delivered).** Contracts were appended in all 30 Q runs (504 in total, 17 per run). On AB1, every Q run saw `_rankRules`' contract by turn 4 (`results/analysis/it20c.probe.json`).
+
+| Task | P (pi) pass, cost per pass, turns | Q (pi + contracts on read) pass, cost per pass, turns | p (mean cost) |
+|---|---|---|---|
+| AB1 | 1/6, $0.0449, 14.5 | **4/6, $0.0074, 9.8** | 0.22 |
+| AB2 | 2/6, $0.0289, 17.5 | 4/6, $0.0159, 16.3 | 0.30 |
+| AB3 | 6/6, $0.0052, 8.0 | 6/6, $0.0061, 10.0 | 0.26 |
+| AB4 | 6/6, $0.0026, 5.0 | 6/6, $0.0028, 5.0 | 0.20 |
+| AB5 | 5/6, $0.0104, 13.5 | 3/6, $0.0164, 11.2 | 0.83 |
+| **All** | **20/30, $0.0100** | **23/30, $0.0085 (−15%)** | |
+
+- **AB1:** all 4 passes restore the comparator; the 2 failures saw the contract and still kept the workaround. Cost per pass falls 6×, and runs are shorter (9.8 turns vs 14.5) and read less (94k vs 168k cache reads).
+- **AB3/AB4:** a small tax (+17% and +8% cost per pass, not significant), much less than iteration 18's +39%/+52% with contracts as comments in the files.
+- **AB2:** 4/6 vs 2/6, not significant; as predicted, the `unicodeLike` contract can't be reached from `'$like'`, so this is most likely noise.
+- **AB5:** 3/6 vs 5/6, not significant (Fisher p ≈ 0.55). The failures, in both arms, write the date filter as one object, `{ date: { $gte: from, $lte: to } }`. Every passing run writes `$and: [{ $gte }, { $lte }]` or sorts the ends. Whether AQL silently drops one of two operators in a single object would be another misleading primitive, but that is unverified; noted for a later check, not claimed.
+
+**Conclusion.**
+- Contracts delivered by the harness where code is read give the AB1 effect (the code contradicts its contract) at a fraction of the tax of contracts written into files. That's the best overall result so far: **23/30 at $0.0085 per pass**, against 20/30 at $0.0116 for Claude Code in the nearest batch (iteration 20b), i.e. −27% cost per pass with more passes.
+- Of that, roughly −15% comes from the harness (pi's smaller prompt and tool definitions, iterations 19, 20b and 20c) and −15% from the contracts on AB1. Neither changes AB2.
+- It took three batches to get the delivery right. The failure modes were the ordinary ways agents run shell commands (`;` instead of `&&`, several reads per call). A harness-level mechanism needs to be tested against real transcripts, not against the command shapes one expects.
+
+**For Tersa.** This settles where contracts belong. Their *content* belongs to the language: every function has one, written and checked with the code. Their *delivery* belongs to the toolchain and harness: show the contract wherever the code is read or called, once, and never as text in the file. A language with contracts in signatures gets the second for free from any tool that shows signatures. In TypeScript today, a 150-line pi extension and a cheap generation pass come close.
+
+Records: `results/P-pi-baseline/AB*/run-1..18.json`, `results/Q-pi-contracts/AB*/run-13..18.json`, `results/A-ts-baseline/AB*/run-106..117.json`; undelivered Q batches in `results/archive/`.
