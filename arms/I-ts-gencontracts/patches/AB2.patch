@@ -1,0 +1,757 @@
+diff --git a/packages/loot-core/src/platform/server/sqlite/unicodeLike.ts b/packages/loot-core/src/platform/server/sqlite/unicodeLike.ts
+index 1e7051d..b6c29f7 100644
+--- a/packages/loot-core/src/platform/server/sqlite/unicodeLike.ts
++++ b/packages/loot-core/src/platform/server/sqlite/unicodeLike.ts
+@@ -4,6 +4,12 @@ const likePatternCache = new LRUCache<string, RegExp>({ max: 500 });
+ 
+ const REGEX_SPECIAL = /[.*+^${}()|[\]\\?]/g;
+ 
++/**
++ * Contract: Translates a SQL LIKE pattern string into a case-insensitive (`i` flag) RegExp,
++ * with no anchors. `%` becomes `.*`, `?` becomes `.`, and a backslash before `%`, `?`, or `\`
++ * makes that next character a literal. Every other character, including a backslash not
++ * followed by one of those three, is regex-escaped and matched literally.
++ */
+ function likePatternToRegex(pattern: string): RegExp {
+   let regexStr = '';
+   let i = 0;
+@@ -30,6 +36,12 @@ function likePatternToRegex(pattern: string): RegExp {
+   return new RegExp(regexStr, 'i');
+ }
+ 
++/**
++ * Contract: Returns 0 if `pattern` is null or empty, and otherwise returns 1 if the translated
++ * regex matches anywhere within `value` (with null or empty `value` treated as `''`), else 0.
++ * Compiled regexes are memoized by pattern string in an LRU cache capped at 500 entries; the
++ * function does not modify its arguments.
++ */
+ export function unicodeLike(
+   pattern: string | null,
+   value: string | null,
+diff --git a/packages/loot-core/src/server/rules/condition.ts b/packages/loot-core/src/server/rules/condition.ts
+index efeb67c..dfe8c54 100644
+--- a/packages/loot-core/src/server/rules/condition.ts
++++ b/packages/loot-core/src/server/rules/condition.ts
+@@ -199,6 +199,13 @@ export class Condition {
+   unparsedValue;
+   value;
+ 
++  /**
++   * Contract: Takes an operator, field name, raw value, and optional options, and throws an
++   * assertion error if the field has no known type, the operator is not valid for that field, or
++   * the value is null (or an empty string for non-nullable string fields). On success it stores
++   * the raw value, the original unparsed value, op, field, options, and type name, and sets
++   * `value` to the type's parse result (or the raw value if the type has no parser).
++   */
+   constructor(op, field, value, options) {
+     const typeName = FIELD_TYPES.get(field);
+     assert(typeName, 'internal', 'Invalid condition field: ' + field);
+@@ -236,6 +243,16 @@ export class Condition {
+     this.type = typeName;
+   }
+ 
++  /**
++   * Contract: Takes a transaction-like object and returns a boolean by reading
++   * `object[this.field]` and applying the operator for this condition's type. Null string fields
++   * are treated as '', an undefined field value yields false, strings are lowercased before
++   * comparison, number fields with `outflow` or `inflow` options return false for the excluded
++   * sign (outflow negates the value), and any unrecognized operator or unmatched path returns
++   * false. Invalid regular expressions in `matches` are logged and yield false, and
++   * `onBudget`/`offBudget` return false when `object._account` is absent. The method does not
++   * modify the object or the condition.
++   */
+   eval(object) {
+     let fieldValue = object[this.field];
+     const type = this.type;
+@@ -446,10 +463,19 @@ export class Condition {
+     return false;
+   }
+ 
++  /**
++   * Contract: Returns the parsed value stored on the condition at construction time, without
++   * modification or recomputation.
++   */
+   getValue() {
+     return this.value;
+   }
+ 
++  /**
++   * Contract: Returns a plain object containing `op`, `field`, `value` (the original unparsed
++   * value passed to the constructor), and `type`, plus an `options` property only when the
++   * condition was constructed with truthy options. It does not alter the condition's state.
++   */
+   serialize() {
+     return {
+       op: this.op,
+diff --git a/packages/loot-core/src/server/rules/rule-utils.ts b/packages/loot-core/src/server/rules/rule-utils.ts
+index 8531f3b..2180227 100644
+--- a/packages/loot-core/src/server/rules/rule-utils.ts
++++ b/packages/loot-core/src/server/rules/rule-utils.ts
+@@ -9,6 +9,10 @@ import type { RuleConditionEntity } from '#types/models';
+ 
+ import type { Rule } from './rule';
+ 
++/**
++ * Contract: Returns nothing when `test` is truthy. When `test` is falsy, throws a `RuleError`
++ * built from `type` and `msg`, and narrows `test` to truthy for the caller's type checking.
++ */
+ export function assert(test: unknown, type: string, msg: string): asserts test {
+   if (!test) {
+     throw new RuleError(type, msg);
+@@ -35,6 +39,12 @@ const OP_SCORES: Record<RuleConditionEntity['op'], number> = {
+   offBudget: 0,
+ };
+ 
++/**
++ * Contract: Takes a rule and returns a number: the sum of `OP_SCORES` for each condition's
++ * operator, where an operator with no score contributes 0 and is logged. The sum is doubled
++ * when every condition's operator is one of is, isNot, isapprox, oneOf, or notOneOf, which
++ * includes the case of no conditions (result 0). The rule is not modified.
++ */
+ function computeScore(rule: Rule): number {
+   const initialScore = rule.conditions.reduce((score, condition) => {
+     if (OP_SCORES[condition.op] == null) {
+@@ -60,6 +70,11 @@ function computeScore(rule: Rule): number {
+   return initialScore;
+ }
+ 
++/**
++ * Contract: Takes an array of rules and returns a new array sorted in ascending order by
++ * computed score, with ties broken by ascending comparison of `getId()` values. The input
++ * array is not mutated, and the result is the same for any input ordering of the same rules.
++ */
+ function _rankRules(rules: Rule[]): Rule[] {
+   const scores = new Map();
+   rules.forEach(rule => {
+@@ -84,6 +99,12 @@ function _rankRules(rules: Rule[]): Rule[] {
+   });
+ }
+ 
++/**
++ * Contract: Takes an iterable of rules and returns a new array made by ranking the `pre`
++ * rules, then the normal rules (every stage other than 'pre' or 'post'), then the `post`
++ * rules, each group ordered by `_rankRules`, and concatenating them in that order. Every input
++ * rule appears exactly once in the output.
++ */
+ export function rankRules(rules: Iterable<Rule>): Rule[] {
+   let pre = [];
+   let normal = [];
+@@ -109,6 +130,14 @@ export function rankRules(rules: Iterable<Rule>): Rule[] {
+   return pre.concat(normal).concat(post);
+ }
+ 
++/**
++ * Contract: Mutates the given rule in place, leaving `rawValue` untouched. For id conditions
++ * with `is` or `isNot`, sets `value` and `unparsedValue` to the mapped `rawValue` (or
++ * `rawValue` if no mapping is found, including when the mapping is falsy). For `oneOf` and
++ * `notOneOf`, sets `value` to the deduplicated mapped array and `unparsedValue` to a copy of
++ * it. For id actions with op `set`, sets `value` to the mapped `rawValue`. Other operators are
++ * left unchanged.
++ */
+ export function migrateIds(rule: Rule, mappings: Map<string, string>): void {
+   // Go through the in-memory rules and patch up ids that have been
+   // "migrated" to other ids. This is a little tricky, but a lot
+@@ -160,6 +189,15 @@ export function migrateIds(rule: Rule, mappings: Map<string, string>): void {
+ }
+ 
+ // This finds all the rules that reference the `id`
++/**
++ * Contract: Walks the rules in array order and, for each condition on an id field matching
++ * `fieldName`, calls `func` with the rule and each referenced id (`value` for is/isNot, each
++ * element for oneOf/notOneOf). If `func` returns a truthy value for a condition, the walk
++ * moves to the next rule and skips that rule's remaining conditions and actions. Otherwise,
++ * for each id action on `fieldName` with op `set`, it calls `func` with the action's value,
++ * and a truthy return ends the action loop for that rule. Returns nothing and does not itself
++ * modify rules.
++ */
+ export function iterateIds(
+   rules: Rule[],
+   fieldName: string,
+@@ -217,6 +255,13 @@ export function iterateIds(
+   }
+ }
+ 
++/**
++ * Contract: Takes a recurrence description and returns `{ type: 'recur', schedule }`, where
++ * `schedule` is an `RSchedule` built from `recurConfigToRSchedule(desc)` with `skipWeekend`
++ * and `weekendSolve` (from `desc.weekendSolveMode`) passed as its data. Any error thrown while
++ * building the schedule is rethrown as a `RuleError` with type 'parse-recur-date' and the
++ * original message.
++ */
+ export function parseRecurDate(desc) {
+   try {
+     const rules = recurConfigToRSchedule(desc);
+@@ -236,6 +281,13 @@ export function parseRecurDate(desc) {
+   }
+ }
+ 
++/**
++ * Contract: Takes a value and returns null if it is not a string or is not of length 10, 7, or
++ * 4, or if it fails ISO validation. For length 10, validates `YYYY-MM-DD` and returns `{ type:
++ * 'date', date }`; for length 7, validates `YYYY-MM` (by appending `-01`) and returns `{ type:
++ * 'month', date }`; for length 4, validates `YYYY` (by appending `-01-01`) and returns `{
++ * type: 'year', date }`. The returned `date` is the original input string, unchanged.
++ */
+ export function parseDateString(str) {
+   if (typeof str !== 'string') {
+     return null;
+@@ -265,6 +317,11 @@ export function parseDateString(str) {
+   return null;
+ }
+ 
++/**
++ * Contract: Takes an object with `num1` and `num2` and returns `{ type: 'between', num1, num2
++ * }` with the values unchanged when both are of JavaScript type 'number', otherwise returns
++ * null. No range or NaN check is performed.
++ */
+ export function parseBetweenAmount(between) {
+   const { num1, num2 } = between;
+   if (typeof num1 !== 'number' || typeof num2 !== 'number') {
+diff --git a/packages/loot-core/src/server/transactions/transaction-rules.ts b/packages/loot-core/src/server/transactions/transaction-rules.ts
+index 15a3786..b3c0609 100644
+--- a/packages/loot-core/src/server/transactions/transaction-rules.ts
++++ b/packages/loot-core/src/server/transactions/transaction-rules.ts
+@@ -62,6 +62,11 @@ let unlistenSync;
+ let firstcharIndexer;
+ let payeeIndexer;
+ 
++/**
++ * Contract: Replaces the module-level in-memory rule map with an empty Map and creates new
++ * firstchar (on `imported_payee`) and payee `RuleIndexer` instances, discarding any previously
++ * indexed rules. Takes no arguments and returns nothing.
++ */
+ export function resetState() {
+   allRules = new Map();
+   firstcharIndexer = new RuleIndexer({
+@@ -73,6 +78,11 @@ export function resetState() {
+ 
+ // Database functions
+ 
++/**
++ * Contract: Returns a new object whose keys are the original values and whose values are the
++ * original keys. When two entries share a value, the later entry's key overwrites the earlier
++ * one.
++ */
+ function invert(obj) {
+   return Object.fromEntries(
+     Object.entries(obj).map(entry => {
+@@ -84,6 +94,11 @@ function invert(obj) {
+ const internalFields = schemaConfig.views.transactions.fields;
+ const publicFields = invert(schemaConfig.views.transactions.fields);
+ 
++/**
++ * Contract: Returns a shallow copy of the object with `field` replaced by its public name from
++ * the inverted schema field map, or left unchanged when no mapping exists. The input is not
++ * mutated.
++ */
+ function fromInternalField<T extends { field: string }>(obj: T): T {
+   return {
+     ...obj,
+@@ -91,6 +106,11 @@ function fromInternalField<T extends { field: string }>(obj: T): T {
+   };
+ }
+ 
++/**
++ * Contract: Returns a shallow copy of the object with `field` replaced by its internal column
++ * name from the schema field map, or left unchanged when no mapping exists. The input is not
++ * mutated.
++ */
+ function toInternalField<T extends { field: string }>(obj: T): T {
+   return {
+     ...obj,
+@@ -98,6 +118,11 @@ function toInternalField<T extends { field: string }>(obj: T): T {
+   };
+ }
+ 
++/**
++ * Contract: Parses a JSON string (or passes through a non-string value) and returns it as an
++ * array. Throws `RuleError('internal')` if JSON parsing fails or the parsed value is not an
++ * array.
++ */
+ function parseArray(str) {
+   let value;
+   try {
+@@ -112,10 +137,19 @@ function parseArray(str) {
+   return value;
+ }
+ 
++/**
++ * Contract: For a truthy input, parses it into an array via `parseArray` and maps each item
++ * through `fromInternalField`, returning the resulting array. For a falsy input, returns an
++ * empty array.
++ */
+ export function parseConditionsOrActions(str) {
+   return str ? parseArray(str).map(item => fromInternalField(item)) : [];
+ }
+ 
++/**
++ * Contract: Maps each item of the array through `toInternalField` and returns the JSON string
++ * of the resulting array. The input array is not mutated.
++ */
+ export function serializeConditionsOrActions(arr) {
+   return JSON.stringify(arr.map(item => toInternalField(item)));
+ }
+@@ -167,6 +201,11 @@ export const ruleModel = {
+   },
+ };
+ 
++/**
++ * Contract: Builds a `Rule` from the `toJS` form of `data`. If construction throws a
++ * `RuleError`, it logs a warning and returns null; any other error is rethrown. On success it
++ * applies the current id mappings via `migrateIds` and returns the rule.
++ */
+ export function makeRule(data) {
+   let rule;
+   try {
+@@ -187,6 +226,12 @@ export function makeRule(data) {
+   return rule;
+ }
+ 
++/**
++ * Contract: Resets state, then loads every rule from the database with non-null conditions and
++ * actions and `tombstone = 0`, mapping legacy stages 'cleanup' and 'modify' to 'pre'. Each
++ * rule that builds successfully is added to the in-memory map and both indexers. It then
++ * unsubscribes any previous sync listener and subscribes `onApplySync`. Resolves to nothing.
++ */
+ export async function loadRules() {
+   resetState();
+ 
+@@ -216,11 +261,20 @@ export async function loadRules() {
+   unlistenSync = addSyncListener(onApplySync);
+ }
+ 
++/**
++ * Contract: Returns a new array containing the rules currently held in the in-memory map. It
++ * does not query the database.
++ */
+ export function getRules() {
+   // This can simply return the in-memory data
+   return [...allRules.values()];
+ }
+ 
++/**
++ * Contract: Validates the rule as a new record (requiring `conditions`, `actions`, a valid
++ * `stage` and `conditionsOp`), throwing if validation fails. It then inserts the serialized
++ * rule with a generated UUID and returns the result of `db.insertWithUUID`.
++ */
+ export async function insertRule(
+   rule: Omit<RuleEntity, 'id'> & { id?: string },
+ ) {
+@@ -228,11 +282,20 @@ export async function insertRule(
+   return db.insertWithUUID('rules', ruleModel.fromJS(rule));
+ }
+ 
++/**
++ * Contract: Validates the rule in update mode, checking `stage` and `conditionsOp` only when
++ * those keys are present, and throws if a present value is invalid. It then writes the
++ * serialized rule to the `rules` table with `db.update` and returns that result.
++ */
+ export async function updateRule(rule) {
+   rule = ruleModel.validate(rule, { update: true });
+   return db.update('rules', ruleModel.fromJS(rule));
+ }
+ 
++/**
++ * Contract: Returns false and deletes nothing if any schedule row references the rule id.
++ * Otherwise it deletes the rule row and returns true.
++ */
+ export async function deleteRule(id: string) {
+   const schedule = await db.first<Pick<db.DbSchedule, 'id'>>(
+     'SELECT id FROM schedules WHERE rule = ?',
+@@ -249,6 +312,12 @@ export async function deleteRule(id: string) {
+ 
+ // Sync projections
+ 
++/**
++ * Contract: Applies incoming `rules` changes to the in-memory map and indexers: tombstoned
++ * rows are removed, and other rows are rebuilt via `makeRule`, replacing the prior indexer
++ * entries when the rebuilt rule is valid. If any changed table name contains 'mapping', it
++ * re-runs `migrateIds` on every current rule. Returns nothing.
++ */
+ function onApplySync(oldValues, newValues) {
+   newValues.forEach((items, table) => {
+     if (table === 'rules') {
+@@ -290,6 +359,10 @@ function onApplySync(oldValues, newValues) {
+   }
+ }
+ 
++/**
++ * Contract: Returns the `rule` value of the schedule with the given id, or null if no such
++ * schedule exists or its rule is empty.
++ */
+ export async function getRuleIdFromScheduleId(
+   scheduleId: string,
+ ): Promise<string | null> {
+@@ -301,6 +374,10 @@ export async function getRuleIdFromScheduleId(
+   return row?.rule || null;
+ }
+ 
++/**
++ * Contract: Returns the non-null rule ids of all schedules, omitting entries equal to
++ * `excluding`. Duplicate ids are not removed.
++ */
+ export async function getAllRuleIdsFromSchedules(
+   excluding: string,
+ ): Promise<string[]> {
+@@ -320,6 +397,15 @@ export async function getAllRuleIdsFromSchedules(
+ // Runner
+ const NULLABLE_RULE_FIELDS = ['payee', 'category'] as const;
+ 
++/**
++ * Contract: Applies the ranked candidate rules to a transaction in sequence and returns the
++ * resulting transaction. Missing `payee` or `category` fields are treated as null during
++ * matching and are removed from the result if they remain null. The running balance is fetched
++ * at most once, and only if a rule that runs reads it. When the transaction has a schedule,
++ * the schedule's own rule runs unconditionally and other schedule-linked rules are skipped.
++ * `category_group` is refreshed after each rule whenever `category` has changed. The result is
++ * finalized with synthetic fields stripped.
++ */
+ export async function runRules(
+   trans,
+   accounts: Map<string, db.DbAccount> | null = null,
+@@ -457,6 +543,12 @@ export async function runRules(
+   return result;
+ }
+ 
++/**
++ * Contract: For a null or undefined condition, returns it unchanged. For an `is` condition on
++ * `category` with a null value, returns an `and` condition that also requires not a transfer
++ * and not a parent. For an `isNot` condition on `category` with a null value, returns an `and`
++ * condition that also requires not a parent. Any other condition is returned unchanged.
++ */
+ function conditionSpecialCases(cond: Condition | null): Condition | null {
+   if (!cond) {
+     return cond;
+@@ -490,6 +582,13 @@ function conditionSpecialCases(cond: Condition | null): Condition | null {
+ }
+ 
+ // This does the inverse: finds all the transactions matching a rule
++/**
++ * Contract: Converts conditions (Condition instances or plain objects) into AQL filter
++ * expressions and returns `{ filters, errors }`. Conditions that fail to construct are
++ * dropped, and their error types are collected in `errors`. Special cases are applied when
++ * `applySpecialCases` is true, and null entries are filtered out. Throws `Error` for an
++ * unhandled operator.
++ */
+ export function conditionsToAQL(
+   conditions,
+   { recurDateBounds = 100, applySpecialCases = true } = {},
+@@ -752,6 +851,13 @@ export function conditionsToAQL(
+   return { filters, errors };
+ }
+ 
++/**
++ * Contract: Converts the given actions into `Action` instances and returns null if any action
++ * fails to parse. It then prepares each transaction (computing running balance only if an
++ * action references it), prefetches `BALANCE_OF` values, executes the actions, ungroups the
++ * results, and finalizes each one. It persists the finalized transactions with
++ * `batchUpdateTransactions` and returns that result.
++ */
+ export async function applyActions(
+   transactions: TransactionEntity[],
+   actions: Array<Action | RuleActionEntity>,
+@@ -827,6 +933,11 @@ export async function applyActions(
+   return batchUpdateTransactions({ updated: finalized });
+ }
+ 
++/**
++ * Contract: Takes a payeeId and returns, as a new array, the distinct in-memory rules whose
++ * payee action targets that id, ordered by rankRules. Returns an empty array when no rule
++ * matches. It does not modify any rule state.
++ */
+ export function getRulesForPayee(payeeId) {
+   const rules = new Set<Rule>();
+   iterateIds(getRules(), 'payee', (rule, id) => {
+@@ -838,6 +949,12 @@ export function getRulesForPayee(payeeId) {
+   return rankRules([...rules]);
+ }
+ 
++/**
++ * Contract: Generator that yields serialized in-memory rules matching the given stage, with
++ * exactly one 'set' action on actionField (value equal to actionValue when provided) and
++ * exactly one 'is' or 'isNot' condition on condField (value equal to condValue when provided).
++ * Yields nothing when no rule matches, and it does not modify rules.
++ */
+ function* getIsSetterRules(
+   stage,
+   condField,
+@@ -865,6 +982,13 @@ function* getIsSetterRules(
+ 
+   return null;
+ }
++/**
++ * Contract: Generator that yields serialized in-memory rules matching the given stage, with
++ * exactly one 'set' action on actionField and exactly one 'oneOf' condition on condField. The
++ * action value must equal actionValue and the condition's value list must contain condValue,
++ * each check skipped when the argument is null or undefined. Yields nothing when no rule
++ * matches.
++ */
+ function* getOneOfSetterRules(
+   stage,
+   condField,
+@@ -893,6 +1017,14 @@ function* getOneOfSetterRules(
+   return null;
+ }
+ 
++/**
++ * Contract: Takes a list of imported payee names and a target payee name. If a pre-stage oneOf
++ * imported_payee rule already sets payee to the target, it merges the non-empty names into
++ * that rule's condition values, persists the update, and returns that rule's id; otherwise it
++ * inserts a new pre-stage rule (conditions: imported_payee oneOf fromNames, action: set payee
++ * to the target) and returns the result of insertRule, with the names passed through
++ * unfiltered.
++ */
+ export async function updatePayeeRenameRule(fromNames: string[], to: string) {
+   const renameRule = getOneOfSetterRules('pre', 'imported_payee', 'payee', {
+     actionValue: to,
+@@ -929,6 +1061,12 @@ export async function updatePayeeRenameRule(fromNames: string[], to: string) {
+   }
+ }
+ 
++/**
++ * Contract: Takes a list of transactions and returns the category that appears most often
++ * among those with a truthy category, provided its count is at least 3, otherwise null. Ties
++ * resolve to the earliest-scoring entry, and if the first transaction has no category the
++ * result is null. Throws a TypeError when given an empty array.
++ */
+ export function getProbableCategory(transactions) {
+   const scores = new Map();
+ 
+@@ -949,6 +1087,15 @@ export function getProbableCategory(transactions) {
+   return winner.score >= 3 ? winner.category : null;
+ }
+ 
++/**
++ * Contract: Async. For the payees of the given transactions with learn_categories enabled,
++ * loads non-parent transactions in open accounts from 180 days before the oldest given date
++ * through 180 days ahead, and for each non-null payee having one of its five most recent
++ * transactions among the inputs, derives a probable category and then updates existing
++ * is-payee category rules to it where they differ, or inserts a new rule if none exists and no
++ * oneOf rule already sets that category. Returns immediately for an empty input, and returns
++ * nothing otherwise.
++ */
+ export async function updateCategoryRules(transactions) {
+   if (transactions.length === 0) {
+     return;
+@@ -1069,6 +1216,12 @@ export type TransactionForRules = TransactionEntity & {
+ /**
+  * Running balance for `accountId` before the current transaction row (same cutoff as `balance`).
+  */
++/**
++ * Contract: Async. Returns the sum of amounts of non-parent transactions in the given account
++ * that come before the transaction: those dated earlier, or dated the same day with a lower
++ * sort_order (or, when sort_order is null, ordered ahead by non-null sort_order or lower id),
++ * excluding the transaction itself. Returns 0 when there are no such rows.
++ */
+ export async function getRunningBalanceBeforeTransaction(
+   trans: TransactionEntity,
+   accountId: string,
+@@ -1111,6 +1264,12 @@ export async function getRunningBalanceBeforeTransaction(
+   return balance ?? 0;
+ }
+ 
++/**
++ * Contract: Async. Collects the distinct BALANCE_OF literals across the given formulas,
++ * resolves each to an account id, and returns a new Map from each literal to the running
++ * balance before the transaction for that account, or to 0 when the account cannot be
++ * resolved. Does not modify the transaction or the accounts map.
++ */
+ export async function prefetchBalanceOfForTransaction(
+   trans: TransactionEntity,
+   accountsMap: Map<string, db.DbAccount>,
+@@ -1143,6 +1302,11 @@ const BALANCE_VARIABLE = /\bbalance\b/i;
+ // balance: Handlebars templates via `{{balance}}` and formulas via the
+ // `balance` variable. `BALANCE_OF(...)` is a different, prefetched value
+ // and does not count.
++/**
++ * Contract: Pure check that returns true if any action's options.template or options.formula
++ * string contains the word 'balance' (case-insensitive, word-bounded). Actions without options
++ * or without those strings are ignored, and BALANCE_OF(...) usages do not count.
++ */
+ export function actionsReferenceBalance(
+   actions: Array<{ options?: { template?: string; formula?: string } }>,
+ ): boolean {
+@@ -1155,6 +1319,13 @@ export function actionsReferenceBalance(
+   });
+ }
+ 
++/**
++ * Contract: Async. Returns a new object copying the transaction and adding payee_name when the
++ * payee exists, balance initialized to 0, _account and _account_name when the account is set
++ * (taken from the accounts map if present, otherwise fetched), balance replaced by the running
++ * balance only when includeBalance is true and an account is set, and _category_name and
++ * category_group when the category exists. The input object is not mutated.
++ */
+ export async function prepareTransactionForRules(
+   trans: TransactionEntity,
+   accounts: Map<string, db.DbAccount> | null = null,
+@@ -1207,6 +1378,12 @@ export async function prepareTransactionForRules(
+   return r;
+ }
+ 
++/**
++ * Contract: Async. Acts only when the object has a payee_name property and payee equals 'new':
++ * if payee_name is truthy it sets payee to the id of the existing payee with that name or of a
++ * newly inserted one, otherwise it sets payee to null. Mutates the object in place and returns
++ * nothing.
++ */
+ async function resolvePayeeNameForRules(
+   trans: TransactionEntity | TransactionForRules,
+ ): Promise<void> {
+@@ -1236,6 +1413,13 @@ async function resolvePayeeNameForRules(
+  * actually changed since the last check, to avoid a database lookup on
+  * every rule when category was untouched.
+  */
++/**
++ * Contract: Async. Compares the transaction's category (null-normalized) with lastCategoryId
++ * and returns lastCategoryId unchanged without a database lookup when they match. When they
++ * differ, it sets category_group from the new category's cat_group (or undefined if the
++ * category is not found), or deletes category_group when the category is cleared, mutates the
++ * transaction, and returns the new category id normalized to null when absent.
++ */
+ async function refreshCategoryGroupIfChanged(
+   trans: TransactionForRules,
+   lastCategoryId: string | null,
+@@ -1255,6 +1439,14 @@ async function refreshCategoryGroupIfChanged(
+   return currentCategoryId;
+ }
+ 
++/**
++ * Contract: Async. Mutates and returns the same transaction: if it has payee_name, resolves a
++ * 'new' payee and then deletes payee_name; deletes balance, category_group and
++ * _balanceOfPrefetched when present, and deletes parent_amount, parent_notes,
++ * parent_imported_payee, parent_payee and parent_account. The same balance,
++ * _balanceOfPrefetched and parent_* fields are removed from each subtransaction when
++ * subtransactions exist.
++ */
+ export async function finalizeTransactionForRules(
+   trans: TransactionEntity | TransactionForRules,
+ ): Promise<TransactionEntity> {
+diff --git a/packages/loot-core/src/shared/rules.ts b/packages/loot-core/src/shared/rules.ts
+index c431867..6364c83 100644
+--- a/packages/loot-core/src/shared/rules.ts
++++ b/packages/loot-core/src/shared/rules.ts
+@@ -96,6 +96,12 @@ export const FIELD_TYPES = new Map<keyof FieldValueTypes, string>(
+   ]),
+ );
+ 
++/**
++ * Contract: Takes a field key and an operator and returns a boolean. It returns false if the
++ * field has no entry in FIELD_TYPES or if the operator is in that field's disallowedOps.
++ * Otherwise it returns true when the operator is in the ops list for the field's type or in
++ * the field's internalOps, and false in all other cases. It does not modify any state.
++ */
+ export function isValidOp(field: keyof FieldValueTypes, op: RuleConditionOp) {
+   const type = FIELD_TYPES.get(field);
+ 
+@@ -107,6 +113,12 @@ export function isValidOp(field: keyof FieldValueTypes, op: RuleConditionOp) {
+   );
+ }
+ 
++/**
++ * Contract: Takes a field key and returns a new array of operators. For an unknown field it
++ * returns an empty array. For a known field it returns the ops of the field's type from
++ * TYPE_INFO, in their original order, with the field's disallowedOps removed. internalOps are
++ * not included. The shared TYPE_INFO arrays are not mutated.
++ */
+ export function getValidOps(field: keyof FieldValueTypes): RuleConditionOp[] {
+   const type = FIELD_TYPES.get(field);
+   if (!type) {
+@@ -117,6 +129,12 @@ export function getValidOps(field: keyof FieldValueTypes): RuleConditionOp[] {
+   );
+ }
+ 
++/**
++ * Contract: Takes a field name and returns an object with a `field` property. 'amount-inflow'
++ * maps to { field: 'amount', options: { inflow: true } } and 'amount-outflow' maps to { field:
++ * 'amount', options: { outflow: true } }. Any other input is returned as { field } with the
++ * value unchanged.
++ */
+ export function deserializeField(field) {
+   if (field === 'amount-inflow') {
+     return { field: 'amount', options: { inflow: true } };
+@@ -127,6 +145,12 @@ export function deserializeField(field) {
+   }
+ }
+ 
++/**
++ * Contract: Takes an error type string and returns a fixed user-facing message. 'no-null',
++ * 'no-empty-array' and 'no-empty-string' share the message 'Value cannot be empty'. Each other
++ * known type maps to its own message, and any unrecognized type returns the internal-error
++ * message with the support link.
++ */
+ export function getFieldError(type) {
+   switch (type) {
+     case 'date-format':
+@@ -150,6 +174,12 @@ export function getFieldError(type) {
+   }
+ }
+ 
++/**
++ * Contract: Takes two values and returns a two-element array containing them in ascending
++ * order, using the < operator. If num1 is less than num2 it returns [num1, num2], otherwise
++ * [num2, num1], so equal inputs are returned in swapped order with the same values. Inputs are
++ * not coerced or validated and nothing is mutated.
++ */
+ export function sortNumbers(num1, num2) {
+   if (num1 < num2) {
+     return [num1, num2];
+@@ -157,6 +187,15 @@ export function sortNumbers(num1, num2) {
+   return [num2, num1];
+ }
+ 
++/**
++ * Contract: Takes a rule item and returns a new object derived from it, except in one case
++ * noted below. For 'set-split-amount' items with method 'fixed-amount' it returns a shallow
++ * copy; for other methods it returns the same item reference. For 'number' items it returns a
++ * shallow copy. For 'string' items it returns a copy whose value is '' when the original value
++ * is null or undefined. For 'boolean' items it returns a copy with the value unchanged. For
++ * all other types it returns a copy with error set to null, overwriting any existing error.
++ * The input is not mutated.
++ */
+ export function parse(item) {
+   if (item.op === 'set-split-amount') {
+     if (item.options.method === 'fixed-amount') {
+@@ -183,6 +222,16 @@ export function parse(item) {
+   return { ...item, error: null };
+ }
+ 
++/**
++ * Contract: Takes a rule item, removes its `error` and `inputKey` properties, and returns the
++ * result without mutating the input. For 'set-split-amount' with method 'fixed-amount' it
++ * returns the remaining properties unchanged. With method 'fixed-percent' it also sets value
++ * to parseFloat(value) when value is truthy, otherwise to the original falsy value. Other
++ * 'set-split-amount' methods return the remaining object unchanged. For 'number' it returns
++ * the remaining properties. For 'string' it sets a null or undefined value to ''. For
++ * 'boolean' it sets a null or undefined value to false. For all other types it returns the
++ * remaining properties unchanged.
++ */
+ export function unparse({ error: _error, inputKey: _inputKey, ...item }) {
+   if (item.op === 'set-split-amount') {
+     if (item.options.method === 'fixed-amount') {
+@@ -217,6 +266,13 @@ export function unparse({ error: _error, inputKey: _inputKey, ...item }) {
+   return item;
+ }
+ 
++/**
++ * Contract: Takes a value and a condition object and returns a new condition object with error
++ * set to null and value set according to the condition. For 'oneOf' and 'notOneOf' conditions
++ * the value is value || [], so falsy inputs become an empty array and truthy inputs are kept
++ * as given. For 'number' conditions with a null or undefined value the value is 0. In all
++ * other cases the value is kept as given. The condition is not mutated.
++ */
+ export function makeValue(value, cond) {
+   const isMulti = ['oneOf', 'notOneOf'].includes(cond.op);
+ 
+@@ -231,6 +287,11 @@ export function makeValue(value, cond) {
+   return { ...cond, error: null, value };
+ }
+ 
++/**
++ * Contract: Takes a number and returns Math.round(Math.abs(number) * 0.075), a non-negative
++ * integer equal to 7.5% of the number's magnitude rounded to the nearest integer, with halves
++ * rounded upward by Math.round. It does not mutate state.
++ */
+ export function getApproxNumberThreshold(number) {
+   return Math.round(Math.abs(number) * 0.075);
+ }
