@@ -1,0 +1,57 @@
+name: contracts
+
+# Generates contract comments for every function in the given files of a suite's pristine
+# (correct) code with query/src/contracts.ts, and commits the result as an arm's code patch.
+# The model sees only the files, never a task. Used by arm I (iteration 17).
+on:
+  workflow_dispatch:
+    inputs:
+      arm:
+        description: Arm that gets the patch (arms/<arm>/patches/<task>.patch)
+        default: I-ts-gencontracts
+      task:
+        description: Task the patch is for
+        default: AB1
+      files:
+        description: Files, space-separated, relative to the repo root of the suite's project
+        required: true
+      model:
+        description: Model that writes the contracts
+        default: claude-haiku-5-5
+
+concurrency:
+  group: summary
+  cancel-in-progress: false
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+        working-directory: query
+      - name: Generate
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FILES: ${{ inputs.files }}
+        run: |
+          P=$(bash suites/actual/scripts/pristine.sh)
+          mkdir -p "arms/${{ inputs.arm }}/patches"
+          (cd query && node src/contracts.ts "$P" $FILES --model "${{ inputs.model }}" \
+            --json "../arms/${{ inputs.arm }}/patches/${{ inputs.task }}.contracts.json")
+          git -C "$P" diff > "arms/${{ inputs.arm }}/patches/${{ inputs.task }}.patch"
+          git -C "$P" diff --stat
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add arms
+          git commit -qm "contracts: ${{ inputs.arm }} ${{ inputs.task }} (${{ inputs.model }})"
+          for i in 1 2 3; do git pull -q --rebase && git push -q && exit 0; sleep 5; done; exit 1
