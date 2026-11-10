@@ -1,0 +1,25 @@
+=== 42809447615/logs-AB4-900/P-pi-baseline/AB4/run-900/agent-stdout.log
+[P-pi-baseline AB4 run 900] agent starting (anthropic/claude-haiku-5-5)
+[turn 1 1s] in 3k out 163 $0.0001 | Bash {"command":"cd /tmp/tersa-raw/P-pi-baseline/AB4/run-900/workspace && git status | head; grep -r
+[turn 2 3s] in 4k out 126 $0.0003 | Bash {"command":"cd /tmp/tersa-raw/P-pi-baseline/AB4/run-900/workspace && cat packages/loot-core/src
+[turn 3 7s] in 9k out 953 $0.0015 | Bash {"command":"cd /tmp/tersa-raw/P-pi-baseline/AB4/run-900/workspace && ls packages/api/__tests__ 
+[turn 4 176s] in 11k out 401 $0.0020 | Bash {"command":"cd /tmp/tersa-raw/P-pi-baseline/AB4/run-900/workspace && ls packages/api/__tests__ 
+node:internal/modules/esm/resolve:318
+  return new ERR_PACKAGE_PATH_NOT_EXPORTED(
+         ^
+
+Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: No "exports" main defined in /home/runner/work/_temp/agent-bench/harness/runner/node_modules/@earendil-works/pi-coding-agent/package.json
+    at exportsNotFound (node:internal/modules/esm/resolve:318:10)
+    at packageExportsResolve (node:internal/modules/esm/resolve:608:13)
+    at resolveExports (node:internal/modules/cjs/loader:664:36)
+    at Function._findPath (node:internal/modules/cjs/loader:731:31)
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1415:27)
+    at Function.resolve (node:internal/modules/helpers:157:19)
+    at piVersion (file:///home/runner/work/_temp/agent-bench/harness/runner/src/agent-pi.ts:34:24)
+    at runPiAgent (file:///home/runner/work/_temp/agent-bench/harness/runner/src/agent-pi.ts:219:46)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///home/runner/work/_temp/agent-bench/harness/runner/src/run.ts:150:7 {
+  code: 'ERR_PACKAGE_PATH_NOT_EXPORTED'
+}
+
+Node.js v22.23.4

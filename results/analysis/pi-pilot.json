@@ -1,0 +1,26 @@
+[
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB4",
+  "run": 900,
+  "requests": 4,
+  "startContext": 3395,
+  "input": 27660,
+  "output": 1243,
+  "outputByKind": {
+   "thinking": 406.9840848806366,
+   "text": 116.77559681697613,
+   "shellEdit": 0,
+   "shell": 413.3702917771883,
+   "editTool": 305.87002652519897,
+   "otherTool": 0
+  },
+  "carried": {
+   "start": 13580,
+   "ownOutput": 1287.0159151193634,
+   "toolResults": 12792.984084880636
+  },
+  "visibleChars": 1450,
+  "thinkingBlocks": 1
+ }
+]
