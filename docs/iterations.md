@@ -535,3 +535,22 @@ Records: `results/A-ts-baseline/AB2/run-58..69.json`, `results/G-ts-agreement/AB
 The frozen check, applied unchanged to AB5 (`arms/G-ts-agreement/patches/AB5.patch`): with the reference solution it fails only with "no sample value is valid for "isbetween" on date fields: add one to SAMPLE_VALUES.date", which is the designed behaviour for a new operator; once a `{ from, to }` sample is added it passes (24/24). Whether it catches anything in agents' code depends on what they get wrong, which isn't known yet.
 
 **Runs dispatched:** AB5, `claude-haiku-5-5`: arm A `effort=low` runs 1–12, arm G `effort=low` runs 1–12, arm A default effort runs 13–18.
+
+**Result** (AB5, `claude-haiku-5-5`, same period):
+
+| Arm | Pass | Cost per pass | Turns per run |
+|---|---|---|---|
+| A, `effort=low` (runs 1–12) | 12/12 | $0.0105 | 17.0 |
+| G, `effort=low` (runs 1–12) | 12/12 | $0.0120 (+14%, p = 0.06) | 18.8 |
+| A, default effort (runs 13–18) | 6/6 | $0.0273 | 36.7 |
+
+Probe (`results/analysis/it15-ab5.probe.json`): 10 of 12 G runs ran the check, got "no sample value is valid for "isbetween" on date fields", added a `{ from, to }` sample to the test and re-ran it; 2 runs never ran it. All 36 runs pass every rule, including the ends in either order in filters (R3/R5).
+
+**Conclusion (as pre-registered: "no effect possible").** AB5 has no semantic trap: the existing amount `isbetween` already shows the right pattern in both evaluators (sorted ends, `$gte`/`$lte`), and every agent copied it. With nothing to catch, the check can only cost, and it does: about +14% per pass, almost all of it the turns spent adding a sample value the check demands. So the generalisation question is **not answered** by this task. What it does show:
+- The check is honest about its price. Its benefit on AB2 (−38% cost per pass) and its tax on AB5 (+14%) are both measured; whether it pays depends on how often tasks hit a disagreement between two implementations.
+- The tax comes from maintaining the check by hand (sample values). In a language where both evaluators are derived from one definition there's nothing to maintain and nothing to disagree, which is the stronger form of the rule; this result argues for that form over a test.
+- `effort=low` passes AB5 12/12 at 38% of default effort's cost per pass. Where the code shows the pattern to copy, the cheap setting is enough; AB2 failed only because the pattern on offer (`$like`) was misleading.
+
+**Limit of the method.** Writing a task with a trap in it after seeing the check would bias the test, and writing one without knowing whether it has a trap (as here) can come out empty. A fairer source of traps is disagreements that already exist upstream: the generic check found one at the pinned commit (`contains` with `%`/`_`, iteration 14). A task that touches that code would be a trap nobody designed.
+
+Records: `results/A-ts-baseline/AB5/run-1..18.json`, `results/G-ts-agreement/AB5/run-1..12.json`.
