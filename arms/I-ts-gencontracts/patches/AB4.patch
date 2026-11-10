@@ -1,0 +1,431 @@
+diff --git a/packages/loot-core/src/server/api.ts b/packages/loot-core/src/server/api.ts
+index d9f62fc..8477bfb 100644
+--- a/packages/loot-core/src/server/api.ts
++++ b/packages/loot-core/src/server/api.ts
+@@ -59,6 +59,14 @@ let IMPORT_MODE = false;
+ // we also need to notify the UI manually if stuff has changed (if
+ // they are connecting to an already running instance, the UI should
+ // update). The wrapper handles that.
++/**
++ * Contract: Takes an async handler and returns a wrapper that runs the handler through
++ * runMutator with undo disabled. It records the current CRDT clock timestamp before the
++ * handler runs, and after the handler resolves it queries the distinct datasets in
++ * messages_crdt with timestamps later than that value. If more than one client is connected,
++ * it sends a 'sync-event' listing those datasets. The wrapper resolves to the handler's
++ * result.
++ */
+ function withMutation<Params extends Array<unknown>, ReturnType>(
+   handler: (...args: Params) => Promise<ReturnType>,
+ ) {
+@@ -90,6 +98,11 @@ function withMutation<Params extends Array<unknown>, ReturnType>(
+ 
+ let handlers = {} as unknown as Handlers;
+ 
++/**
++ * Contract: Takes a month string and throws an APIError unless it matches YYYY-MM. When
++ * IMPORT_MODE is off, it also throws unless the month lies within the range from the budget
++ * bounds returned by 'get-budget-bounds'. Returns nothing when validation passes.
++ */
+ async function validateMonth(month) {
+   if (!month.match(/^\d{4}-\d{2}$/)) {
+     throw APIError('Invalid month format, use YYYY-MM: ' + month);
+@@ -104,6 +117,11 @@ async function validateMonth(month) {
+   }
+ }
+ 
++/**
++ * Contract: Takes a debug label and a category id and throws an APIError if the id is null, if
++ * no categories row has that id, or if that row's is_income value is not 0. Returns nothing
++ * when the id names an existing expense category.
++ */
+ async function validateExpenseCategory(debug, id) {
+   if (id == null) {
+     throw APIError(`${debug}: category id is required`);
+@@ -123,12 +141,23 @@ async function validateExpenseCategory(debug, id) {
+   }
+ }
+ 
++/**
++ * Contract: Takes a name and a value and throws an APIError unless the value is a string that
++ * passes monthUtils.isValidYearMonthDay. Returns nothing on success.
++ */
+ function validateDay(name: string, value: string) {
+   if (typeof value !== 'string' || !monthUtils.isValidYearMonthDay(value)) {
+     throw APIError(`Invalid ${name}, use YYYY-MM-DD: ${value}`);
+   }
+ }
+ 
++/**
++ * Contract: Takes either a date string or a RecurConfig object. A string is validated as a
++ * YYYY-MM-DD day. An object must be non-null, must have a valid start day, must have an
++ * interval that is absent or a positive integer, must have a valid endDate when endMode is
++ * 'on_date', and must have a positive integer endOccurrences when endMode is
++ * 'after_n_occurrences'. Any violation throws an APIError; otherwise it returns nothing.
++ */
+ function validateScheduleDate(date: RecurConfig | string) {
+   if (typeof date === 'string') {
+     validateDay('schedule date', date);
+@@ -158,6 +187,10 @@ function validateScheduleDate(date: RecurConfig | string) {
+   }
+ }
+ 
++/**
++ * Contract: Throws an APIError with 'No budget file is open' when the current prefs have no
++ * id; otherwise it does nothing.
++ */
+ function checkFileOpen() {
+   if (!(prefs.getPrefs() || {}).id) {
+     throw APIError('No budget file is open');
+@@ -1204,6 +1237,11 @@ handlers['api/get-server-version'] = async function () {
+   return handlers['get-server-version']();
+ };
+ 
++/**
++ * Contract: Takes the server handler map and creates a new object by copying its entries and
++ * then this module's handlers, so module handlers override on key collision. It stores that
++ * merged object as the module's handler table used for internal dispatch and returns it.
++ */
+ export function installAPI(serverHandlers: ServerHandlers) {
+   const merged = Object.assign({}, serverHandlers, handlers);
+   handlers = merged as Handlers;
+diff --git a/packages/loot-core/src/server/budget/base.ts b/packages/loot-core/src/server/budget/base.ts
+index efb8a35..531073f 100644
+--- a/packages/loot-core/src/server/budget/base.ts
++++ b/packages/loot-core/src/server/budget/base.ts
+@@ -19,11 +19,22 @@ const MIN_MONTHS_AHEAD = 12;
+ const MONTHS_AFTER_LATEST_ALLOCATION = 3;
+ const MAX_MONTHS_AHEAD = 60;
+ 
++/**
++ * Contract: Reads budgetType from the spreadsheet meta and returns it, or 'envelope' when the
++ * stored value is falsy. It does not modify state.
++ */
+ export function getBudgetType() {
+   const meta = sheet.get().meta();
+   return meta.budgetType || 'envelope';
+ }
+ 
++/**
++ * Contract: Takes start and end month strings and an optional latest allocated month, and
++ * returns { start, end, range }. The start is clamped to end if it falls after end, start is
++ * moved back 3 months, and end is extended to at least 12 months past the original end. If
++ * latestAllocatedMonth plus 3 months is later than that end, end becomes that value capped at
++ * the original end plus 60 months. range is the inclusive list of months from start to end.
++ */
+ export function getBudgetRange(
+   start: string,
+   end: string,
+@@ -63,6 +74,11 @@ export function getBudgetRange(
+ // The latest month with a non-zero amount in the active budget type.
+ // Envelope and tracking amounts are stored separately, so each type
+ // extends its own range.
++/**
++ * Contract: Queries zero_budgets or reflect_budgets, depending on the active budget type, for
++ * the greatest month with a non-zero amount on non-tombstoned categories. It returns that
++ * month as 'YYYY-MM', or null when no such row exists.
++ */
+ async function getLatestAllocatedMonth(): Promise<string | null> {
+   const table =
+     getBudgetType() === 'tracking' ? 'reflect_budgets' : 'zero_budgets';
+@@ -81,6 +97,11 @@ async function getLatestAllocatedMonth(): Promise<string | null> {
+ // The day range spanning the given months. They aren't guaranteed to be
+ // sorted, so find the first and last explicitly ('YYYY-MM' strings compare
+ // chronologically).
++/**
++ * Contract: For a non-empty array of 'YYYY-MM' months in any order, returns rangeStart as the
++ * first day of the earliest month and rangeEnd as the last day of the latest month, found by
++ * explicit comparison.
++ */
+ function getMonthSpanBounds(months: string[]) {
+   let firstMonth = months[0];
+   let lastMonth = months[0];
+@@ -106,6 +127,12 @@ function getMonthSpanBounds(months: string[]) {
+ // categories × months and dominates load time for budgets with many years
+ // of data). The filters must match the per-cell query in `createCategory`
+ // exactly so balances stay identical.
++/**
++ * Contract: Runs one grouped query over alive transactions that have a category, belong to
++ * off-budget-excluded accounts (accounts.offbudget = 0), and fall within the given day range.
++ * It returns a Map keyed by `${yyyymm}-${categoryId}` to the summed amount, with null sums
++ * stored as 0.
++ */
+ function getSumAmountsByMonth(
+   rangeStart: number,
+   rangeEnd: number,
+@@ -136,6 +163,12 @@ function getSumAmountsByMonth(
+ // were seeded. Resetting the budget cache recomputes every cell, which would
+ // otherwise run one `SELECT SUM(amount)` per category per month; the caller
+ // skips recomputing these and caches them directly instead.
++/**
++ * Contract: For the given months, loads the sum-amount cell of every category in every month
++ * with the value from one grouped spend query, skipping any cell the spreadsheet does not
++ * contain. It returns the names of the cells it loaded, and returns an empty array without
++ * querying when given no months.
++ */
+ export async function reseedSumAmounts(months: string[]): Promise<string[]> {
+   if (months.length === 0) {
+     return [];
+@@ -170,6 +203,12 @@ export async function reseedSumAmounts(months: string[]): Promise<string[]> {
+   return seededCells;
+ }
+ 
++/**
++ * Contract: Creates a dynamic 'sum-amount-<id>' cell in sheetName that computes the category's
++ * transaction total for start through end on accounts with offbudget = 0, defaulting to 0. It
++ * then creates the envelope category cells or the tracking category cells, depending on the
++ * active budget type.
++ */
+ export function createCategory(cat, sheetName, prevSheetName, start, end) {
+   sheet.get().createDynamic(sheetName, 'sum-amount-' + cat.id, {
+     initialValue: 0,
+@@ -196,6 +235,11 @@ export function createCategory(cat, sheetName, prevSheetName, start, end) {
+   }
+ }
+ 
++/**
++ * Contract: When an account's offbudget flag changed or there was no previous value,
++ * recomputes the sum-amount cell for every category that has transactions in that account, for
++ * each given month. It makes no change otherwise.
++ */
+ function handleAccountChange(months, oldValue, newValue) {
+   if (!oldValue || oldValue.offbudget !== newValue.offbudget) {
+     const rows = db.runQuery<Pick<db.DbTransaction, 'category'>>(
+@@ -219,6 +263,11 @@ function handleAccountChange(months, oldValue, newValue) {
+   }
+ }
+ 
++/**
++ * Contract: If the transaction has a date and a category and any of date, acct, amount,
++ * category, tombstone, or isParent changed, recomputes the sum-amount cell for that category
++ * in the month of the transaction's date. Otherwise it does nothing.
++ */
+ function handleTransactionChange(transaction, changedFields) {
+   if (
+     (changedFields.has('date') ||
+@@ -239,6 +288,10 @@ function handleTransactionChange(transaction, changedFields) {
+   }
+ }
+ 
++/**
++ * Contract: For each given month, recomputes the sum-amount cell for the previous transferId
++ * when an old value exists, and for the new transferId.
++ */
+ function handleCategoryMappingChange(months, oldValue, newValue) {
+   months.forEach(month => {
+     const sheetName = monthUtils.sheetForMonth(month);
+@@ -253,11 +306,20 @@ function handleCategoryMappingChange(months, oldValue, newValue) {
+   });
+ }
+ 
++/**
++ * Contract: Sets the sheet's buffered cell for the month identified by budget.id to
++ * budget.buffered.
++ */
+ function handleBudgetMonthChange(budget) {
+   const sheetName = monthUtils.sheetForMonth(budget.id);
+   sheet.get().set(`${sheetName}!buffered`, budget.buffered);
+ }
+ 
++/**
++ * Contract: When budget.category is set, writes the budget amount (0 if missing), the
++ * carryover flag as a boolean, the goal, and the long-goal cells for that category in the
++ * budget's month.
++ */
+ function handleBudgetChange(budget) {
+   if (budget.category) {
+     const sheetName = monthUtils.sheetForMonth(budget.month.toString());
+@@ -277,6 +339,13 @@ function handleBudgetChange(budget) {
+   }
+ }
+ 
++/**
++ * Contract: Inside a sheet transaction that is always ended in a finally block, dispatches
++ * each changed row to the handler for its table: budget months, budgets, transactions (old and
++ * new versions with the set of changed fields), category mappings, categories, category
++ * groups, or accounts. Category and category-group changes go to the envelope or tracking
++ * handler according to the active budget type.
++ */
+ export function triggerBudgetChanges(oldValues, newValues) {
+   const { createdMonths = new Set() } = sheet.get().meta();
+   const budgetType = getBudgetType();
+@@ -342,6 +411,11 @@ export function triggerBudgetChanges(oldValues, newValues) {
+   }
+ }
+ 
++/**
++ * Contract: For each created month, sets the transferId category's budget to the sum of the
++ * budgets of categoryIds plus its existing budget for that month. It makes no change when
++ * there are no created months.
++ */
+ export async function doTransfer(categoryIds, transferId) {
+   const { createdMonths: months } = sheet.get().meta();
+ 
+@@ -365,6 +439,12 @@ export async function doTransfer(categoryIds, transferId) {
+   });
+ }
+ 
++/**
++ * Contract: Loads all category groups and, for each given month not already in createdMonths,
++ * creates the month's sheet cells for categories, groups, and summary for the active budget
++ * type. It seeds unset sum-amount cells from one grouped query, marks each month as created,
++ * saves the seeded cells to the cache, and awaits the spreadsheet.
++ */
+ export async function createBudget(months) {
+   const { data: groups }: { data: CategoryGroupEntity[] } = await aqlQuery(
+     q('category_groups').select('*'),
+@@ -459,6 +539,12 @@ export async function createBudget(months) {
+   await sheet.waitOnSpreadsheet();
+ }
+ 
++/**
++ * Contract: Computes a range from the earliest non-child dated transaction (or the current
++ * month if none exists) to the current month, extended by the latest allocated month, and
++ * creates budgets for any months in that range not yet created. It returns start from the
++ * range and end as the later of the range end and the latest created month.
++ */
+ export async function createAllBudgets() {
+   const earliestTransaction = await db.first<db.DbTransaction>(
+     'SELECT * FROM transactions WHERE isChild=0 AND date IS NOT NULL ORDER BY date ASC LIMIT 1',
+@@ -496,6 +582,12 @@ export async function createAllBudgets() {
+   return { start, end: lastMonth };
+ }
+ 
++/**
++ * Contract: Returns immediately if the type is unchanged. Otherwise it sets budgetType, clears
++ * createdMonths, deletes all budget-sheet cells in a database transaction, and then, between a
++ * cache barrier, starts loadUserBudgets without awaiting it and awaits createAllBudgets. It
++ * returns the bounds from createAllBudgets.
++ */
+ export async function setType(type) {
+   const meta = sheet.get().meta();
+   if (type === meta.budgetType) {
+diff --git a/packages/loot-core/src/server/budget/envelope.ts b/packages/loot-core/src/server/budget/envelope.ts
+index 1e7695a..0ef5fc0 100644
+--- a/packages/loot-core/src/server/budget/envelope.ts
++++ b/packages/loot-core/src/server/budget/envelope.ts
+@@ -8,11 +8,22 @@ import { safeNumber } from '#shared/util';
+ import { createCategory as createCategoryFromBase } from './base';
+ import { flatten2, number, sumAmounts, unflatten2 } from './util';
+ 
++/**
++ * Contract: Takes the list of months and returns the name of the sheet for the month
++ * immediately before `months[0]`. It does not check that `months` is non-empty, so an empty
++ * array makes it read `months[0]` as undefined.
++ */
+ function getBlankSheet(months) {
+   const blankMonth = monthUtils.prevMonth(months[0]);
+   return monthUtils.sheetForMonth(blankMonth);
+ }
+ 
++/**
++ * Contract: Takes a category and a list of months. When `months` is non-empty, it creates
++ * three static cells in the blank sheet (the month before the first month): `carryover-<id>`
++ * set to false, `leftover-<id>` set to 0, and `leftover-pos-<id>` set to 0. When `months` is
++ * empty, it does nothing.
++ */
+ export function createBlankCategory(cat, months) {
+   if (months.length > 0) {
+     const sheetName = getBlankSheet(months);
+@@ -22,6 +33,11 @@ export function createBlankCategory(cat, months) {
+   }
+ }
+ 
++/**
++ * Contract: Takes categories, a sheet name, and a list of months. It creates static cells
++ * `is-blank` (true), `to-budget` (0), and `buffered` (0) in the given sheet, then calls
++ * `createBlankCategory` for each category.
++ */
+ function createBlankMonth(categories, sheetName, months) {
+   sheet.get().createStatic(sheetName, 'is-blank', true);
+   sheet.get().createStatic(sheetName, 'to-budget', 0);
+@@ -30,6 +46,15 @@ function createBlankMonth(categories, sheetName, months) {
+   categories.forEach(cat => createBlankCategory(cat, months));
+ }
+ 
++/**
++ * Contract: Takes a category, its month sheet name, and the previous month's sheet name. For
++ * non-income categories only, it creates the static `budget-<id>` cell (0), resets it to 0 if
++ * its value is null, and creates the static `carryover-<id>` cell (false). It also creates the
++ * dynamic `leftover-<id>` cell, computed as budgeted plus spent plus either the previous
++ * leftover (if the previous carryover is truthy) or the previous `leftover-pos`, clamped with
++ * `safeNumber`, and the dynamic `leftover-pos-<id>` cell, which is that leftover floored at 0.
++ * Income categories are ignored.
++ */
+ export function createCategory(cat, sheetName, prevSheetName) {
+   if (!cat.is_income) {
+     sheet.get().createStatic(sheetName, `budget-${cat.id}`, 0);
+@@ -73,6 +98,13 @@ export function createCategory(cat, sheetName, prevSheetName) {
+   }
+ }
+ 
++/**
++ * Contract: Takes a group (with its categories) and a sheet name. It creates a dynamic
++ * `group-sum-amount-<groupId>` cell that sums the `sum-amount` cells of the group's
++ * categories. For non-income groups only, it also creates dynamic `group-budget-<groupId>` and
++ * `group-leftover-<groupId>` cells that sum the corresponding category `budget` and `leftover`
++ * cells.
++ */
+ export function createCategoryGroup(group, sheetName) {
+   sheet.get().createDynamic(sheetName, 'group-sum-amount-' + group.id, {
+     initialValue: 0,
+@@ -95,6 +127,16 @@ export function createCategoryGroup(group, sheetName) {
+   }
+ }
+ 
++/**
++ * Contract: Takes the groups, categories, previous sheet name, and sheet name, and creates the
++ * summary cells for the month sheet. These are `buffered` (static 0), `from-last-month`,
++ * `total-income`, `available-funds`, `last-month-overspent` (sum of negative previous
++ * leftovers for expense categories whose previous carryover is falsy), `total-budgeted`
++ * (negated sum of non-income group budgets), `buffered-auto` (sum of income category amounts
++ * whose carryover is truthy), `buffered-selected` (the manual `buffered` value if nonzero,
++ * otherwise `buffered-auto`), `to-budget`, `total-spent`, and `total-leftover`, each with the
++ * dependencies and formulas given in the code.
++ */
+ export function createSummary(groups, categories, prevSheetName, sheetName) {
+   const incomeGroup = groups.filter(group => group.is_income)[0];
+   const expenseCategories = categories.filter(cat => !cat.is_income);
+@@ -225,6 +267,12 @@ export function createSummary(groups, categories, prevSheetName, sheetName) {
+   });
+ }
+ 
++/**
++ * Contract: Takes the budget metadata, categories, and months. It computes the blank sheet
++ * name for the month before the first month; if it differs from `meta.blankSheet`, it clears
++ * the previous blank sheet, creates the blank month structure in the new one, and records the
++ * new name in `meta.blankSheet`. If the name is unchanged, it does nothing.
++ */
+ export function createBudget(meta, categories, months) {
+   // The spreadsheet is now strict - so we need to fill in some
+   // default values for the month before the first month. Only do this
+@@ -237,6 +285,15 @@ export function createBudget(meta, categories, months) {
+   }
+ }
+ 
++/**
++ * Contract: Takes the months and the old and new category values, and updates the spreadsheet
++ * dependencies accordingly. If the category goes from tombstone 0 to 1, it removes its group
++ * and carryover/overspent dependencies in every month. If it is newly live (no old value, or
++ * old tombstone 1), it creates its blank-month cells, creates its per-month cells, and adds
++ * its dependencies in every month. If it stays live and its `cat_group` changes, it removes
++ * dependencies from the old group and adds them to the new group in every month. Otherwise it
++ * does nothing.
++ */
+ export function handleCategoryChange(months, oldValue, newValue) {
+   // Build list of cells and dependencies that need updated
+   function getDeps(sheetName, prevSheetName, groupId, cat) {
+@@ -322,6 +379,14 @@ export function handleCategoryChange(months, oldValue, newValue) {
+   }
+ }
+ 
++/**
++ * Contract: Takes the months and the old and new group values, and updates the group-level
++ * dependencies of the `total-budgeted`, `total-spent`, and `total-leftover` cells. When a
++ * group goes from live to tombstoned, it removes those dependencies in every month. When a
++ * non-income group becomes live (new, or old tombstone 1), it synchronously queries its
++ * non-tombstoned categories, creates its group cells in every month, and adds the
++ * dependencies. Income groups and all other transitions do nothing.
++ */
+ export function handleCategoryGroupChange(months, oldValue, newValue) {
+   function addDeps(sheetName, groupId) {
+     sheet
