@@ -1,0 +1,7 @@
+{
+  "ready": true,
+  "harness": "pi",
+  "tools": ["read", "bash", "edit", "write"],
+  "mcpServers": {},
+  "contextFiles": []
+}

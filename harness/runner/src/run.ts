@@ -18,6 +18,7 @@ import { parseArgs } from "node:util";
 import { spawnSync } from "node:child_process";
 import { Ajv2020 } from "ajv/dist/2020.js";
 import { fakeAgent, runAgent } from "./agent.ts";
+import { piVersion, runPiAgent } from "./agent-pi.ts";
 import { isArm, isProvider, isSuite, isTask, loadArm, parseModelOptions, paths, PROVIDERS, START_STATE } from "./config.ts";
 import { readingStats, runAcceptance, runPerf, runSuiteAcceptance } from "./evaluate.ts";
 import type { AgentMetrics, Usage } from "./metrics.ts";
@@ -146,7 +147,7 @@ if (does("agent")) {
   console.log(`${label} agent starting (${provider}/${model})`);
   const metrics = a["fake-agent"]
     ? fakeAgent(workspace, resolve(a["fake-agent"]))
-    : await runAgent({
+    : await (armConfig.harness === "pi" ? runPiAgent : runAgent)({
         suite,
         arm,
         task,
@@ -173,7 +174,9 @@ if (does("agent")) {
       provider: a["fake-agent"] ? "fake" : provider,
       harness: a["fake-agent"]
         ? { name: "fake-agent", version: "0" }
-        : { name: "claude-agent-sdk", version: sdkVersion },
+        : armConfig.harness === "pi"
+          ? { name: "pi-coding-agent", version: piVersion() }
+          : { name: "claude-agent-sdk", version: sdkVersion },
       agent: metrics.m,
       usage: metrics.usage,
       costUsd: metrics.costUsd,

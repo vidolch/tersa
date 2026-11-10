@@ -8,7 +8,7 @@ export const TASKS = ["T1", "T2", "T3", "T4", "T5"] as const;
 export type Task = string;
 export const SUITES = ["urlshort", "actual"] as const;
 export type Suite = (typeof SUITES)[number];
-export const ARMS = ["A-ts-baseline", "B-ts-query", "B2-ts-query-shell", "C-tersa-lang", "D-ts-bundle", "F-ts-exhaustive", "G-ts-agreement", "H-ts-contracts", "I-ts-gencontracts"] as const;
+export const ARMS = ["A-ts-baseline", "B-ts-query", "B2-ts-query-shell", "C-tersa-lang", "D-ts-bundle", "F-ts-exhaustive", "G-ts-agreement", "H-ts-contracts", "I-ts-gencontracts", "P-pi-baseline"] as const;
 export type Arm = (typeof ARMS)[number];
 
 /** Reference snapshot each task starts from; null = arm scaffold only. */
@@ -48,6 +48,10 @@ export interface ArmConfig {
    * can't run in this arm.
    */
   codePatches?: Record<string, string>;
+  /** Agent harness: Claude Code through the Agent SDK (default) or the pi coding agent (src/agent-pi.ts). */
+  harness?: "claude-code" | "pi";
+  /** pi only: module under arms/<arm>/ whose default export is a pi extension factory. */
+  piExtension?: string;
   /** Start the query daemon for the run and put the `tersa` command on the agent's PATH. */
   shellQuery?: boolean;
   /** How the harness steers the agent toward this arm's tools (see src/steering.ts). */
