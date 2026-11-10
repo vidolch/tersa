@@ -8,7 +8,7 @@ export const TASKS = ["T1", "T2", "T3", "T4", "T5"] as const;
 export type Task = string;
 export const SUITES = ["urlshort", "actual"] as const;
 export type Suite = (typeof SUITES)[number];
-export const ARMS = ["A-ts-baseline", "B-ts-query", "B2-ts-query-shell", "C-tersa-lang", "D-ts-bundle"] as const;
+export const ARMS = ["A-ts-baseline", "B-ts-query", "B2-ts-query-shell", "C-tersa-lang", "D-ts-bundle", "F-ts-exhaustive"] as const;
 export type Arm = (typeof ARMS)[number];
 
 /** Reference snapshot each task starts from; null = arm scaffold only. */
@@ -42,6 +42,12 @@ export interface ArmConfig {
   allowedTools?: string[];
   /** Put a task-scoped context bundle, built from the spec by query/src/bundle.ts, in the first prompt. */
   bundle?: { budgetTokens?: number };
+  /**
+   * Per task, a patch under arms/<arm>/ applied to the start state before the agent starts
+   * (a code-structure change the arm stands for, e.g. exhaustive dispatch). Tasks without one
+   * can't run in this arm.
+   */
+  codePatches?: Record<string, string>;
   /** Start the query daemon for the run and put the `tersa` command on the agent's PATH. */
   shellQuery?: boolean;
   /** How the harness steers the agent toward this arm's tools (see src/steering.ts). */

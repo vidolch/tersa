@@ -2,6 +2,8 @@
 # Builds an agent workspace for one task of the Actual Budget suite.
 # Usage: prepare.sh <TASK> <WORKSPACE> [SOLUTION_PATCH]
 #   SOLUTION_PATCH (validation only): applied after the start patch, as if an agent wrote it.
+# Env: ARM_PATCH (optional): an arm's code-structure patch, applied after the start patch and
+#      before the start commit, so the agent sees it as the starting code.
 # Env: ACTUAL_CACHE (default ~/.cache/tersa) holds the pristine clone, reused across runs.
 set -euo pipefail
 TASK=${1:?TASK}; WS=${2:?WORKSPACE}; SOL=${3:-}
@@ -15,6 +17,7 @@ rm -rf "$WS"; mkdir -p "$WS"
 git -C "$PRISTINE" archive HEAD | tar -x -C "$WS"
 START=$(node -p "require('$TASKDIR/task.json').startPatch || ''")
 if [[ -n "$START" ]]; then (cd "$WS" && git apply "$TASKDIR/$START"); fi
+if [[ -n "${ARM_PATCH:-}" ]]; then (cd "$WS" && git apply "$ARM_PATCH"); fi
 if [[ -n "$SOL" ]]; then (cd "$WS" && git apply "$SOL"); fi
 
 # A fresh repo whose only commit is the start state, so `git diff` works for the agent.

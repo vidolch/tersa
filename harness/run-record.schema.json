@@ -22,7 +22,7 @@
         "B-ts-query",
         "B2-ts-query-shell",
         "C-tersa-lang",
-        "D-ts-bundle"
+        "D-ts-bundle", "F-ts-exhaustive"
       ]
     },
     "task": {

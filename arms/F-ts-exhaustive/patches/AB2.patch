@@ -1,0 +1,198 @@
+diff --git a/packages/loot-core/src/server/rules/condition.ts b/packages/loot-core/src/server/rules/condition.ts
+index efeb67c..43821f4 100644
+--- a/packages/loot-core/src/server/rules/condition.ts
++++ b/packages/loot-core/src/server/rules/condition.ts
+@@ -17,7 +17,9 @@ import {
+   isValidOp,
+   sortNumbers,
+ } from '#shared/rules';
++import { assertNever } from '#shared/assert-never';
+ import { extractTagsForFilter } from '#shared/tags';
++import type { AnyConditionOp, RuleConditionEntity } from '#types/models';
+ 
+ import {
+   assert,
+@@ -28,7 +30,7 @@ import {
+ 
+ export const CONDITION_TYPES = {
+   date: {
+-    ops: ['is', 'isapprox', 'gt', 'gte', 'lt', 'lte'],
++    ops: ['is', 'isapprox', 'gt', 'gte', 'lt', 'lte'] satisfies AnyConditionOp[],
+     nullable: false,
+     parse(op, value, fieldName) {
+       const parsed =
+@@ -75,7 +77,7 @@ export const CONDITION_TYPES = {
+       'and',
+       'onBudget',
+       'offBudget',
+-    ],
++    ] satisfies AnyConditionOp[],
+     nullable: true,
+     parse(op, value, fieldName) {
+       if (op === 'oneOf' || op === 'notOneOf' || op === 'and') {
+@@ -100,7 +102,7 @@ export const CONDITION_TYPES = {
+       'notOneOf',
+       'hasTags',
+       'hasAnyTag',
+-    ],
++    ] satisfies AnyConditionOp[],
+     nullable: true,
+     parse(op, value, fieldName) {
+       if (op === 'oneOf' || op === 'notOneOf') {
+@@ -142,7 +144,7 @@ export const CONDITION_TYPES = {
+     },
+   },
+   number: {
+-    ops: ['is', 'isapprox', 'isbetween', 'gt', 'gte', 'lt', 'lte'],
++    ops: ['is', 'isapprox', 'isbetween', 'gt', 'gte', 'lt', 'lte'] satisfies AnyConditionOp[],
+     nullable: false,
+     parse(op, value, fieldName) {
+       const parsed =
+@@ -176,7 +178,7 @@ export const CONDITION_TYPES = {
+     },
+   },
+   boolean: {
+-    ops: ['is'],
++    ops: ['is'] satisfies AnyConditionOp[],
+     nullable: false,
+     parse(op, value, fieldName) {
+       assert(
+@@ -192,7 +194,7 @@ export const CONDITION_TYPES = {
+ 
+ export class Condition {
+   field;
+-  op;
++  op: AnyConditionOp;
+   options;
+   rawValue;
+   type;
+@@ -440,7 +442,14 @@ export class Condition {
+ 
+         return object._account.offbudget === 1;
+ 
++      // Internal operators: only meaningful when building queries (conditionsToAQL).
++      case 'and':
++      case 'true':
++      case 'false':
++        return false;
++
+       default:
++        return assertNever(this.op, 'operator');
+     }
+ 
+     return false;
+@@ -450,9 +459,9 @@ export class Condition {
+     return this.value;
+   }
+ 
+-  serialize() {
++  serialize(): RuleConditionEntity {
+     return {
+-      op: this.op,
++      op: this.op as RuleConditionEntity['op'],
+       field: this.field,
+       value: this.unparsedValue,
+       type: this.type,
+diff --git a/packages/loot-core/src/server/transactions/transaction-rules.ts b/packages/loot-core/src/server/transactions/transaction-rules.ts
+index 15a3786..1c203cc 100644
+--- a/packages/loot-core/src/server/transactions/transaction-rules.ts
++++ b/packages/loot-core/src/server/transactions/transaction-rules.ts
+@@ -37,6 +37,7 @@ import {
+   parseDate,
+   subDays,
+ } from '#shared/months';
++import { assertNever } from '#shared/assert-never';
+ import { q } from '#shared/query';
+ import { getApproxNumberThreshold, sortNumbers } from '#shared/rules';
+ import { extractTagsForFilter, makeTagAqlRegex } from '#shared/tags';
+@@ -514,7 +515,7 @@ export function conditionsToAQL(
+     .filter(Boolean);
+ 
+   // rule -> actualql
+-  const mapConditionToActualQL = cond => {
++  const mapConditionToActualQL = (cond: Condition) => {
+     const { type, options } = cond;
+     let { field, op, value } = cond;
+ 
+@@ -744,7 +745,7 @@ export function conditionsToAQL(
+         return { 'account.offbudget': true };
+ 
+       default:
+-        throw new Error('Unhandled operator: ' + op);
++        return assertNever(op, 'operator');
+     }
+   };
+ 
+diff --git a/packages/loot-core/src/shared/assert-never.ts b/packages/loot-core/src/shared/assert-never.ts
+new file mode 100644
+index 0000000..d3047fc
+--- /dev/null
++++ b/packages/loot-core/src/shared/assert-never.ts
+@@ -0,0 +1,7 @@
++/**
++ * Exhaustiveness check for a `switch` over a closed set: when a new member is added to the set,
++ * every switch that ends in `assertNever` stops compiling until it handles the new member.
++ */
++export function assertNever(x: never, what = 'value'): never {
++  throw new Error(`Unhandled ${what}: ${String(x)}`);
++}
+diff --git a/packages/loot-core/src/shared/rules.ts b/packages/loot-core/src/shared/rules.ts
+index c431867..3bbb1ca 100644
+--- a/packages/loot-core/src/shared/rules.ts
++++ b/packages/loot-core/src/shared/rules.ts
+@@ -5,7 +5,7 @@ import type { FieldValueTypes, RuleConditionOp } from '#types/models';
+ // to share it later.
+ const TYPE_INFO = {
+   date: {
+-    ops: ['is', 'isapprox', 'gt', 'gte', 'lt', 'lte'],
++    ops: ['is', 'isapprox', 'gt', 'gte', 'lt', 'lte'] satisfies RuleConditionOp[],
+     nullable: false,
+   },
+   id: {
+@@ -19,11 +19,11 @@ const TYPE_INFO = {
+       'notOneOf',
+       'onBudget',
+       'offBudget',
+-    ],
++    ] satisfies RuleConditionOp[],
+     nullable: true,
+   },
+   saved: {
+-    ops: [],
++    ops: [] satisfies RuleConditionOp[],
+     nullable: false,
+   },
+   string: {
+@@ -37,15 +37,15 @@ const TYPE_INFO = {
+       'notOneOf',
+       'hasTags',
+       'hasAnyTag',
+-    ],
++    ] satisfies RuleConditionOp[],
+     nullable: true,
+   },
+   number: {
+-    ops: ['is', 'isapprox', 'isbetween', 'gt', 'gte', 'lt', 'lte'],
++    ops: ['is', 'isapprox', 'isbetween', 'gt', 'gte', 'lt', 'lte'] satisfies RuleConditionOp[],
+     nullable: false,
+   },
+   boolean: {
+-    ops: ['is'],
++    ops: ['is'] satisfies RuleConditionOp[],
+     nullable: false,
+   },
+ } as const;
+diff --git a/packages/loot-core/src/types/models/rule.ts b/packages/loot-core/src/types/models/rule.ts
+index 7c0665a..74873df 100644
+--- a/packages/loot-core/src/types/models/rule.ts
++++ b/packages/loot-core/src/types/models/rule.ts
+@@ -16,6 +16,9 @@ export type RuleEntity = {
+ 
+ export type RuleConditionOp = RuleConditionEntity['op'];
+ 
++/** Every operator a condition can carry at runtime, including the internal ones the server creates. */
++export type AnyConditionOp = RuleConditionOp | 'and' | 'true' | 'false';
++
+ export type FieldValueTypes = {
+   account: string;
+   amount: number;

@@ -425,3 +425,24 @@ Anatomy (`results/analysis/it12-haiku.json`, split by run number):
 **What this means for Tersa.** This is the first result that points at the language rather than at tooling. A cheap, low-effort agent is half the price, and its failure is a *missed second place that had to change*. That is the kind of failure a language can prevent: if adding an operator to a closed set made every place that handles operators fail to compile until handled (exhaustive matching, no silent `default`), a low-effort agent would be told by the compiler where R5 is. Next: check how Actual's condition and filter code dispatch on operators, and whether a compile-time exhaustiveness check in plain TS would have flagged R5 (cheap to test as an arm before building any language).
 
 Records: `results/A-ts-baseline/AB*/run-28..45.json`.
+
+## Iteration 13 — One language rule, applied by hand (arm F)
+
+**Hypothesis.** At `effort=low`, Haiku costs half as much, but on AB2 it misses the second place that must handle the new operator (R5, `conditionsToAQL`) in 2 of 6 runs (iteration 12). If the code made that place a compile error, a cheap agent that runs the typechecker would find it. This is a property a language can enforce everywhere (closed sets, exhaustive matching, no silent `default`), so it's the first test of a Tersa rule. It is tested in plain TypeScript, without building the language.
+
+**How Actual dispatches on operators** (at the pinned commit):
+- The operator union `RuleConditionOp` exists in `types/models/rule.ts`, but the two dispatchers don't use it. `Condition.op` is untyped, both files are `@ts-strict-ignore`, and the switches end in `default: return false` (`Condition.eval`, rule matching) and `default: throw` (`conditionsToAQL`, filters). Adding an operator to the union breaks nothing there.
+- The op lists that say which operators a field type allows (`CONDITION_TYPES` in `condition.ts`, `TYPE_INFO` in `shared/rules.ts`) are untyped string arrays.
+- One place is already exhaustive: `OP_SCORES: Record<RuleConditionOp, number>` in `rule-utils.ts`. Adding `startsWith` to the union breaks the build there only.
+
+**Change: arm F** = arm A plus a code patch applied to the start state before the agent starts (`arms/F-ts-exhaustive/patches/AB2.patch`, 4 files, behaviour-preserving):
+- `Condition.op` is typed as `AnyConditionOp` (the union plus the internal `and`/`true`/`false`). Both switches end in `assertNever(op)` (new `shared/assert-never.ts`); the internal operators that used to fall through to `return false` are now listed explicitly.
+- Both op lists are checked against the union (`[...] satisfies RuleConditionOp[]`).
+- Effect, checked by hand: adding `startsWith` to either op list fails the build until it is added to the union; adding it to the union fails the build at `Condition.eval`, `conditionsToAQL` and `OP_SCORES`. Before the patch, only `OP_SCORES` failed.
+- Checks: typecheck passes; loot-core regression tests pass (29 files, 624 tests); `ARM=F-ts-exhaustive harness/validate-actual.sh AB2` passes (start fails R1–R5, the reference rebased onto the patch passes everything).
+
+Harness changes: arms can declare `codePatches` per task (applied by `prepare.sh` through `ARM_PATCH`); `validate-actual.sh` takes `ARM=`. The suite profile now lists the typecheck command (`yarn workspace @actual-app/core run typecheck`) for **all** arms. Earlier arm A runs didn't have this line, so arm A is rerun in the same period.
+
+**Run.** AB2 only, `claude-haiku-5-5`, `effort=low`, 12 runs per arm in the same period: A runs 46–57, F runs 1–12.
+
+**Expected if the hypothesis holds.** F misses R5 less often than A, at similar cost. If F's agents don't run the typechecker, or don't add `startsWith` to the union, the rule doesn't help an agent that doesn't consult the compiler. That would be a finding too: the language would have to run the check itself.

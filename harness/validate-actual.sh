@@ -7,6 +7,9 @@
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 S=$ROOT/suites/actual
+# ARM: arm whose start state to validate (default A). An arm with code patches validates against its
+# own reference, arms/<arm>/patches/<task>.reference.patch (the task's reference rebased onto the patch).
+ARM=${ARM:-A-ts-baseline}
 TMP=$(mktemp -d)
 export TERSA_RESULTS_DIR="$TMP/results" TERSA_RAW_DIR="$TMP/raw"
 trap 'rm -rf "$TMP"' EXIT
@@ -18,19 +21,22 @@ for task in "${TASKS[@]}"; do
   for variant in start reference; do
     n=$((n + 1))
     if [[ $variant == start ]]; then sol=$EMPTY; expected=$(node -p "require('$S/tasks/$task/task.json').expectStartFailing.slice().sort().join(',')")
-    else sol=$S/tasks/$task/reference.patch; expected=""; fi
+    else
+      sol=$S/tasks/$task/reference.patch; expected=""
+      [[ -f "$ROOT/arms/$ARM/patches/$task.reference.patch" ]] && sol=$ROOT/arms/$ARM/patches/$task.reference.patch
+    fi
     echo "== $task $variant"
     for phase in prepare agent eval; do
-      args=(--suite actual --arm A-ts-baseline --task "$task" --run "$n" --phase "$phase" --force)
+      args=(--suite actual --arm "$ARM" --task "$task" --run "$n" --phase "$phase" --force)
       [[ $phase == agent ]] && args+=(--fake-agent "$sol")
       (cd "$ROOT/harness/runner" && node --disable-warning=ExperimentalWarning src/run.ts "${args[@]}") 2>&1 \
         | grep -E "acceptance:|reading:|error" | sed 's/^/   /' || true
     done
-    rec="$TERSA_RESULTS_DIR/A-ts-baseline/$task/run-$n.json"
+    rec="$TERSA_RESULTS_DIR/$ARM/$task/run-$n.json"
     failing=$(node -e "const r=require('$rec');console.log(Object.entries(r.acceptance.rules).filter(([,v])=>!v).map(([k])=>k).sort().join(','))")
     if [[ "$failing" == "$expected" ]]; then echo "   OK (failing: ${failing:-none})"
     else echo "   MISMATCH: expected [${expected:-none}], got [${failing:-none}]"; status=1; fi
-    rm -rf "$TERSA_RAW_DIR/A-ts-baseline/$task/run-$n"   # 1.7 GB of node_modules per workspace
+    rm -rf "$TERSA_RAW_DIR/$ARM/$task/run-$n"   # 1.7 GB of node_modules per workspace
   done
 done
 [[ $status == 0 ]] && echo "== all $n cases OK" || echo "== FAILED"

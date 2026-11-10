@@ -96,7 +96,12 @@ if (does("prepare")) {
   let startState: string;
   if (suite !== "urlshort") {
     if (a.chained) fail("chained runs are only defined for the urlshort suite");
-    const r = spawnSync(join(paths.suite(suite), "scripts", "prepare.sh"), [task, workspace], { stdio: "inherit" });
+    const codePatch = armConfig.codePatches?.[task];
+    if (armConfig.codePatches && !codePatch) fail(`arm ${arm} has no code patch for ${task}`);
+    const r = spawnSync(join(paths.suite(suite), "scripts", "prepare.sh"), [task, workspace], {
+      stdio: "inherit",
+      env: { ...process.env, ARM_PATCH: codePatch ? join(paths.arm(arm), codePatch) : "" },
+    });
     if (r.status !== 0) fail(`${suite} prepare failed`);
     startState = `${suite}/${task}`;
   } else if (a.chained && task !== "T1") {

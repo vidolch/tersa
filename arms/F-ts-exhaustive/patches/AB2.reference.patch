@@ -1,0 +1,94 @@
+diff --git a/packages/loot-core/src/server/rules/condition.ts b/packages/loot-core/src/server/rules/condition.ts
+index 43821f4..1daf61a 100644
+--- a/packages/loot-core/src/server/rules/condition.ts
++++ b/packages/loot-core/src/server/rules/condition.ts
+@@ -102,6 +102,7 @@ export const CONDITION_TYPES = {
+       'notOneOf',
+       'hasTags',
+       'hasAnyTag',
++      'startsWith',
+     ] satisfies AnyConditionOp[],
+     nullable: true,
+     parse(op, value, fieldName) {
+@@ -126,6 +127,7 @@ export const CONDITION_TYPES = {
+         op === 'contains' ||
+         op === 'matches' ||
+         op === 'doesNotContain' ||
++        op === 'startsWith' ||
+         op === 'hasTags' ||
+         op === 'hasAnyTag'
+       ) {
+@@ -341,6 +343,11 @@ export class Condition {
+           return false;
+         }
+         return String(fieldValue).indexOf(this.value) === -1;
++      case 'startsWith':
++        if (fieldValue === null) {
++          return false;
++        }
++        return String(fieldValue).startsWith(this.value);
+       case 'oneOf':
+         if (fieldValue === null) {
+           return false;
+diff --git a/packages/loot-core/src/server/rules/rule-utils.ts b/packages/loot-core/src/server/rules/rule-utils.ts
+index 8531f3b..5b47836 100644
+--- a/packages/loot-core/src/server/rules/rule-utils.ts
++++ b/packages/loot-core/src/server/rules/rule-utils.ts
+@@ -28,6 +28,7 @@ const OP_SCORES: Record<RuleConditionEntity['op'], number> = {
+   lte: 1,
+   contains: 0,
+   doesNotContain: 0,
++  startsWith: 0,
+   matches: 0,
+   hasTags: 0,
+   hasAnyTag: 0,
+diff --git a/packages/loot-core/src/server/transactions/transaction-rules.ts b/packages/loot-core/src/server/transactions/transaction-rules.ts
+index 1c203cc..667879a 100644
+--- a/packages/loot-core/src/server/transactions/transaction-rules.ts
++++ b/packages/loot-core/src/server/transactions/transaction-rules.ts
+@@ -675,6 +675,13 @@ export function conditionsToAQL(
+         // Running contains with id will automatically reach into
+         // the `name` of the referenced table and do a regex match
+         return apply(type === 'id' ? field + '.name' : field, '$regexp', value);
++      case 'startsWith':
++        // $like is not anchored (see unicodeLike), so anchor with a regexp.
++        return apply(
++          field,
++          '$regexp',
++          '^' + String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
++        );
+       case 'doesNotContain':
+         // Running contains with id will automatically reach into
+         // the `name` of the referenced table and do a string match
+diff --git a/packages/loot-core/src/shared/rules.ts b/packages/loot-core/src/shared/rules.ts
+index 3bbb1ca..48761a5 100644
+--- a/packages/loot-core/src/shared/rules.ts
++++ b/packages/loot-core/src/shared/rules.ts
+@@ -37,6 +37,7 @@ const TYPE_INFO = {
+       'notOneOf',
+       'hasTags',
+       'hasAnyTag',
++      'startsWith',
+     ] satisfies RuleConditionOp[],
+     nullable: true,
+   },
+diff --git a/packages/loot-core/src/types/models/rule.ts b/packages/loot-core/src/types/models/rule.ts
+index 74873df..23c452f 100644
+--- a/packages/loot-core/src/types/models/rule.ts
++++ b/packages/loot-core/src/types/models/rule.ts
+@@ -106,6 +106,7 @@ export type RuleConditionEntity =
+       | 'isNot'
+       | 'contains'
+       | 'doesNotContain'
++      | 'startsWith'
+       | 'matches'
+       | 'hasTags'
+       | 'hasAnyTag'
+@@ -128,6 +129,7 @@ export type RuleConditionEntity =
+       | 'notOneOf'
+       | 'contains'
+       | 'doesNotContain'
++      | 'startsWith'
+       | 'matches'
+     >
+   | BaseConditionEntity<'saved', 'is'>
