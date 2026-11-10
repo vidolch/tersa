@@ -735,3 +735,30 @@ Fix 2: the extension collects every source file a bash command names, in any seg
 **For Tersa.** This settles where contracts belong. Their *content* belongs to the language: every function has one, written and checked with the code. Their *delivery* belongs to the toolchain and harness: show the contract wherever the code is read or called, once, and never as text in the file. A language with contracts in signatures gets the second for free from any tool that shows signatures. In TypeScript today, a 150-line pi extension and a cheap generation pass come close.
 
 Records: `results/P-pi-baseline/AB*/run-1..18.json`, `results/Q-pi-contracts/AB*/run-13..18.json`, `results/A-ts-baseline/AB*/run-106..117.json`; undelivered Q batches in `results/archive/`.
+
+## Iteration 21 — A second codebase: Hono (pre-registered)
+
+**Why.** Every finding so far comes from one repository, Actual. Before building anything on "agents treat bugs as intended, and contracts fix it", it has to hold somewhere else.
+
+**The suite** (`suites/hono/`, Hono v4.13.17, commit 61f7c59): a web framework, TypeScript, one package, fast vitest tests, no services. It has several router implementations that must agree, so the "two implementations of one meaning" structure of AB2 occurs naturally. Four tasks, designed and validated **before any agent run on this suite**:
+
+| Task | Type | What | Like |
+|---|---|---|---|
+| HN1 | seeded bug | TrieRouter returns matching handlers in reverse registration order (middleware after handlers; the default router falls back to the trie for some route sets) | AB1 |
+| HN2 | seeded bug | `parseAccept` sorts by ascending quality, so the language detector picks the least preferred language when the header isn't already sorted | AB1 |
+| HN3 | feature | named trailing wildcard `/files/*path`, identical across all five routers | AB2/AB5 |
+| HN4 | feature | `cors({ allowPrivateNetwork })` for Private Network Access preflights | AB3 |
+
+- Seeded bugs: the upstream tests that state the intended order (156 for HN1, 5 for HN2) are removed from the start state and restored for scoring, as AB1's was (`suites/hono/scripts/strip-blocks.py` removes test blocks by line). Both start states pass every remaining test and the typecheck.
+- Hidden acceptance tests drive Hono apps built from the workspace's own source through `app.request()` (`suites/hono/acceptance/`). Regression = the pinned commit's tests for each task's scope.
+- `SUITE=hono harness/validate-suite.sh` (the validator, now suite-generic) passes: each start state fails exactly its expected rules, and each reference passes all of them, regression included.
+- One test was corrected during validation, before any run: RegExpRouter on its own rejects one of HN1's route sets as unsupported, which is exactly when the default router falls back to the trie, so that check runs on the other routers only.
+
+**Contracts (blind).** `contracts` workflow (now suite-aware), `claude-haiku-5-5`, the pristine versions of the 14 files relevant to HN1–HN4 (85 functions; `arms/Q-pi-contracts/contracts.hono.json`). Arm Q's extension now loads `contracts.<suite>.json`. As in iteration 17, the generated contracts happen to state the violated properties: TrieRouter `Node.search` "sorted ascending by `score` (insertion order)", `parseAccept` "sorts the array by q in descending order".
+
+**Pre-registered expectations.**
+1. Harness: P (pi) costs less per pass than A (Claude Code) at a similar pass rate, as on Actual (−15 to −22%).
+2. Contracts: on the seeded bugs HN1 and HN2, Q passes more often than P. That holds only if, without contracts, agents there also tend to treat the bug as intended. If P already passes them, there's nothing to fix and the result is "no effect possible", reported as such.
+3. On the features HN3 and HN4, Q costs about the same as P (a small tax).
+
+**Run.** `claude-haiku-5-5`, `effort=low`, all four tasks, 8 runs per task per arm, same period: A runs 1–8, P runs 1–8, Q runs 1–8.

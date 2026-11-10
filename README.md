@@ -44,6 +44,7 @@ P0 (building the wrong thing) is out of scope; specs are written to be unambiguo
 |---|---|---|---|
 | `urlshort` | URL shortener written for the benchmark (~500 lines) | T1–T5: build, feature, bugfix, refactor, fresh-session change | small control; validates the pipeline |
 | `actual` | [Actual Budget](https://github.com/actualbudget/actual) (MIT), ~49k lines in `loot-core`, pinned commit | AB1–AB5: two seeded bugs, three cross-module features (AB5 added in iteration 15) | where reading cost shows; see `suites/actual/README.md` |
+| `hono` | [Hono](https://github.com/honojs/hono) (MIT) v4.13.17, web framework, five router implementations | HN1–HN4: two seeded bugs, two features (one across all routers) | second codebase, iteration 21; see `suites/hono/README.md` |
 
 Every run is evaluated by hidden tests the agent never sees: black-box HTTP tests for `urlshort`, and tests through the public `@actual-app/api` package for `actual`. Both suites also run the project's own tests, restored from the original before checking.
 
@@ -182,6 +183,7 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 19: harness alone: pi vs Claude Code: same passes, −22% cost per pass
 - [x] Iteration 20: modified pi (arm Q, contracts appended where code is read): delivered in 20c after two fixes; 23/30 vs 20/30, −15% cost per pass vs pi, −27% vs Claude Code
 - [ ] Later: run the agreement check automatically (as the toolchain would) instead of relying on the agent running tests
+- [ ] Iteration 21 (pre-registered): second codebase, Hono (HN1–HN4); A vs P vs Q
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model
