@@ -476,3 +476,17 @@ Passes: Fisher exact p = 0.68. Cost per run: p = 0.60. Turns: p = 0.45. No diffe
 Records: `results/A-ts-baseline/AB2/run-46..57.json`, `results/F-ts-exhaustive/AB2/run-1..12.json`.
 
 **Follow-up: what effort buys** (`results/analysis/it12-ab2-code.probe.json`, iteration 12's AB2 runs). At default effort, all 6 runs write the filter as an anchored `$regexp`; two leave a comment saying why, e.g. run 32: "`$like` can't be used here because its matching is not anchored." At `effort=low` 2 of 6 use `$like` and fail. Across all low-effort AB2 runs (iterations 12 and 13, both arms) 16 of 30 use `$like`, against 0 of 6 at default effort (Fisher p = 0.02). So effort buys **checking the semantics of the primitive being used**, not finding the places to change. Cheap agents trust names; that is the cost a misleading name imposes.
+
+## Iteration 14 — "One definition per operator", approximated by a test (arm G)
+
+**Hypothesis.** Low-effort AB2 failures are the `$like` trap: the filter version of `startsWith` disagrees with the rule-matching version (iteration 13). The language rule that removes the trap is "one definition of an operator's meaning, from which both evaluators are derived". Without building that, the closest stand-in is a check in the codebase that the two evaluators agree for every operator. If a cheap agent runs the existing tests, the check tells it its filter is wrong, and it fixes it.
+
+**Change: arm G** = arm A plus one new test file in the start state (`arms/G-ts-agreement/patches/AB2.patch` → `packages/loot-core/src/server/transactions/condition-agreement.test.ts`). It loops over every operator in `CONDITION_TYPES.string.ops`, so an operator the agent adds is checked automatically. For each operator and several values it builds a `Condition` on `notes`, and compares the transactions `Condition.eval` accepts with those the `conditionsToAQL` query returns, over 12 notes chosen to expose case and anchoring differences ("Rent October", "Not rent", "renting", "Straße", empty, null…). No production code changes; nothing tells the agent the test exists.
+
+Checks: at the start state 31/31 cases pass. With the `$like` implementation from the failing iteration-13 runs, 4 `startsWith` cases fail ("Not rent" is returned by the filter but not by the matcher). With the reference solution, 36/36 pass. `ARM=G-ts-agreement harness/validate-actual.sh AB2` passes.
+
+**Side finding.** The first version of the test also used values with LIKE wildcards and immediately found an existing disagreement in Actual at the pinned commit: `contains "a%"` treats `%` as a wildcard in filters but literally in rule matching (same for `doesNotContain`). Those values were removed so the test passes at the start; the bug is outside the task. It's the same class of defect as the trap: two implementations of one operator, silently different.
+
+**Run.** AB2 only, `claude-haiku-5-5`, `effort=low`, 12 runs per arm, same period: A runs 58–69, G runs 1–12.
+
+**Expected if the hypothesis holds.** G passes R5 clearly more often than A (A: 4/12 and 2/6 in earlier low-effort batches), at similar or slightly higher cost (an extra test run and a fix). The probe will show whether G's agents ran the agreement test at all; if they mostly didn't, the check only helps when the harness or the language runs it, not when it merely exists.

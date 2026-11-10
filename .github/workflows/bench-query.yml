@@ -8,9 +8,9 @@ on:
   workflow_dispatch:
     inputs:
       arm:
-        description: B = query tools over MCP with redirects; B2 = tersa shell command; D = context bundle up front; F = exhaustive dispatch in the code
+        description: B = query tools over MCP with redirects; B2 = tersa shell command; D = context bundle up front; F = exhaustive dispatch in the code; G = matcher/filter agreement test in the code
         type: choice
-        options: [D-ts-bundle, F-ts-exhaustive, B2-ts-query-shell, B-ts-query]
+        options: [D-ts-bundle, G-ts-agreement, F-ts-exhaustive, B2-ts-query-shell, B-ts-query]
         default: D-ts-bundle
       suite:
         description: Suite (urlshort = small control, actual = Actual Budget)

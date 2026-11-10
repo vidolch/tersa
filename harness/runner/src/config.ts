@@ -8,7 +8,7 @@ export const TASKS = ["T1", "T2", "T3", "T4", "T5"] as const;
 export type Task = string;
 export const SUITES = ["urlshort", "actual"] as const;
 export type Suite = (typeof SUITES)[number];
-export const ARMS = ["A-ts-baseline", "B-ts-query", "B2-ts-query-shell", "C-tersa-lang", "D-ts-bundle", "F-ts-exhaustive"] as const;
+export const ARMS = ["A-ts-baseline", "B-ts-query", "B2-ts-query-shell", "C-tersa-lang", "D-ts-bundle", "F-ts-exhaustive", "G-ts-agreement"] as const;
 export type Arm = (typeof ARMS)[number];
 
 /** Reference snapshot each task starts from; null = arm scaffold only. */

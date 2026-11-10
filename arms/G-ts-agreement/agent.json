@@ -1,0 +1,16 @@
+{
+  "ready": true,
+  "tools": [
+    "Read",
+    "Write",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Bash"
+  ],
+  "mcpServers": {},
+  "contextFiles": [],
+  "codePatches": {
+    "AB2": "patches/AB2.patch"
+  }
+}

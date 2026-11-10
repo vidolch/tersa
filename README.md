@@ -16,9 +16,10 @@ Everything is measured by the benchmark in this repo, so each idea has to prove 
 | **B2** `B2-ts-query-shell` | TypeScript | standard tools + the query layer as a `tersa` shell command (daemon keeps the index warm), usage note in the system prompt, no redirects, so lookups batch with other shell commands in one turn | piloted: not adopted by Haiku |
 | **D** `D-ts-bundle` | TypeScript | standard tools + a ~6k-token context bundle in the first prompt, built automatically from the spec (`query/src/bundle.ts`) | iteration 10: no cost gain |
 | **F** `F-ts-exhaustive` | TypeScript, with one language rule applied by hand: dispatch over a closed set is exhaustive (`assertNever`, typed operator lists), so adding a member breaks the build at every place that must handle it (`arms/F-ts-exhaustive/patches/`, behaviour-preserving, AB2 only) | Claude Code's standard tools | iteration 13 |
+| **G** `G-ts-agreement` | TypeScript, plus one test standing in for the language rule "one definition per operator": every string operator listed in the code is run through both the rule matcher and the filter query on the same data, and must agree (`arms/G-ts-agreement/patches/`, AB2 only) | Claude Code's standard tools | iteration 14 |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
-**B vs A** isolates the query layer. **F vs A** tests one language rule without building the language. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
+**B vs A** isolates the query layer. **F vs A** and **G vs A** each test one language rule without building the language. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
 
 ## Problems tracked
 
@@ -158,6 +159,7 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 11: cost anatomy on Haiku: old tool output ~12% of cost; `turnsToFirstEdit` fixed to count shell edits
 - [x] Iteration 12: `effort=low` halves cost per pass (−51%, p ≤ 0.016 on every task) but misses a second code path (AB2 R5, 4/6); `thinking=disabled` has no effect
 - [x] Iteration 13: arm F (exhaustive dispatch) vs A on AB2 at `effort=low`: no effect; failures come from the `$like` trap, not omissions (iteration 12's reading corrected)
+- [ ] Iteration 14: arm G (matcher/filter agreement test) vs A on AB2 at `effort=low`
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model

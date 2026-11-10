@@ -1,0 +1,84 @@
+diff --git a/packages/loot-core/src/server/transactions/condition-agreement.test.ts b/packages/loot-core/src/server/transactions/condition-agreement.test.ts
+new file mode 100644
+index 0000000..f2c2820
+--- /dev/null
++++ b/packages/loot-core/src/server/transactions/condition-agreement.test.ts
+@@ -0,0 +1,78 @@
++// @ts-strict-ignore
++// Every string operator has two implementations: `Condition.eval` (rule matching, in memory)
++// and `conditionsToAQL` (filters, as a database query). They must agree. This test runs every
++// operator listed for string fields in CONDITION_TYPES (including any added later) through
++// both, on the same notes, and fails on any difference.
++import { aqlQuery } from '#server/aql';
++import * as db from '#server/db';
++import { loadMappings } from '#server/db/mappings';
++import { q } from '#shared/query';
++
++import { Condition, CONDITION_TYPES } from '../rules/condition';
++
++import { conditionsToAQL, resetState } from './transaction-rules';
++
++const NOTES = [
++  'Rent October',
++  'rent november',
++  'Not rent',
++  'RENT',
++  'renting',
++  'October rent payment',
++  'a%b',
++  'a_b',
++  'abc',
++  'Straße',
++  '',
++  null,
++];
++
++const VALUES: Record<string, unknown[]> = {
++  oneOf: [['rent'], ['RENT', 'abc']],
++  notOneOf: [['rent'], ['RENT', 'abc']],
++  hasTags: ['#rent'],
++  hasAnyTag: ['#rent'],
++};
++// LIKE wildcards in values (`%`, `_`) are left out: `contains` already disagrees on them at this
++// commit (filters treat `%` as a wildcard, rule matching doesn't), which is outside this check.
++const DEFAULT_VALUES = ['rent', 'Rent', 'oct', 'straße', 'ent'];
++
++beforeEach(async () => {
++  await global.emptyDatabase()();
++  resetState();
++  await loadMappings();
++});
++
++async function insertNotes() {
++  const account = await db.insertAccount({ name: 'bank' });
++  for (const [i, notes] of NOTES.entries()) {
++    await db.insertTransaction({ id: `t${i}`, date: '2026-10-01', account, amount: -100, notes });
++  }
++}
++
++async function idsByQuery(cond: Condition): Promise<string[]> {
++  const { filters } = conditionsToAQL([cond.serialize()]);
++  const { data } = await aqlQuery(q('transactions').filter({ $and: filters }).select('id'));
++  return data.map((t) => t.id).sort();
++}
++
++function idsInMemory(cond: Condition): string[] {
++  return NOTES.flatMap((notes, i) => (cond.eval({ notes }) ? [`t${i}`] : [])).sort();
++}
++
++describe('string operators: rule matching and filters agree', () => {
++  for (const op of CONDITION_TYPES.string.ops) {
++    for (const value of VALUES[op] ?? DEFAULT_VALUES) {
++      test(`notes ${op} ${JSON.stringify(value)}`, async () => {
++        let cond: Condition;
++        try {
++          cond = new Condition(op, 'notes', value, null);
++        } catch {
++          return; // not a valid value for this operator
++        }
++        await insertNotes();
++        expect(await idsByQuery(cond)).toEqual(idsInMemory(cond));
++      });
++    }
++  }
++});
