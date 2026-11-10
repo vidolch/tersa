@@ -15,7 +15,7 @@ on:
       suite:
         description: Suite (urlshort = small control, actual = Actual Budget)
         type: choice
-        options: [actual, urlshort]
+        options: [actual, hono, urlshort]
         default: actual
       tasks:
         description: Tasks, comma-separated (empty = all tasks of the suite)
