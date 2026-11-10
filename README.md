@@ -16,7 +16,7 @@ Everything is measured by the benchmark in this repo, so each idea has to prove 
 | **B2** `B2-ts-query-shell` | TypeScript | standard tools + the query layer as a `tersa` shell command (daemon keeps the index warm), usage note in the system prompt, no redirects, so lookups batch with other shell commands in one turn | piloted: not adopted by Haiku |
 | **D** `D-ts-bundle` | TypeScript | standard tools + a ~6k-token context bundle in the first prompt, built automatically from the spec (`query/src/bundle.ts`) | iteration 10: no cost gain |
 | **F** `F-ts-exhaustive` | TypeScript, with one language rule applied by hand: dispatch over a closed set is exhaustive (`assertNever`, typed operator lists), so adding a member breaks the build at every place that must handle it (`arms/F-ts-exhaustive/patches/`, behaviour-preserving, AB2 only) | Claude Code's standard tools | iteration 13 |
-| **G** `G-ts-agreement` | TypeScript, plus one test standing in for the language rule "one definition per operator": every string operator listed in the code is run through both the rule matcher and the filter query on the same data, and must agree (`arms/G-ts-agreement/patches/`, AB2 only) | Claude Code's standard tools | iteration 14 |
+| **G** `G-ts-agreement` | TypeScript, plus one test standing in for the language rule "one definition per operator": every operator listed in the code is run through both the rule matcher and the filter query on the same data, and must agree (`arms/G-ts-agreement/patches/`: AB2 = string operators, iteration 14; AB5 = the generic, pre-registered version for all types, iteration 15) | Claude Code's standard tools | iteration 14 |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
 **B vs A** isolates the query layer. **F vs A** and **G vs A** each test one language rule without building the language. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
@@ -39,7 +39,7 @@ P0 (building the wrong thing) is out of scope; specs are written to be unambiguo
 | Suite | Codebase | Tasks | Purpose |
 |---|---|---|---|
 | `urlshort` | URL shortener written for the benchmark (~500 lines) | T1–T5: build, feature, bugfix, refactor, fresh-session change | small control; validates the pipeline |
-| `actual` | [Actual Budget](https://github.com/actualbudget/actual) (MIT), ~49k lines in `loot-core`, pinned commit | AB1–AB4: two seeded bugs, two cross-module features | where reading cost shows; see `suites/actual/README.md` |
+| `actual` | [Actual Budget](https://github.com/actualbudget/actual) (MIT), ~49k lines in `loot-core`, pinned commit | AB1–AB5: two seeded bugs, three cross-module features (AB5 added in iteration 15) | where reading cost shows; see `suites/actual/README.md` |
 
 Every run is evaluated by hidden tests the agent never sees: black-box HTTP tests for `urlshort`, and tests through the public `@actual-app/api` package for `actual`. Both suites also run the project's own tests, restored from the original before checking.
 
@@ -161,7 +161,8 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 12: `effort=low` halves cost per pass (−51%, p ≤ 0.016 on every task) but misses a second code path (AB2 R5, 4/6); `thinking=disabled` has no effect
 - [x] Iteration 13: arm F (exhaustive dispatch) vs A on AB2 at `effort=low`: no effect; failures come from the `$like` trap, not omissions (iteration 12's reading corrected)
 - [x] Iteration 14: arm G (matcher/filter agreement test) vs A on AB2 at `effort=low`: 11/12 vs 6/12, −38% cost per pass
-- [ ] Iteration 15: run the agreement check automatically (as the toolchain would) instead of relying on the agent running tests
+- [ ] Iteration 15 (pre-registered): does the agreement check generalise? Generic check frozen first, then new task AB5 (date `isbetween`); A vs G at `effort=low`
+- [ ] Later: run the agreement check automatically (as the toolchain would) instead of relying on the agent running tests
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model

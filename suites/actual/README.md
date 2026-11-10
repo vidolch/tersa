@@ -10,6 +10,7 @@ A real, large TypeScript codebase where reading cost matters: [Actual Budget](ht
 | AB2 | feature | rule conditions | New operator ripples through types, shared op tables, the matcher, ranking and AQL conversion. Trap: the app's `$like` is unanchored (`unicodeLike.ts`), so the obvious filter implementation is wrong. |
 | AB3 | feature | schedules + API | Crosses `packages/api` → `server/api.ts` → handler types. Reusing the existing `getScheduleDates` helper gets weekend moves, month skips and dedupe right; reimplementing it doesn't. |
 | AB4 | bugfix (seeded) | envelope budget | Cause is in the spreadsheet formulas of `envelope.ts`; the visible failing tests are about budget actions (`actions.test.ts`), and `tracking.ts` looks similar. |
+| AB5 | feature | rules (date ranges) | `isbetween` on `date` with `{ from, to }`; two evaluators (rule matching and filters) must both support it, and the existing `isbetween` is amount-only in both. Added in iteration 15, after the generic agreement check was frozen. |
 
 ## Layout
 

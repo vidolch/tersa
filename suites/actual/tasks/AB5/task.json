@@ -1,0 +1,33 @@
+{
+  "id": "AB5",
+  "type": "feature",
+  "startPatch": null,
+  "referencePatch": "reference.patch",
+  "relevant": {
+    "core": [
+      "packages/loot-core/src/server/rules/condition.ts",
+      "packages/loot-core/src/server/transactions/transaction-rules.ts"
+    ],
+    "supporting": [
+      "packages/loot-core/src/shared/rules.ts",
+      "packages/loot-core/src/types/models/rule.ts",
+      "packages/loot-core/src/server/rules/rule-utils.ts"
+    ]
+  },
+  "regression": {
+    "loot-core": [
+      "src/server/rules",
+      "src/server/transactions",
+      "src/server/accounts",
+      "src/server/forecast",
+      "src/shared"
+    ]
+  },
+  "expectStartFailing": [
+    "AB5 R1",
+    "AB5 R2",
+    "AB5 R3",
+    "AB5 R4",
+    "AB5 R5"
+  ]
+}

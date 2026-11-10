@@ -1,0 +1,84 @@
+diff --git a/packages/loot-core/src/server/rules/condition.ts b/packages/loot-core/src/server/rules/condition.ts
+index efeb67c..42ccae0 100644
+--- a/packages/loot-core/src/server/rules/condition.ts
++++ b/packages/loot-core/src/server/rules/condition.ts
+@@ -28,9 +28,21 @@ import {
+ 
+ export const CONDITION_TYPES = {
+   date: {
+-    ops: ['is', 'isapprox', 'gt', 'gte', 'lt', 'lte'],
++    ops: ['is', 'isapprox', 'isbetween', 'gt', 'gte', 'lt', 'lte'],
+     nullable: false,
+     parse(op, value, fieldName) {
++      if (op === 'isbetween') {
++        // A range of two exact dates: { from, to }, in either order.
++        const from = value != null ? parseDateString(value.from) : null;
++        const to = value != null ? parseDateString(value.to) : null;
++        assert(
++          from?.type === 'date' && to?.type === 'date',
++          'date-format',
++          `Invalid date range for "isbetween" (field: ${fieldName})`,
++        );
++        return { type: 'between', from: from.date, to: to.date };
++      }
++
+       const parsed =
+         typeof value === 'string'
+           ? parseDateString(value)
+@@ -324,6 +336,13 @@ export class Condition {
+       case 'isNot':
+         return fieldValue !== this.value;
+       case 'isbetween': {
++        if (type === 'date') {
++          if (fieldValue == null) {
++            return false;
++          }
++          const [from, to] = [this.value.from, this.value.to].sort();
++          return fieldValue >= from && fieldValue <= to;
++        }
+         // The parsing logic already checks that the value is of the
+         // right type (only numbers with high and low)
+         const [low, high] = sortNumbers(this.value.num1, this.value.num2);
+diff --git a/packages/loot-core/src/server/transactions/transaction-rules.ts b/packages/loot-core/src/server/transactions/transaction-rules.ts
+index 15a3786..2d1d6a2 100644
+--- a/packages/loot-core/src/server/transactions/transaction-rules.ts
++++ b/packages/loot-core/src/server/transactions/transaction-rules.ts
+@@ -656,6 +656,10 @@ export function conditionsToAQL(
+         return apply(field, '$ne', value);
+ 
+       case 'isbetween':
++        if (type === 'date') {
++          const [from, to] = [value.from, value.to].sort();
++          return { [field]: [{ $gte: from }, { $lte: to }] };
++        }
+         // This operator is only applicable to the specific `between`
+         // number type so we don't use `apply`
+         const [low, high] = sortNumbers(value.num1, value.num2);
+diff --git a/packages/loot-core/src/shared/rules.ts b/packages/loot-core/src/shared/rules.ts
+index c431867..1ac5566 100644
+--- a/packages/loot-core/src/shared/rules.ts
++++ b/packages/loot-core/src/shared/rules.ts
+@@ -5,7 +5,7 @@ import type { FieldValueTypes, RuleConditionOp } from '#types/models';
+ // to share it later.
+ const TYPE_INFO = {
+   date: {
+-    ops: ['is', 'isapprox', 'gt', 'gte', 'lt', 'lte'],
++    ops: ['is', 'isapprox', 'isbetween', 'gt', 'gte', 'lt', 'lte'],
+     nullable: false,
+   },
+   id: {
+diff --git a/packages/loot-core/src/types/models/rule.ts b/packages/loot-core/src/types/models/rule.ts
+index 7c0665a..f4bcf98 100644
+--- a/packages/loot-core/src/types/models/rule.ts
++++ b/packages/loot-core/src/types/models/rule.ts
+@@ -42,7 +42,9 @@ type BaseConditionEntity<
+   value: Op extends 'oneOf' | 'notOneOf'
+     ? Array<FieldValueTypes[Field]>
+     : Op extends 'isbetween'
+-      ? { num1: number; num2: number }
++      ? Field extends 'date'
++        ? { from: string; to: string }
++        : { num1: number; num2: number }
+       : FieldValueTypes[Field];
+   options?: {
+     inflow?: boolean;

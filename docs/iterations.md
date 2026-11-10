@@ -529,3 +529,9 @@ Records: `results/A-ts-baseline/AB2/run-58..69.json`, `results/G-ts-agreement/AB
 2. A **new task AB5**, written after this commit, that adds behaviour to a condition operator on a different type from AB2, with hidden acceptance tests and a reference solution validated the usual way. Its acceptance tests are written from the spec, not from agent behaviour.
 3. Runs: AB5, `claude-haiku-5-5`, `effort=low`, arm A vs arm G (G's AB5 patch adds exactly this generic file), 12 runs each, same period. Default-effort arm A, 6 runs, as a reference point.
 4. Reported whatever the outcome; success = G passes clearly more often than A at low effort, or the check visibly catches a disagreement in G runs (probe). If A already passes AB5 at low effort, the task has no semantic trap and the result is "no effect possible", reported as such.
+
+**Task AB5, written after the check was frozen** (`suites/actual/tasks/AB5/`): allow `isbetween` on the transaction `date` field with a `{ from, to }` value, inclusive, ends in either order, rejected for non-exact dates, and working in both rule matching (R2, R3) and filters (R5); amount `isbetween` must keep working. Hidden acceptance tests through `@actual-app/api` (`acceptance/tests/AB5.test.ts`); reference solution in 4 files. `harness/validate-actual.sh AB5` passes for arms A and G (start fails R1–R5, reference passes all).
+
+The frozen check, applied unchanged to AB5 (`arms/G-ts-agreement/patches/AB5.patch`): with the reference solution it fails only with "no sample value is valid for "isbetween" on date fields: add one to SAMPLE_VALUES.date", which is the designed behaviour for a new operator; once a `{ from, to }` sample is added it passes (24/24). Whether it catches anything in agents' code depends on what they get wrong, which isn't known yet.
+
+**Runs dispatched:** AB5, `claude-haiku-5-5`: arm A `effort=low` runs 1–12, arm G `effort=low` runs 1–12, arm A default effort runs 13–18.
