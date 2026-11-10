@@ -598,3 +598,19 @@ Records: `results/A-ts-baseline/AB1/run-70..81.json`, `results/H-ts-contracts/AB
 - `ARM=I-ts-gencontracts harness/validate-actual.sh AB1` passes.
 
 **Run.** AB1, `claude-haiku-5-5`, `effort=low`, 12 runs per arm, same period: A runs 82–93, I runs 1–12.
+
+**Result** (`node src/compare.ts "A low (it.17)=results/A-ts-baseline@82-93" "I low (it.17)=results/I-ts-gencontracts@1-12" --suite actual --model claude-haiku-5-5`):
+
+| Arm, `effort=low` | Pass | Cost per pass | Mean cost per run | Turns |
+|---|---|---|---|---|
+| A (runs 82–93) | 1/12 | $0.1076 | $0.0090 | 18.2 |
+| I (runs 1–12) | **10/12** | **$0.0056** | $0.0047 (p < 0.001) | 10.8 |
+| *H, iteration 16 (hand-written contracts)* | *12/12* | *$0.0030* | *$0.0030* | *8.3* |
+
+Passes: Fisher p = 0.0006. Probe (`results/analysis/it17-ab1.probe.json`): all 10 I passes restore the upstream comparator; both I failures leave it flipped and work around it, as A runs do. In A, 3 runs restored the comparator but still failed the regression test (they also changed the order somewhere else); 8 kept the workaround.
+
+**Conclusion.** The effect holds without anyone knowing the bug: contracts written mechanically by a model from the correct code take AB1 from 1/12 to 10/12 and cut cost per pass 19×. They are somewhat weaker than hand-written ones (10/12 vs 12/12, $0.0056 vs $0.0030; different periods, so only indicative), which fits how they differ: they state *what* (`sorted by computed score ascending`) but not *why* (later rules overwrite earlier ones), and they are spread over 53 functions in 3 files instead of 9 in one. Both still give the agent what it lacked: a statement of intent that the code can be checked against.
+
+**For Tersa.** Two of the three rules tested have a measured effect, and this one is cheap to apply to existing code: generating contracts cost a few cents and needed no knowledge of where bugs are. In the language, the contract is part of the function's signature and written when the function is written; the toolchain can then also check that it still describes the code. That keeps contracts current when code changes, and it stops a contract from being "fixed" to match a bug. In TypeScript today, the measured effect is available as plain comments.
+
+Records: `results/A-ts-baseline/AB1/run-82..93.json`, `results/I-ts-gencontracts/AB1/run-1..12.json`; contracts: `arms/I-ts-gencontracts/patches/AB1.contracts.json`.
