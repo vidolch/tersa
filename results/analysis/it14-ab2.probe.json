@@ -1,0 +1,746 @@
+[
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 58,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": false
+   },
+   "agreement": {
+    "count": 1,
+    "firstTurn": 19,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 5,
+    "firstTurn": 15,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith': {\n        // The field is lowercased by `apply` ($lower), so the pattern is too\n        const escaped = String(value)\n          .toLowerCase()\n          .replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\n        return apply(field, '$regexp', '^' + escaped);\n      }\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 59,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": false
+   },
+   "agreement": {
+    "count": 1,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 11,
+    "anyError": true,
+    "lastError": true
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Lowercased by the condition parser; LIKE is case-insensitive\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$like',\n          value + '%',\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 60,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Case-insensitive prefix match (value is already lowercased)\n        return apply(field, '$like', value + '%');\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n\n      case 'hasTags': {"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 61,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Value is already lowercased; SQL LIKE is case-insensitive for ASCII\n        return apply(field, '$like', value + '%');\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 62,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 1,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 5,
+    "firstTurn": 10,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored, case-insensitive literal prefix match. Each letter\n        // becomes a character class of its lower/upper forms so the\n        // regex needs no flags, and all other characters are escaped.\n        return apply(field, '$regexp', startsWithRegex(value));\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 63,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 14,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 1,
+    "firstTurn": 14,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 14,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored, case-insensitive regexp. LIKE here is unanchored, so it\n        // cannot express a prefix match.\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$regexp',\n          '^' + caseInsensitiveRegexLiteral(value),\n        );\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 64,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 13,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 1,
+    "firstTurn": 13,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 4,
+    "firstTurn": 13,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith': {\n        // Case-insensitive prefix match. Each letter is expanded into a\n        // character class so the JS regexp (which has no flags) ignores\n        // case, and the value is escaped so it is matched literally.\n        const escaped = [...String(value)]\n          .map(ch => {\n            const lower = ch.toLowerCase();\n            const upper = ch.toUpperCase();\n            const base = ch.replace(/[.*+?^${}()|[\\]\\\\/-]/g, '\\\\$&');\n            return lower !== upper && lower.length === 1 && upper.length === 1\n              ? `[${lower}${upper}]`\n              : base;"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 65,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Case-insensitive prefix match (LIKE is case-insensitive for the\n        // normalised values used here)\n        return apply(field, '$like', value + '%');\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$notlike',\n          '%' + value + '%',\n        );"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 66,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 15,
+    "anyError": false,
+    "lastError": false
+   },
+   "agreement": {
+    "count": 1,
+    "firstTurn": 16,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 16,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // LIKE pattern anchored at the start. Escape the LIKE wildcards\n        // (and the escape character itself) so the value is matched literally.\n        return apply(\n          field,\n          '$like',\n          value.replace(/[\\\\%?]/g, '\\\\$&') + '%',\n        );\n      case 'matches':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a regex match\n        return apply(type === 'id' ? field + '.name' : field, '$regexp', value);"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 67,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 6,
+    "anyError": false,
+    "lastError": false
+   },
+   "agreement": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // LIKE is case-insensitive for ASCII; the value is already lowercased\n        return apply(field, '$like', value + '%');\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n\n      case 'hasTags': {"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 68,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 21,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 21,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // `$like` is unanchored and treats `%`/`?` as wildcards, so use an\n        // anchored regexp. Each letter is expanded to a case-insensitive\n        // character class because REGEXP is case-sensitive.\n        return apply(\n          field,\n          '$regexp',\n          '^' + caseInsensitiveRegexLiteral(value),\n        );\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match"
+  }
+ },
+ {
+  "arm": "A-ts-baseline",
+  "task": "AB2",
+  "run": 69,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": null
+  },
+  "extracts": {
+   "aql": "      case 'startsWith': {\n        // Case-insensitive prefix match: escape regex metacharacters and\n        // turn every letter into a [xX] class so it works with the\n        // case-sensitive REGEXP/RegExp engines used by AQL.\n        const escaped = String(value)\n          .replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')\n          .replace(/[a-z]/gi, c => `[${c.toLowerCase()}${c.toUpperCase()}]`);\n        return apply(field, '$regexp', '^' + escaped);\n      }\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 1,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 11,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 5,
+    "firstTurn": 11,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 6,
+    "firstTurn": 11,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored regexp, built so it matches case-insensitively without\n        // relying on SQL lower() (which is ASCII-only). LIKE is not used\n        // because its pattern matching is not anchored at the start.\n        return { [field]: { $regexp: '^' + caseInsensitiveRegExp(value) } };\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$notlike',\n          '%' + value + '%',"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 2,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 20,
+    "anyError": false,
+    "lastError": false
+   },
+   "agreement": {
+    "count": 2,
+    "firstTurn": 21,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 4,
+    "firstTurn": 21,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Case-insensitive prefix match. `$like` has no escape syntax for\n        // `%`/`_`, so use an anchored regexp with each cased letter matched\n        // in either case.\n        return apply(field, '$regexp', '^' + caseInsensitiveRegexSource(value));\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$notlike',\n          '%' + value + '%',"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 3,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 14,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 3,
+    "firstTurn": 14,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 14,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored regex on the lowercased field (apply() adds $lower for\n        // string fields). A null field is treated as '' by REGEXP, and the\n        // value is non-empty, so null fields never match.\n        return apply(\n          field,\n          '$regexp',\n          '^' + String(value).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 4,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 4,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 5,
+    "firstTurn": 12,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored, escaped regex against the lowercased field (`apply`\n        // lowercases string fields and the value is lowercased at parse time).\n        // LIKE can't be used here: its implementation is not anchored.\n        return apply(\n          field,\n          '$regexp',\n          '^' + String(value).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 5,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 7,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 2,
+    "firstTurn": 7,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored, escaped regex so that only a leading match counts\n        return apply(\n          field,\n          '$regexp',\n          '^' + value.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 6,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 2,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith': {\n        // Anchored, escaped regex on the lowercased field (see `apply`), so\n        // LIKE wildcards like `%` or `_` in the value are matched literally.\n        const escaped = String(value)\n          .replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')\n          .replace(/\\\\\\$/g, '[$]');\n        return apply(field, '$regexp', '^' + escaped);\n      }\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 7,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 14,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 2,
+    "firstTurn": 14,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 14,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith': {\n        // The value is already lowercased by the condition parser and the\n        // field is lowercased via $transform, so an anchored, escaped regex\n        // gives a case-insensitive prefix match. Null notes never match.\n        const escaped = value.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\n        return apply(field, '$regexp', '^' + escaped);\n      }\n\n      case 'hasTags': {\n        const tagValues = extractTagsForFilter(value);\n\n        if (tagValues.length === 0) {"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 8,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 7,
+    "anyError": false,
+    "lastError": false
+   },
+   "agreement": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 9,
+    "anyError": true,
+    "lastError": true
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Value is already lowercased by the condition parser; LIKE is\n        // case-insensitive for ASCII. NULL fields never match.\n        return apply(field, '$like', value + '%');\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing\n          return { id: null };\n        }\n        return { $or: values.map(v => apply(field, '$eq', v)) };\n"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 9,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 15,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 5,
+    "firstTurn": 15,
+    "anyError": false,
+    "lastError": false
+   },
+   "tests": {
+    "count": 5,
+    "firstTurn": 15,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // The field is lowercased by `apply`; match an anchored, escaped\n        // regexp against the lowercased value so wildcards stay literal.\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$regexp',\n          '^' +\n            String(value)\n              .toLowerCase()\n              .replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'oneOf':"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 10,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 7,
+    "anyError": false,
+    "lastError": false
+   },
+   "agreement": {
+    "count": 2,
+    "firstTurn": 8,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 3,
+    "firstTurn": 8,
+    "anyError": true,
+    "lastError": true
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored, case-insensitive regex match. Built this way (rather\n        // than LIKE) so that `%` and `_` in the value are literal.\n        return apply(\n          type === 'id' ? field + '.name' : field,\n          '$regexp',\n          makeStartsWithRegex(value),\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {\n          // This forces it to match nothing"
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 11,
+  "cmds": {
+   "typecheck": {
+    "count": 1,
+    "firstTurn": 9,
+    "anyError": false,
+    "lastError": false
+   },
+   "agreement": {
+    "count": 0,
+    "firstTurn": null,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 1,
+    "firstTurn": 10,
+    "anyError": false,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // Anchored, escaped regex match against the lowercased value\n        // (the `$lower` transform is applied by `apply` for strings)\n        return apply(\n          field,\n          '$regexp',\n          '^' + String(value).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'doesNotContain':\n        // Running contains with id will automatically reach into\n        // the `name` of the referenced table and do a string match\n        return apply("
+  }
+ },
+ {
+  "arm": "G-ts-agreement",
+  "task": "AB2",
+  "run": 12,
+  "cmds": {
+   "typecheck": {
+    "count": 2,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": null
+   },
+   "agreement": {
+    "count": 4,
+    "firstTurn": 12,
+    "anyError": false,
+    "lastError": null
+   },
+   "tests": {
+    "count": 7,
+    "firstTurn": 12,
+    "anyError": true,
+    "lastError": false
+   }
+  },
+  "files": {
+   "agreeEdited": true
+  },
+  "extracts": {
+   "aql": "      case 'startsWith':\n        // The field is lowercased by `apply` and the value by the\n        // condition parser, so an anchored, escaped regexp gives a\n        // case-insensitive prefix match. (LIKE isn't anchored here.)\n        return apply(\n          field,\n          '$regexp',\n          '^' + String(value).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'),\n        );\n      case 'oneOf':\n        const values = value;\n        if (values.length === 0) {"
+  }
+ }
+]
