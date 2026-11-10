@@ -566,3 +566,22 @@ The cause is the **missing contract**: nothing in the code says which direction 
 **Change: arm H** = arm A plus contract comments on **every** function in `rule-utils.ts` (9 functions: `assert`, `computeScore`, `_rankRules`, `rankRules`, `migrateIds`, `iterateIds`, `parseRecurDate`, `parseDateString`, `parseBetweenAmount`), each a short "Contract:" doc comment describing upstream behaviour (`arms/H-ts-contracts/patches/AB1.patch`, comments only). All functions, not just the one with the bug, so the treatment is "the module documents its contracts", not a pointed hint. Still, the honest framing is that this measures **the value of a stated contract when the implementation contradicts it**, not whether agents can infer unstated intent. `ARM=H-ts-contracts harness/validate-actual.sh AB1` passes.
 
 **Run.** AB1, `claude-haiku-5-5`, `effort=low`, 12 runs per arm, same period: A runs 70–81, H runs 1–12.
+
+**Result** (`node src/compare.ts "A low (it.16)=results/A-ts-baseline@70-81" "H low (it.16)=results/H-ts-contracts@1-12" --suite actual --model claude-haiku-5-5`):
+
+| Arm, `effort=low` | Pass | Cost per pass | Mean cost per run | Turns | Output per run |
+|---|---|---|---|---|---|
+| A (runs 70–81) | 1/12 | $0.1189 | $0.0099 | 19.8 | 8.8k |
+| H (runs 1–12) | **12/12** | **$0.0030** | $0.0030 (p < 0.001) | 8.3 | 2.2k |
+
+Passes: Fisher exact p ≈ 1e-5. All 11 A failures are the same regression test; probe (`results/analysis/it16-ab1.probe.json`): 11 of 12 H runs restore the comparator exactly as upstream wrote it (the 12th fixes it with an equivalent expression), against 1 of 12 in A. H runs are also shorter: 8 turns instead of 20, a quarter of the output, because there's nothing to deliberate about once the contract and the code disagree.
+
+**Conclusion.** The largest effect in this project so far: **cost per passing task 40× lower**, from the worst task to a perfect score, at the cheapest setting. The failure on AB1 was never about finding code or reading too much. Agents found the bug every time and argued themselves out of it, because nothing said what the function was supposed to do. A one-line contract per function turns "is this intended?" into "the code contradicts its contract".
+
+**Caveats.**
+- I wrote the contracts knowing where the bug is. All 9 functions got one, and each states upstream behaviour, but the `_rankRules`/`rankRules` contracts state exactly the property the bug violates. The scenario is realistic (a regression against a documented contract is how bugs usually look in documented code), but it doesn't show that contracts written *without* knowing the bug help as much.
+- One task, one model, 12 runs per arm.
+
+**For Tersa:** "every function states its contract" moves from a stylistic idea to the rule with the strongest measured effect. The next test removes the bias above: contracts generated mechanically from the correct code, before the regression, for every function in the modules the task touches, without anyone choosing what they say.
+
+Records: `results/A-ts-baseline/AB1/run-70..81.json`, `results/H-ts-contracts/AB1/run-1..12.json`.
