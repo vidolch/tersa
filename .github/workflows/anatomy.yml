@@ -56,6 +56,10 @@ jobs:
               | tee "../../results/analysis/${{ inputs.label }}.probe.md"
           fi
           cat "../../results/analysis/${{ inputs.label }}.md" >> "$GITHUB_STEP_SUMMARY"
+          # Tail of each run's agent output (job logs aren't readable from outside Actions).
+          for f in $(find /tmp/logs -name agent-stdout.log | sort); do
+            echo "=== ${f#/tmp/logs/}"; tail -40 "$f"
+          done > "../../results/analysis/${{ inputs.label }}.logs.txt" || true
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
