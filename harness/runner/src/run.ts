@@ -155,6 +155,7 @@ if (does("agent")) {
         workspace,
         rawDir,
         model,
+        provider,
         modelOptions,
         maxTurns: Number(a["max-turns"]),
         maxMinutes: Number(a["max-minutes"]) || 30,

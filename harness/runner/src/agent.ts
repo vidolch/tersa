@@ -14,6 +14,8 @@ export interface AgentRunInput {
   workspace: string;
   rawDir: string;
   model: string;
+  /** Runner provider (anthropic | deepseek); used by the pi harness to pick its provider. */
+  provider?: string;
   /** Experiment settings for the model (effort, thinking); empty = SDK defaults. */
   modelOptions?: ModelOptions;
   maxTurns: number;

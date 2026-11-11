@@ -103,11 +103,14 @@ export async function runPiAgent(input: AgentRunInput): Promise<MetricsCollector
   const agentDir = mkdtempSync(join(tmpdir(), "pi-agent-"));
   mkdirSync(agentDir, { recursive: true });
   const modelRuntime = await ModelRuntime.create({ authPath: join(agentDir, "auth.json"), modelsPath: null });
-  const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) throw new Error("ANTHROPIC_API_KEY is not set");
-  await modelRuntime.setRuntimeApiKey("anthropic", key);
-  const model = modelRuntime.getModel("anthropic", input.model);
-  if (!model) throw new Error(`pi has no model anthropic/${input.model}`);
+  // Runner provider → pi provider and its key (DeepSeek through pi's own provider, api.deepseek.com).
+  const piProvider = input.provider === "deepseek" ? "deepseek" : "anthropic";
+  const keyEnv = piProvider === "deepseek" ? "DEEPSEEK_API_KEY" : "ANTHROPIC_API_KEY";
+  const key = process.env[keyEnv];
+  if (!key) throw new Error(`${keyEnv} is not set`);
+  await modelRuntime.setRuntimeApiKey(piProvider, key);
+  const model = modelRuntime.getModel(piProvider, input.model);
+  if (!model) throw new Error(`pi has no model ${piProvider}/${input.model}`);
 
   const extensionFactories: any[] = [];
   if (input.armConfig.piExtension) {
