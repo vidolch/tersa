@@ -925,3 +925,18 @@ Also: a probe regex first matched the wrong function in the same file (`shoveSor
 **Where the name rule stands:** two independent seeded bugs, 35/36 with the self-describing name (AB1 24/24, AB6 11/12) against 1/36 without it (AB1 0/24 in the same periods, AB6 1/12), at 13–30× lower cost per passing task. Controls show it is the name's meaning, not novelty. Still one codebase and one model.
 
 Records: `results/{P-pi-baseline,R-pi-name}/AB6/run-1..12.json`.
+
+## Iteration 26 — Does the name rule hold for other models? (pre-registered)
+
+**Question.** The name rule (iterations 22–25: 35/36 with a self-describing name vs 1/36 without) is measured on one model, Haiku 5.5. Does a cheaper model, DeepSeek, or a stronger one, Sonnet 5.5, behave the same way? Two outcomes are plausible. A stronger model might see through the seeded bugs on its own (then there's no headroom, and "names matter" would be a weak-model effect). A different model family might not anchor on names the same way.
+
+**Change.** pi's adapter now maps the runner's provider to pi's: `deepseek` uses pi's own DeepSeek provider (`deepseek-flash` = DeepSeek V4.1 Flash, api.deepseek.com, the host the sandbox already allows). Price added from pi's model data ($0.30 in / $1.20 out / $0.006 cache read per 1M tokens). Pilot (not counted): `results/P-pi-baseline/AB6/run-900`, DeepSeek, pass, 14 turns, $0.019.
+
+**Run.** Arms P (no change) and R (self-describing name) on AB1 and AB6, pi, `effort=low`, same period:
+- DeepSeek `deepseek-flash`: 12 runs per task per arm, runs 101–112.
+- Claude Sonnet 5.5: 6 runs per task per arm, runs 201–206 (about 20× Haiku's price per token).
+
+**Predictions.**
+- For each model, R ≥ P on both tasks.
+- Headroom rule per model and task: if P passes ≥ 75% of its runs, that model doesn't fall for that bug, and the comparison is "no effect possible" there. That would itself be a finding about which models need the signal.
+- Where there is headroom, R clearly above P.

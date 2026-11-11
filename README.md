@@ -214,6 +214,7 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 23: filtered contracts lose the protection (1/12)
 - [x] Iteration 24: it's the name's meaning: R 12/12 again, neutral name 1/12, bug-agreeing name 1/12
 - [x] Iteration 25 (pre-registered): the name rule replicates on AB6: 11/12 vs 1/12
+- [ ] Iteration 26 (pre-registered): the name rule on DeepSeek and Sonnet (AB1, AB6)
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model
