@@ -1,0 +1,86 @@
+{
+  "suite": "actual",
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 104,
+  "chained": false,
+  "startState": "actual/AB1",
+  "specSha256": "3ed4a82cf3927a943b3086ced320b193ae91463d7a5e760a67aa3f4de5276f1c",
+  "model": "deepseek-flash",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "deepseek",
+  "harness": {
+    "name": "pi-coding-agent",
+    "version": "1.5.1"
+  },
+  "usage": {
+    "inputUncached": 58577,
+    "cacheRead": 795776,
+    "cacheWrite": 0,
+    "output": 9977,
+    "toolResultTokens": 48396,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 26,
+    "toolCalls": 25,
+    "toolCallsByName": {
+      "Bash": 24,
+      "Edit": 1
+    },
+    "fileReads": 0,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": 22,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 158441,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB1 R1": true,
+      "AB1 R2": true,
+      "AB1 R3": true,
+      "AB1 R4": true,
+      "AB1 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 38,
+    "readChars": 193070,
+    "relevantChars": 24214,
+    "coreChars": 1991,
+    "precision": 0.12541565235406849,
+    "coreRecall": 1,
+    "readTokens": 48268
+  },
+  "costUsd": 0.034320156,
+  "costSource": "harness/prices.json",
+  "sdkCostUsd": 0.034320156000000004,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 24,
+      "outTokens": 48365,
+      "carriedTokens": 632139
+    },
+    "Edit": {
+      "calls": 1,
+      "outTokens": 34,
+      "carriedTokens": 136
+    }
+  }
+}

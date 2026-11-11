@@ -1,0 +1,98 @@
+{
+  "suite": "actual",
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 101,
+  "chained": false,
+  "startState": "actual/AB1",
+  "specSha256": "3ed4a82cf3927a943b3086ced320b193ae91463d7a5e760a67aa3f4de5276f1c",
+  "model": "deepseek-flash",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "deepseek",
+  "harness": {
+    "name": "pi-coding-agent",
+    "version": "1.5.1"
+  },
+  "usage": {
+    "inputUncached": 68170,
+    "cacheRead": 934016,
+    "cacheWrite": 0,
+    "output": 7404,
+    "toolResultTokens": 58276,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 23,
+    "toolCalls": 31,
+    "toolCallsByName": {
+      "Bash": 28,
+      "Read": 1,
+      "Edit": 1,
+      "Write": 1
+    },
+    "fileReads": 1,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": 12,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 100563,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": true,
+    "rules": {
+      "AB1 R1": true,
+      "AB1 R2": true,
+      "AB1 R3": true,
+      "AB1 R4": true,
+      "AB1 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 49,
+    "readChars": 232502,
+    "relevantChars": 30734,
+    "coreChars": 8311,
+    "precision": 0.13218811020980464,
+    "coreRecall": 1,
+    "readTokens": 58126
+  },
+  "costUsd": 0.034939896,
+  "costSource": "harness/prices.json",
+  "sdkCostUsd": 0.034939896,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 28,
+      "outTokens": 56684,
+      "carriedTokens": 770123
+    },
+    "Read": {
+      "calls": 1,
+      "outTokens": 1532,
+      "carriedTokens": 32172
+    },
+    "Edit": {
+      "calls": 1,
+      "outTokens": 34,
+      "carriedTokens": 374
+    },
+    "Write": {
+      "calls": 1,
+      "outTokens": 29,
+      "carriedTokens": 174
+    }
+  }
+}
