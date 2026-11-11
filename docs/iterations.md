@@ -808,3 +808,19 @@ Both code patches pass `ARM=… harness/validate-actual.sh AB1`.
 **Run.** AB1, `claude-haiku-5-5`, `effort=low`, 12 runs per arm, same period: P runs 19–30, Q runs 19–30, R, S and T runs 1–12.
 
 **Expected if the hypothesis holds.** At least one of R/S/T passes about as often as Q (iteration 20c: 4/6), clearly above P (1/6 in 20c, 2/6 in 19), at P's cost or less. If none does, a prose contract carries something these signals don't.
+
+## Iteration 23 — Contracts shown only when they add information (arm Q2)
+
+**Hypothesis.** Contracts on read cost ~20% where intent is already legible (iteration 21). If the same blind model drops the contracts that only restate what a function's name, signature and comments already say, the tax should shrink. The AB1 effect should stay, if the decisive contract is judged informative.
+
+**Change.** `query/src/contracts-filter.ts` + `contracts-filter` workflow: for each function, `claude-haiku-5-5` sees its pristine source and its generated contract, and answers whether the contract tells a reader something important (direction or order, range, unit, side effect, edge case, which of two plausible behaviours) that isn't evident from name, signature and comments. **Arm Q2** = arm Q's extension with the filtered set (`arms/Q2-pi-selective/contracts.<suite>.json`); the extension now loads contracts from the running arm's directory.
+
+**Filter result, before any run.** Actual: kept 94 of 264. Hono: kept 67 of 85.
+- Crucially, it **dropped `_rankRules`' contract** ("sorted by ascending score"), the one that fixed AB1 in iterations 17 and 20c. It kept `rankRules`', which doesn't state a direction. Judged against the *correct* code, "ascending" is evident from the comparator, so the contract looks redundant.
+- It kept `unicodeLike`'s ("no anchors") and, on Hono, both `Node.search` and `parseAccept`.
+
+That exposes a problem with the idea itself. **A contract's protective value is its redundancy with correct code.** It only becomes informative once a change makes the code contradict it. A filter that removes redundancy, judged on correct code, removes exactly that protection.
+
+**Prediction, recorded before the run:** Q2 on AB1 passes about as often as P (no contract-driven fix), because the decisive contract is gone.
+
+**Run.** AB1, `effort=low`, 12 runs, in the same period as iteration 22: Q2 runs 1–12.

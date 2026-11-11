@@ -133,8 +133,9 @@ export function contractsFor(
   return out;
 }
 
-export default function contractsOnRead(pi: any, ctx: { workspace: string; rawDir: string; suite: string }) {
-  const db = loadDb(join(dirname(fileURLToPath(import.meta.url)), `contracts.${ctx.suite}.json`));
+export default function contractsOnRead(pi: any, ctx: { workspace: string; rawDir: string; suite: string; armDir?: string }) {
+  // The arm's own contracts.<suite>.json (arm Q2 shares this extension with a filtered set).
+  const db = loadDb(join(ctx.armDir ?? dirname(fileURLToPath(import.meta.url)), `contracts.${ctx.suite}.json`));
   const shown = new Set<string>();
   let appended = 0;
   pi.on("tool_result", async (event: any) => {

@@ -112,7 +112,7 @@ export async function runPiAgent(input: AgentRunInput): Promise<MetricsCollector
   const extensionFactories: any[] = [];
   if (input.armConfig.piExtension) {
     const mod = await import(pathToFileURL(join(paths.arm(input.arm), input.armConfig.piExtension)).href);
-    extensionFactories.push((pi: any) => mod.default(pi, { workspace: input.workspace, rawDir: input.rawDir, suite: input.suite, metrics }));
+    extensionFactories.push((pi: any) => mod.default(pi, { workspace: input.workspace, rawDir: input.rawDir, suite: input.suite, armDir: paths.arm(input.arm), metrics }));
   }
   const resourceLoader = new DefaultResourceLoader({
     cwd: input.workspace,

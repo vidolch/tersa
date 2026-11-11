@@ -1,0 +1,13 @@
+{
+  "ready": true,
+  "harness": "pi",
+  "piExtension": "../Q-pi-contracts/contracts-on-read.ts",
+  "tools": [
+    "read",
+    "bash",
+    "edit",
+    "write"
+  ],
+  "mcpServers": {},
+  "contextFiles": []
+}
