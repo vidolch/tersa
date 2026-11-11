@@ -1,0 +1,676 @@
+[
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 1,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-1/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 415,600p db/index.ts; grep -n \"sortCategories\\|categories-sort\" -r ../../../*/src 2>/dev/null | head",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-1/workspace; node .yarn/releases/yarn-4.17.1.cjs workspace @actual-app/core run test:node src/server/budget/sort-categories.test.ts src/server/budget/app.test.ts src/server/db 2>&1 | tail -15; cat packages/loot-core/src/server/budget/sort-categories.test.ts | head -60",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-1/workspace/packages/loot-core; cat > src/server/budget/tmp-rules.test.ts <<'EOF'\nimport { afterEach, beforeEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nimport { moveCategory } from './app';\n\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\n\nasync function setup("
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 2,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 10,
+    "firstTurn": 2,
+    "anyError": true,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-2/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,600p db/index.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-2/workspace/packages/loot-core/src/server; grep -n \"SORT_INCREMENT\" db/index.ts | head -3; python3 - <<'EOF'\np='budget/sort-categories.ts'\ns=open(p).read()\nold=s[s.index('  for (let i = sorted.length - 1'):s.rindex('}')]\nnew='''  // Moving each category to the end, in sorted order, leaves the group sorted\n  await batchMessages(async () => {\n    for (const ca",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-2/workspace; M=\"node .yarn/releases/yarn-4.17.1.cjs\"; $M workspace @actual-app/core run test:node src/server/budget/sort-categories.test.ts src/server/budget/app.test.ts src/server/db 2>&1 | tail -30; $M workspace @actual-app/core run typecheck 2>&1 | tail -5",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-2/workspace/packages/loot-core/src/server/budget; sed -n 1,60p sort-categories.test.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-2/workspace/packages/loot-core/src/server/budget; cat > tmp-verify.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nimport { batchMessages } from '#server/sync';\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\nasync function",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-2/workspace/packages/loot-core/src/server/budget; git -C ../../../../.. stash list >/dev/null 2>&1; cat > tmp-verify.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nimport { batchMessages } from '#server/sync';\nbeforeEach(global.emptyDatabase());",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-2/workspace/packages/loot-core/src/server/budget; cat > tmp-verify.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nimport { batchMessages } from '#server/sync';\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\nasync function",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-2/workspace/packages/loot-core/src/server/budget; cat > tmp-verify.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nimport { batchMessages } from '#server/sync';\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\nasync function",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-2/workspace/packages/loot-core/src/server/budget; cat > tmp-verify.test.ts <<'EOF'\nimport { beforeEach, afterEach, it } from 'vitest';\nimport fs from 'fs';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nimport { batchMessages } from '#server/sync';\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\nc",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-2/workspace/packages/loot-core/src/server/budget; python3 - <<'EOF'\np='sort-categories.ts'\ns=open(p).read()\ns=s.replace('''  await batchMessages(async () => {\n    for (const category of sorted) {\n      await db.moveCategory(category.id, groupId, null);\n    }\n  });''','''  for (const category of sorted) {\n    await batchMessages(async () => {\n      await db.m"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 3,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 4,
+    "firstTurn": 2,
+    "anyError": true,
+    "lastError": true,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-3/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,580p db/index.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-3/workspace; node .yarn/releases/yarn-4.17.1.cjs workspace @actual-app/core run test:node src/server/budget/sort-categories.test.ts src/server/budget/app.test.ts src/server/db 2>&1 | tail -40; node .yarn/releases/yarn-4.17.1.cjs workspace @actual-app/api run test 2>&1 | tail -15",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-3/workspace/packages/loot-core; sed -n 1,60p src/server/budget/sort-categories.test.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-3/workspace/packages/loot-core; cat > src/server/budget/tmp-verify.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nimport { moveCategory } from '#server/budget/app';\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\nasync fun"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 4,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 4,
+    "firstTurn": 2,
+    "anyError": true,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-4/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,580p db/index.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-4/workspace; yarn workspace @actual-app/core run test:node packages/loot-core/src/server/budget/sort-categories.test.ts packages/loot-core/src/server/sync/sync.test.ts packages/loot-core/src/server/budget/app.test.ts 2>&1 | tail -40; cat packages/loot-core/src/server/budget/sort-categories.test.ts | head -60",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-4/workspace/packages/loot-core/src/server/budget; python3 - <<'EOF'\np='sort-categories.test.ts'\ns=open(p).read()\nidx=s.rstrip().rfind('});')\nadd=\"\"\"\n  it('sorts ascending and descending by name', async () => {\n    await setupGroup('g1', ['Bravo', 'Charlie', 'Alpha']);\n    await sortCategories({ groupId: 'g1', direction: 'asc' });\n    expect(await getCategory",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-4/workspace/packages/loot-core/src/server/budget; python3 - <<'EOF'\np='sort-categories.test.ts'\ns=open(p).read()\ns=s.replace(\"\"\"    await setupGroup('g2', ['A', 'B', 'C', 'D']);\n\"\"\",\"\"\"    await db.insertCategoryGroup({ id: 'g2', name: 'g2' });\n    for (const name of ['A', 'B', 'C', 'D']) {\n      await db.insertCategory({ name, cat_group: 'g2' }, { atEnd: tr"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 5,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-5/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,580p db/index.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-5/workspace/packages/loot-core/src/server/budget; sed -n 1,60p sort-categories.test.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-5/workspace/packages/loot-core/src/server/budget; cat > move-tmp.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\n\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\n\nasync function names(g: string) {\n  const groups = await db."
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 6,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-6/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,600p db/index.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-6/workspace/packages/loot-core/src/server/budget; cat sort-categories.test.ts | head -60",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-6/workspace/packages/loot-core/src/server/budget; cat > tmp-move.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\n\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\n\nasync function names(g: string) {\n  return (await db.getCate"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 7,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": true,
+    "lastError": true,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-7/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,580p db/index.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-7/workspace; cat packages/loot-core/src/server/budget/sort-categories.test.ts | head -60; grep -n \"category-move\\|moveCategory\" -B3 -A10 packages/loot-core/src/server/sync/sync.test.ts | head -40",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-7/workspace/packages/loot-core; cat > src/server/budget/move-regress.test.ts <<'EOF'\nimport { afterEach, beforeEach, describe, expect, it } from 'vitest';\n\nimport * as db from '#server/db';\n\nimport { sortCategories } from './sort-categories';\n\ndescribe('category move/sort', () => {\n  beforeEach(global.emptyDatabase());\n  afterEach(global.emptyDatabase());\n\n "
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 8,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 1,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-8/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 410,580p db/index.ts"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 9,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-9/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,600p db/index.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-9/workspace/packages/loot-core; sed -n 1,60p src/server/budget/sort-categories.test.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-9/workspace/packages/loot-core; cat > src/server/budget/tmp-check.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\nasync function names(g: string) {\n  return (await db.getCateg"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 10,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 1,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-10/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,600p db/index.ts"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 11,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-11/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,580p db/index.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-11/workspace/packages/loot-core; cat src/server/budget/sort-categories.test.ts | head -60",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-11/workspace/packages/loot-core; cat > src/server/budget/move-category.test.ts <<'EOF'\nimport { afterEach, beforeEach, describe, expect, it } from 'vitest';\n\nimport * as db from '#server/db';\n\nimport { sortCategories } from './sort-categories';\n\ndescribe('moveCategory / sortCategories ordering', () => {\n  beforeEach(global.emptyDatabase());\n  afterEach(globa"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 12,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 4,
+    "firstTurn": 2,
+    "anyError": true,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-12/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,600p db/index.ts",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-12/workspace/packages/loot-core/src/server/budget; cat sort-categories.test.ts | head -60",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-12/workspace/packages/loot-core/src/server/budget; cat > move-tmp.test.ts <<'EOF'\nimport { beforeEach, afterEach, describe, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\n\ndescribe('move/sort', () => {\n  beforeEach(global.emptyDatabase());\n  afterEach(global.emptyDatabase());\n  async function",
+     "cd /tmp/tersa-raw/P-pi-baseline/AB6/run-12/workspace/packages/loot-core/src/server/budget; python3 - <<'EOF'\np='sort-categories.ts'\ns=open(p).read()\ns=s.replace(\"\"\"  await batchMessages(async () => {\n    for (const cat of sorted) {\n      await db.moveCategory(cat.id, groupId, null);\n    }\n  });\"\"\",\"\"\"  for (const cat of sorted) {\n    // Batch per move so each move reads the result of the previous "
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 1,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 4,
+    "firstTurn": 2,
+    "anyError": true,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-1/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,580p db/index.ts",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-1/workspace; cat packages/loot-core/src/server/budget/sort-categories.test.ts | head -80; node .yarn/releases/yarn-4.17.1.cjs workspace @actual-app/core run test:node src/server/budget/sort-categories.test.ts src/server/budget/app.test.ts 2>&1 | tail -30",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-1/workspace/packages/loot-core; cat > src/server/budget/tmp-check.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\nasync function names() { return (await db.getCategoriesGrouped(['",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-1/workspace/packages/loot-core; cat > src/server/budget/tmp-check.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\nasync function names() { return (await db.getCategoriesGrouped(['"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 2,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 5,
+    "firstTurn": 2,
+    "anyError": true,
+    "lastError": true,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-2/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,600p db/index.ts",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-2/workspace && node .yarn/releases/yarn-4.17.1.cjs workspace @actual-app/core run test:node packages/loot-core/src/server/budget/sort-categories.test.ts packages/loot-core/src/server/sync/sync.test.ts 2>&1 | tail -30",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-2/workspace && node .yarn/releases/yarn-4.17.1.cjs workspace @actual-app/core run test:node src/server/budget/sort-categories.test.ts src/server/budget/app.test.ts src/server/sync/sync.test.ts 2>&1 | grep -E \"Test Files|Tests |FAIL|✗|×\" | head -30",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-2/workspace/packages/loot-core && sed -n 1,60p src/server/budget/sort-categories.test.ts",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-2/workspace/packages/loot-core && cat > src/server/budget/tmp-check.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nimport { moveCategory } from '../budget/app' with { } as any;\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\na"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 3,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 1,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-3/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,580p db/index.ts"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 4,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 1,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-4/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 400,580p db/index.ts"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 5,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 1,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-5/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 410,580p db/index.ts"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 6,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": true,
+    "lastError": true,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-6/workspace/packages/loot-core/src/server && cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,600p db/index.ts",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-6/workspace/packages/loot-core && cat src/server/budget/sort-categories.test.ts | head -150; ls src/server/db/ | grep -i sort",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-6/workspace/packages/loot-core && cat > src/server/budget/tmp-verify.test.ts <<'EOF'\nimport { beforeEach, describe, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\ndescribe('verify', () => {\n  beforeEach(global.emptyDatabase());\n  async function names(g: string) {\n    const gs = await db.getCatego"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 7,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 3,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-7/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,580p db/index.ts",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-7/workspace/packages/loot-core/src/server; cat budget/sort-categories.test.ts | head -80; ls db/; grep -n \"shove\" -r --include=*.test.ts . | head",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-7/workspace/packages/loot-core/src/server/budget; cat > category-move.test.ts <<'EOF'\nimport { afterEach, beforeEach, describe, expect, it } from 'vitest';\n\nimport * as db from '#server/db';\n\nimport { sortCategories } from './sort-categories';\n\ndescribe('category ordering', () => {\n  beforeEach(global.emptyDatabase());\n  afterEach(global.emptyDatabase());\n\n  asy"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 8,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 1,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-8/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 410,600p db/index.ts"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 9,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 1,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-9/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,600p db/index.ts"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 10,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 2,
+    "firstTurn": 2,
+    "anyError": true,
+    "lastError": true,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-10/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,580p db/index.ts",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-10/workspace/packages/loot-core/src/server/sync; sed -n 20,30p sync.test.ts; cat > tmp-move.test.ts <<'EOF'\nimport * as db from '#server/db';\nimport * as mockSyncServer from '#server/tests/mockSyncServer';\nimport { sortCategories } from '#server/budget/sort-categories';\nbeforeEach(() => { mockSyncServer.reset(); });\ntest('move and sort', async () => {\n  await db"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 11,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 5,
+    "firstTurn": 2,
+    "anyError": true,
+    "lastError": true,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-11/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,580p db/index.ts",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-11/workspace; for f in packages/loot-core/src/server/budget/sort-categories.test.ts packages/loot-core/src/server/budget/app.test.ts packages/loot-core/src/server/db/index.test.ts $(ls packages/loot-core/src/server/db/*sort*.test.ts 2>/dev/null); do yarn workspace @actual-app/core run test:node $f 2>&1 | grep -E \"Test Files|Tests |FAIL|✗|×\" | head -20; done",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-11/workspace; yarn workspace @actual-app/core run test:node src/server/budget/sort-categories.test.ts src/server/budget/app.test.ts src/server/db 2>&1 | tail -15",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-11/workspace/packages/loot-core; sed -n 1,60p src/server/budget/sort-categories.test.ts",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-11/workspace/packages/loot-core; cat > src/server/budget/tmp-check.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\nasync function names(g: string) {\n  const gs = await db.getCateg"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB6",
+  "run": 12,
+  "cmds": {
+   "touchesSortCats": {
+    "count": 5,
+    "firstTurn": 2,
+    "anyError": false,
+    "lastError": false,
+    "commands": [
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-12/workspace/packages/loot-core/src/server; cat budget/sort-categories.ts; sed -n 380,400p budget/app.ts; sed -n 415,580p db/index.ts",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-12/workspace; yarn workspace @actual-app/core run test:node src/server/budget/sort-categories.test.ts src/server/sync/sync.test.ts 2>&1 | tail -15; yarn workspace @actual-app/core run typecheck 2>&1 | tail -3",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-12/workspace/packages/loot-core/src/server/budget; cat sort-categories.test.ts | head -60",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-12/workspace/packages/loot-core/src/server/budget; cat > tmp-move.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\n\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\n\nasync function names(g: string) {\n  const gs = await db.getCate",
+     "cd /tmp/tersa-raw/R-pi-name/AB6/run-12/workspace/packages/loot-core/src/server/budget; cat > tmp-move.test.ts <<'EOF'\nimport { beforeEach, afterEach, expect, it } from 'vitest';\nimport * as db from '#server/db';\nimport { sortCategories } from './sort-categories';\n\nbeforeEach(global.emptyDatabase());\nafterEach(global.emptyDatabase());\n\nasync function names(g: string) {\n  const gs = await db.getCate"
+    ]
+   }
+  },
+  "outputs": {
+   "insertComment": {
+    "count": 1,
+    "firstTurn": 2
+   }
+  },
+  "files": {
+   "sortFixed": true
+  },
+  "extracts": {}
+ }
+]
