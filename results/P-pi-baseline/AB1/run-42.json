@@ -1,0 +1,86 @@
+{
+  "suite": "actual",
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 42,
+  "chained": false,
+  "startState": "actual/AB1",
+  "specSha256": "3ed4a82cf3927a943b3086ced320b193ae91463d7a5e760a67aa3f4de5276f1c",
+  "model": "claude-haiku-5-5",
+  "modelOptions": {
+    "effort": "low"
+  },
+  "provider": "anthropic",
+  "harness": {
+    "name": "pi-coding-agent",
+    "version": "1.5.1"
+  },
+  "usage": {
+    "inputUncached": 22,
+    "cacheRead": 78467,
+    "cacheWrite": 13832,
+    "output": 4909,
+    "toolResultTokens": 4240,
+    "contextOverheadTokens": 0
+  },
+  "agent": {
+    "turns": 10,
+    "toolCalls": 10,
+    "toolCallsByName": {
+      "Bash": 8,
+      "Read": 2
+    },
+    "fileReads": 2,
+    "repeatReads": 0,
+    "failedEdits": 0,
+    "compileFailures": 0,
+    "testRuns": 0,
+    "compactions": 0,
+    "turnsToFirstEdit": null,
+    "shellQueryCalls": 0,
+    "apiRetries": 0,
+    "apiRetryWaitMs": 0,
+    "networkCommands": 0,
+    "wallMs": 58954,
+    "completed": true
+  },
+  "acceptance": {
+    "passed": false,
+    "rules": {
+      "AB1 R1": false,
+      "AB1 R2": false,
+      "AB1 R3": false,
+      "AB1 R4": true,
+      "AB1 regression": true
+    }
+  },
+  "reading": {
+    "filesRead": 12,
+    "readChars": 16935,
+    "relevantChars": 12029,
+    "coreChars": 4158,
+    "precision": 0.7103041039267789,
+    "coreRecall": 1,
+    "readTokens": 4234
+  },
+  "costUsd": 0.004970370000000001,
+  "costSource": "harness/prices.json (per request)",
+  "sdkCostUsd": 0.004970370000000001,
+  "stopReason": "success",
+  "network": {
+    "policy": "provider-only",
+    "deniedConnections": 0
+  },
+  "toolCost": {
+    "Bash": {
+      "calls": 8,
+      "outTokens": 3316,
+      "carriedTokens": 17448
+    },
+    "Read": {
+      "calls": 2,
+      "outTokens": 926,
+      "carriedTokens": 7157
+    }
+  }
+}
