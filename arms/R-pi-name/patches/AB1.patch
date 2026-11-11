@@ -1,0 +1,26 @@
+diff --git a/packages/loot-core/src/server/rules/rule-utils.ts b/packages/loot-core/src/server/rules/rule-utils.ts
+index b3dc624..8f872fb 100644
+--- a/packages/loot-core/src/server/rules/rule-utils.ts
++++ b/packages/loot-core/src/server/rules/rule-utils.ts
+@@ -60,7 +60,7 @@ function computeScore(rule: Rule): number {
+   return initialScore;
+ }
+ 
+-function _rankRules(rules: Rule[]): Rule[] {
++function _rankLeastSpecificFirst(rules: Rule[]): Rule[] {
+   const scores = new Map();
+   rules.forEach(rule => {
+     scores.set(rule, computeScore(rule));
+@@ -102,9 +102,9 @@ export function rankRules(rules: Iterable<Rule>): Rule[] {
+     }
+   }
+ 
+-  pre = _rankRules(pre);
+-  normal = _rankRules(normal);
+-  post = _rankRules(post);
++  pre = _rankLeastSpecificFirst(pre);
++  normal = _rankLeastSpecificFirst(normal);
++  post = _rankLeastSpecificFirst(post);
+ 
+   return pre.concat(normal).concat(post);
+ }

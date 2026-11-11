@@ -8,7 +8,7 @@ export const TASKS = ["T1", "T2", "T3", "T4", "T5"] as const;
 export type Task = string;
 export const SUITES = ["urlshort", "actual", "hono"] as const;
 export type Suite = (typeof SUITES)[number];
-export const ARMS = ["A-ts-baseline", "B-ts-query", "B2-ts-query-shell", "C-tersa-lang", "D-ts-bundle", "F-ts-exhaustive", "G-ts-agreement", "H-ts-contracts", "I-ts-gencontracts", "P-pi-baseline", "Q-pi-contracts"] as const;
+export const ARMS = ["A-ts-baseline", "B-ts-query", "B2-ts-query-shell", "C-tersa-lang", "D-ts-bundle", "F-ts-exhaustive", "G-ts-agreement", "H-ts-contracts", "I-ts-gencontracts", "P-pi-baseline", "Q-pi-contracts", "R-pi-name", "S-pi-example", "T-pi-specintent"] as const;
 export type Arm = (typeof ARMS)[number];
 
 /** Reference snapshot each task starts from; null = arm scaffold only. */
@@ -48,6 +48,8 @@ export interface ArmConfig {
    * can't run in this arm.
    */
   codePatches?: Record<string, string>;
+  /** Per task, a note appended to the spec (an arm that adds one sentence of intent to the report). */
+  specNotes?: Record<string, string>;
   /** Agent harness: Claude Code through the Agent SDK (default) or the pi coding agent (src/agent-pi.ts). */
   harness?: "claude-code" | "pi";
   /** pi only: module under arms/<arm>/ whose default export is a pi extension factory. */

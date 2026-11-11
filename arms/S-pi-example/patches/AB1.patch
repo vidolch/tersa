@@ -1,0 +1,12 @@
+diff --git a/packages/loot-core/src/server/rules/rule-utils.ts b/packages/loot-core/src/server/rules/rule-utils.ts
+index b3dc624..fe11a60 100644
+--- a/packages/loot-core/src/server/rules/rule-utils.ts
++++ b/packages/loot-core/src/server/rules/rule-utils.ts
+@@ -69,6 +69,7 @@ function _rankRules(rules: Rule[]): Rule[] {
+   // No matter the order of rules, this must always return exactly the same
+   // order. That's why rules have ids: if two rules have the same score, it
+   // sorts by id
++  // e.g. a `contains` rule (lower score) sorts before a `oneOf` rule (higher score)
+   return [...rules].sort((r1, r2) => {
+     const score1 = scores.get(r1);
+     const score2 = scores.get(r2);

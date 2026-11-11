@@ -40,7 +40,8 @@ export async function buildPrompt(
   armConfig: ArmConfig,
   workspace?: string,
 ): Promise<{ prompt: string; overheadChars: number; bundle?: { tokens: number; files: string[] } }> {
-  const spec = readFileSync(paths.spec(suite, task), "utf8");
+  const note = armConfig.specNotes?.[task];
+  const spec = readFileSync(paths.spec(suite, task), "utf8") + (note ? `\n${note}\n` : "");
   const profile = readFileSync(paths.profile(suite, arm), "utf8");
   const extras = armConfig.contextFiles.map((f) => readFileSync(join(paths.arm(arm), f), "utf8"));
   const prompt = [

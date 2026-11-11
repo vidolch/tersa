@@ -22,7 +22,7 @@
         "B-ts-query",
         "B2-ts-query-shell",
         "C-tersa-lang",
-        "D-ts-bundle", "F-ts-exhaustive", "G-ts-agreement", "H-ts-contracts", "I-ts-gencontracts", "P-pi-baseline", "Q-pi-contracts"
+        "D-ts-bundle", "F-ts-exhaustive", "G-ts-agreement", "H-ts-contracts", "I-ts-gencontracts", "P-pi-baseline", "Q-pi-contracts", "R-pi-name", "S-pi-example", "T-pi-specintent"
       ]
     },
     "task": {

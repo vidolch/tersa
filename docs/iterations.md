@@ -793,3 +793,18 @@ AB1's `_rankRules` had none of these, and its flipped order had a plausible alte
 - For Tersa, the lesson is sharper than "contracts everywhere": **intent must be legible at the point of change**, from names, types, examples or a contract, whichever is shortest. The language should make the cheapest of these mandatory (named keys and parameters, examples that are checked) and treat prose contracts as the fallback.
 
 Records: `results/{A-ts-baseline,P-pi-baseline,Q-pi-contracts}/HN*/run-1..8.json`.
+
+## Iteration 22 — Which cheap signal of intent fixes AB1? (pre-registered)
+
+**Hypothesis (from iteration 21).** Hono's seeded bugs were fixed in every run without contracts because intent was legible: a self-describing sort key (`score: ++order`), a comment with an example, and a report that names an oracle. AB1 had none of these. If one cheap signal is enough, the language should make that kind of signal mandatory, rather than prose contracts everywhere.
+
+**Change: three arms on pi (arm P's setup), each adding one signal to AB1 only.**
+- **R `R-pi-name`:** `_rankRules` renamed to `_rankLeastSpecificFirst` (declaration and its 3 calls; `arms/R-pi-name/patches/AB1.patch`). The direction is in the name, like Hono's `score: ++order`.
+- **S `S-pi-example`:** one line added to the existing comment above the comparator: `// e.g. a \`contains\` rule (lower score) sorts before a \`oneOf\` rule (higher score)` (`arms/S-pi-example/patches/AB1.patch`). The direction is in an example, like `parseAccept`'s comment.
+- **T `T-pi-specintent`:** one sentence appended to AB1's spec: "Note from the reporter: rules are meant to run from least to most specific, so that the most specific rule's actions are applied last." The intent is in the report, like HN1's oracle. New `specNotes` option in agent.json.
+
+Both code patches pass `ARM=… harness/validate-actual.sh AB1`.
+
+**Run.** AB1, `claude-haiku-5-5`, `effort=low`, 12 runs per arm, same period: P runs 19–30, Q runs 19–30, R, S and T runs 1–12.
+
+**Expected if the hypothesis holds.** At least one of R/S/T passes about as often as Q (iteration 20c: 4/6), clearly above P (1/6 in 20c, 2/6 in 19), at P's cost or less. If none does, a prose contract carries something these signals don't.

@@ -1,0 +1,15 @@
+{
+  "ready": true,
+  "harness": "pi",
+  "tools": [
+    "read",
+    "bash",
+    "edit",
+    "write"
+  ],
+  "mcpServers": {},
+  "contextFiles": [],
+  "specNotes": {
+    "AB1": "Note from the reporter: rules are meant to run from least to most specific, so that the most specific rule's actions are applied last."
+  }
+}

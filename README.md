@@ -21,6 +21,7 @@ Everything is measured by the benchmark in this repo, so each idea has to prove 
 | **I** `I-ts-gencontracts` | TypeScript, plus contract comments for every function of the task's relevant files, written by a model from the correct code without seeing the task (`query/src/contracts.ts`, `contracts` workflow; all tasks) | Claude Code's standard tools | iterations 17–18 |
 | **P** `P-pi-baseline` | TypeScript | arm A's setup on the [pi](https://github.com/earendil-works/pi) coding agent instead of Claude Code: ~600-token system prompt, tools read/bash/edit/write (`harness/runner/src/agent-pi.ts`) | iteration 19 |
 | **Q** `Q-pi-contracts` | TypeScript | arm P + a pi extension that appends the contracts of the functions shown and called, once each, to tool results that show code (`arms/Q-pi-contracts/`) | iteration 20 |
+| **R / S / T** `R-pi-name`, `S-pi-example`, `T-pi-specintent` | TypeScript | arm P + one cheap signal of intent on AB1: a self-describing function name (R), a one-line example comment (S), one sentence of intent in the report (T) | iteration 22 |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
 **B vs A** isolates the query layer. **F vs A** and **G vs A** each test one language rule without building the language. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
@@ -185,6 +186,8 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 20: modified pi (arm Q, contracts appended where code is read): delivered in 20c after two fixes; 23/30 vs 20/30, −15% cost per pass vs pi, −27% vs Claude Code
 - [ ] Later: run the agreement check automatically (as the toolchain would) instead of relying on the agent running tests
 - [x] Iteration 21 (pre-registered): second codebase, Hono: harness −49% confirmed; contracts no effect possible (bugs fixed in every arm), ~22% tax
+- [ ] Iteration 22: which cheap signal of intent (name, example, spec note) fixes AB1 as well as contracts?
+- [ ] Iteration 23: contracts shown only when they add information
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model
