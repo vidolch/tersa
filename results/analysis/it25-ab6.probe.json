@@ -4,7 +4,7 @@
   "task": "AB6",
   "run": 1,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 3,
     "firstTurn": 2,
     "anyError": false,
@@ -16,14 +16,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -32,7 +27,7 @@
   "task": "AB6",
   "run": 2,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 10,
     "firstTurn": 2,
     "anyError": true,
@@ -51,14 +46,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -67,7 +57,7 @@
   "task": "AB6",
   "run": 3,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 4,
     "firstTurn": 2,
     "anyError": true,
@@ -80,14 +70,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -96,7 +81,7 @@
   "task": "AB6",
   "run": 4,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 4,
     "firstTurn": 2,
     "anyError": true,
@@ -109,14 +94,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -125,7 +105,7 @@
   "task": "AB6",
   "run": 5,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 3,
     "firstTurn": 2,
     "anyError": false,
@@ -137,14 +117,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -153,7 +128,7 @@
   "task": "AB6",
   "run": 6,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 3,
     "firstTurn": 2,
     "anyError": false,
@@ -165,14 +140,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -181,7 +151,7 @@
   "task": "AB6",
   "run": 7,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 3,
     "firstTurn": 2,
     "anyError": true,
@@ -193,14 +163,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -209,7 +174,7 @@
   "task": "AB6",
   "run": 8,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 1,
     "firstTurn": 2,
     "anyError": false,
@@ -219,14 +184,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -235,7 +195,7 @@
   "task": "AB6",
   "run": 9,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 3,
     "firstTurn": 2,
     "anyError": false,
@@ -247,14 +207,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -263,7 +218,7 @@
   "task": "AB6",
   "run": 10,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 1,
     "firstTurn": 2,
     "anyError": false,
@@ -273,14 +228,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  },
@@ -289,7 +239,7 @@
   "task": "AB6",
   "run": 11,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 3,
     "firstTurn": 2,
     "anyError": false,
@@ -301,14 +251,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -317,7 +262,7 @@
   "task": "AB6",
   "run": 12,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 4,
     "firstTurn": 2,
     "anyError": true,
@@ -330,14 +275,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -346,7 +286,7 @@
   "task": "AB6",
   "run": 1,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 4,
     "firstTurn": 2,
     "anyError": true,
@@ -359,14 +299,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": true
   },
   "extracts": {}
  },
@@ -375,7 +310,7 @@
   "task": "AB6",
   "run": 2,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 5,
     "firstTurn": 2,
     "anyError": true,
@@ -389,14 +324,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  },
@@ -405,7 +335,7 @@
   "task": "AB6",
   "run": 3,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 1,
     "firstTurn": 2,
     "anyError": false,
@@ -415,14 +345,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  },
@@ -431,7 +356,7 @@
   "task": "AB6",
   "run": 4,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 1,
     "firstTurn": 2,
     "anyError": false,
@@ -441,14 +366,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  },
@@ -457,7 +377,7 @@
   "task": "AB6",
   "run": 5,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 1,
     "firstTurn": 2,
     "anyError": false,
@@ -467,14 +387,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  },
@@ -483,7 +398,7 @@
   "task": "AB6",
   "run": 6,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 3,
     "firstTurn": 2,
     "anyError": true,
@@ -495,14 +410,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  },
@@ -511,7 +421,7 @@
   "task": "AB6",
   "run": 7,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 3,
     "firstTurn": 2,
     "anyError": false,
@@ -523,14 +433,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  },
@@ -539,7 +444,7 @@
   "task": "AB6",
   "run": 8,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 1,
     "firstTurn": 2,
     "anyError": false,
@@ -549,14 +454,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  },
@@ -565,7 +465,7 @@
   "task": "AB6",
   "run": 9,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 1,
     "firstTurn": 2,
     "anyError": false,
@@ -575,14 +475,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  },
@@ -591,7 +486,7 @@
   "task": "AB6",
   "run": 10,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 2,
     "firstTurn": 2,
     "anyError": true,
@@ -602,14 +497,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  },
@@ -618,7 +508,7 @@
   "task": "AB6",
   "run": 11,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 5,
     "firstTurn": 2,
     "anyError": true,
@@ -632,14 +522,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  },
@@ -648,7 +533,7 @@
   "task": "AB6",
   "run": 12,
   "cmds": {
-   "touchesSortCats": {
+   "sortCatsEdited": {
     "count": 5,
     "firstTurn": 2,
     "anyError": false,
@@ -662,14 +547,9 @@
     ]
    }
   },
-  "outputs": {
-   "insertComment": {
-    "count": 1,
-    "firstTurn": 2
-   }
-  },
+  "outputs": {},
   "files": {
-   "sortFixed": true
+   "seedLeft": false
   },
   "extracts": {}
  }
