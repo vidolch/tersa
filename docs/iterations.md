@@ -940,3 +940,31 @@ Records: `results/{P-pi-baseline,R-pi-name}/AB6/run-1..12.json`.
 - For each model, R ≥ P on both tasks.
 - Headroom rule per model and task: if P passes ≥ 75% of its runs, that model doesn't fall for that bug, and the comparison is "no effect possible" there. That would itself be a finding about which models need the signal.
 - Where there is headroom, R clearly above P.
+
+**Result** (pi, `effort=low`, same period; mean cost per run, permutation test P vs R):
+
+| Model | Task | P (original names) pass, cost per pass, turns | R (self-describing name) pass, cost per pass, turns | Cost p |
+|---|---|---|---|---|
+| DeepSeek V4.1 Flash | AB1 | 11/12, $0.0396, 25.3 | 12/12, **$0.0203**, 16.3 | **< 0.001** |
+| DeepSeek V4.1 Flash | AB6 | 12/12, $0.0333, 25.5 | 12/12, $0.0266, 23.7 | 0.04 |
+| Claude Sonnet 5.5 | AB1 | 6/6, $0.0261, 4.8 | 6/6, $0.0290, 6.0 | 0.25 |
+| Claude Sonnet 5.5 | AB6 | 6/6, $0.0353, 5.8 | 6/6, $0.0381, 6.0 | 0.28 |
+| *Haiku 5.5 (iterations 22–25)* | *AB1* | *0/24 in the same periods* | *24/24, $0.0029* | |
+| *Haiku 5.5* | *AB6* | *1/12, $0.0863* | *11/12, $0.0068* | |
+
+**Conclusion, against the predictions.**
+- **Headroom rule triggered for both models on both tasks.** DeepSeek and Sonnet fix both seeded bugs at the cause without help. Among the three models, **falling for a bug that looks intended is a Haiku trait**: the cheapest, fastest model anchors on the code as written.
+- **R ≥ P held everywhere.** On DeepSeek the name still cuts cost where the bug is subtler: AB1 −49% cost per pass (25 → 16 turns, p < 0.001), AB6 −20% (p = 0.04). The name saves deliberation even when the model would get there anyway. On Sonnet it changes nothing measurable: it already solves both in about 5 turns.
+- **The economics are the real result.** On AB1, cost per passing task:
+  - Haiku with the original names: $0.08–0.12 (mostly fails);
+  - Sonnet: $0.026;
+  - DeepSeek: $0.020–0.040;
+  - **Haiku with a self-describing name: $0.0029, 9× cheaper than Sonnet.**
+  
+  Clear names let the cheapest model do the work of the strongest at a ninth of the price. On AB6: Haiku+name $0.0068, against Sonnet $0.035 (5×) and DeepSeek $0.027–0.033.
+
+**What this means.** "Intent in names" isn't a rule that only weak models need. It lets cheap models replace expensive ones on code where intent would otherwise have to be inferred. For an LLM-first language the case gets stronger, not weaker: the language's job is to let the cheapest model that can do the task do it. Stronger models compensate for unclear code by reasoning, and they charge for it.
+
+Caveat: two seeded bugs, one codebase, 6–12 runs per cell; Sonnet at 6 runs per cell.
+
+Records: `results/{P-pi-baseline,R-pi-name}/{AB1,AB6}/run-101..112.json` (DeepSeek) and `run-201..206.json` (Sonnet).
