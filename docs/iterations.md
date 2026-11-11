@@ -861,3 +861,19 @@ Vicho asked whether the query layer is worth chasing. Answer, recorded as a deci
 - **What survives is its delivery mechanism.** Showing information where the agent already reads (the contracts-on-read extension, iteration 20c) works, with no extra turns. It should carry meaning, not code.
 - **pi becomes the default harness** for new experiments (cheaper on both codebases, same quality).
 - **Next:** replicate iteration 22's strongest result (a self-describing name fixes a bug that looks intended) on a second, independent seeded bug before building language features on it.
+
+## Iteration 24 — Is it the name's meaning, or just a rename? (pre-registered)
+
+**Question.** In iteration 22, renaming `_rankRules` to `_rankLeastSpecificFirst` fixed AB1 in 12/12 runs. Two other explanations would make that result less useful: any rename draws attention to the function (novelty), or agents simply read renamed code more carefully. If the *meaning* of the name is what works, a neutral name shouldn't help, and a name that agrees with the bug should make things worse.
+
+**Arms** (pi, AB1 only; same patch as R with a different name; all three pass `validate-actual.sh`'s start/reference check by construction, since only the identifier differs):
+- **R2 `R2-pi-neutralname`:** `_orderRules`. New, but says nothing about direction.
+- **R3 `R3-pi-wrongname`:** `_rankMostSpecificFirst`. Agrees with the seeded bug: the name tells the agent the flipped order is intended.
+- **R** (replication, runs 13–24) and **P** (runs 31–42), same period.
+
+**Predictions, recorded before the run.**
+- R replicates (≥ 10/12).
+- R2 is close to P (0–3/12): novelty isn't the cause.
+- R3 is at or below P (0/12 or close). The workaround should be even more common, and agents may defend the bug in their final message. If R3 passes often, agents aren't trusting names, and the R result needs another explanation.
+
+**Run.** AB1, `claude-haiku-5-5`, `effort=low`, 12 runs per arm, same period.

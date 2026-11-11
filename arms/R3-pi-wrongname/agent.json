@@ -1,0 +1,15 @@
+{
+  "ready": true,
+  "harness": "pi",
+  "tools": [
+    "read",
+    "bash",
+    "edit",
+    "write"
+  ],
+  "mcpServers": {},
+  "contextFiles": [],
+  "codePatches": {
+    "AB1": "patches/AB1.patch"
+  }
+}

@@ -209,6 +209,7 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 21 (pre-registered): second codebase, Hono: harness −49% confirmed; contracts no effect possible (bugs fixed in every arm), ~22% tax
 - [x] Iteration 22: cheap signals of intent on AB1: a name 12/12, contracts 8/12, example comment 3/12, spec note 1/12, nothing 0/12
 - [x] Iteration 23: filtered contracts lose the protection (1/12)
+- [ ] Iteration 24: name meaning vs. rename (neutral name R2, bug-agreeing name R3)
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model
