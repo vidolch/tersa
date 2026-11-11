@@ -97,7 +97,7 @@ In plain terms (details in Findings and `docs/iterations.md`):
 | Does a query layer that serves exactly the right code cut cost? | No. Agents already read efficiently; extra tool calls add turns, and turns are what cost money (+5% to +126%, iterations 3–10). | High, on a ~50k-line codebase with Haiku and DeepSeek |
 | What drives cost? | Number of turns × context re-sent per turn. Lower effort halves cost (iteration 12); a leaner harness (pi) cuts 15–49% (iterations 19–21). | High; the harness result holds on two codebases |
 | Why do cheap agents fail? | Misleading primitives (`$like` that isn't LIKE) and bugs that look intended (they work around them instead of fixing them). | Medium, from a handful of tasks |
-| What fixes "looks intended"? | Intent in the name of the function that owns it: 12/12 on AB1, against 8/12 with contracts on read, 3/12 with an example comment, 1/12 with a sentence in the report. | One task; being replicated |
+| What fixes "looks intended"? | Intent in the name of the function that owns it: 35/36 over two independent seeded bugs (AB1, AB6) vs 1/36 without; on AB1 also better than contracts on read (8/12), an example comment (3/12) or a sentence in the report (1/12). It's the meaning: a neutral new name gives 1/12. | Two bugs, one codebase, one model |
 | Contracts? | They help exactly where they repeat what correct code says, and that redundancy is also their ~20% tax. Filtering them removes the protection. | Medium |
 
 **Decisions.**
@@ -124,6 +124,7 @@ Arm A, `deepseek-v4-flash`, provider-only network, 6 runs per task (2026-11-03):
 - **The query layer reaches every task's core files in one or two queries** (200–600 tokens of output, `query/test/actual.test.ts`).
 - **Steering made the tools used, but not cheaper (v1):** with the system-prompt note and redirects, the agent made 12–25 query calls per run, yet every task cost the same or more than arm A (AB1 $0.035 vs $0.019, and it broke an existing test). Agents still made 7–34 Read calls: Claude Code requires a Read before an Edit, so changed code is read twice. v1.1 trims query output; an edit tool in the query layer would remove the second read.
 - **A context bundle up front shortens orientation but doesn't lower cost — iteration 10 (arm D, Haiku, 6 runs per task):** first edit earlier on AB3 (turn 9.3 → 5.4) and AB4 (5.0 → 3.5); cost per pass $0.0282 vs A $0.0261 (+8%), no task significant. The ~6k-token bundle is re-sent every turn and eats the turns it saves. AB1 fails 0/6 in both arms on the same regression test.
+- **The name rule replicates on an independent bug — iteration 25 (AB6, pre-registered):** `shoveSortOrders(items, targetId)` seeded to insert after instead of before. Plain pi 1/12 (11 call-site workarounds), with the function renamed `shoveSortOrdersToInsertBefore(items, beforeId)` 11/12 (p = 0.0001), 13× lower cost per pass. Across both bugs: 35/36 with a self-describing name, 1/36 without.
 - **It's the name's meaning, not the rename — iteration 24:** a neutral new name (`_orderRules`) 1/12, a name that agrees with the bug 1/12, the self-describing name 12/12 again (24/24 in total).
 - **A self-describing name beats contracts — iteration 22 (AB1, pi, 12 runs per arm):** renaming one private function to `_rankLeastSpecificFirst` fixes AB1 in 12/12 runs at $0.0029 per pass and 7 turns, against 8/12 with contracts on read and 0/12 with nothing. A one-line example comment: 3/12. One sentence of intent in the bug report: 1/12, because it describes the system, so a call-site workaround satisfies it too. Intent must sit in the name or type of the unit that owns it.
 - **Filtering contracts removes the protection — iteration 23 (arm Q2):** keeping only contracts that "add information" to the correct code dropped the decisive one; AB1 1/12. A contract protects by being redundant with correct code; the tax and the protection are the same thing.
@@ -212,7 +213,7 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 22: cheap signals of intent on AB1: a name 12/12, contracts 8/12, example comment 3/12, spec note 1/12, nothing 0/12
 - [x] Iteration 23: filtered contracts lose the protection (1/12)
 - [x] Iteration 24: it's the name's meaning: R 12/12 again, neutral name 1/12, bug-agreeing name 1/12
-- [ ] Iteration 25 (pre-registered): the name rule on an independent bug, AB6 (`shoveSortOrders` inserts after instead of before)
+- [x] Iteration 25 (pre-registered): the name rule replicates on AB6: 11/12 vs 1/12
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model

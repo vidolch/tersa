@@ -908,3 +908,20 @@ Records: `results/{P-pi-baseline/AB1/run-31..42,R-pi-name/AB1/run-13..24,R2-pi-n
 - Otherwise, R passes clearly more often than P (Fisher p < 0.05), at a lower cost per pass.
 
 **Run.** AB6, pi, `claude-haiku-5-5`, `effort=low`, 12 runs per arm, same period: P runs 1–12, R runs 1–12.
+
+**Result** (AB6, pi, `effort=low`, 12 runs per arm, same period; probe `results/analysis/it25-ab6*.probe.json`):
+
+| Arm | Pass | Cost per pass | Mean cost per run | Turns | Fixed `shoveSortOrders` itself |
+|---|---|---|---|---|---|
+| P (unchanged names) | 1/12 | $0.0863 | $0.0072 | 13.7 | 1/12 |
+| R (`shoveSortOrdersToInsertBefore(items, beforeId)`) | **11/12** | **$0.0068** | $0.0062 | 11.6 | 11/12 |
+
+Fisher, passes: p = 0.0001. Cost per pass 13× lower. All 11 P failures, and R's one, are the same two restored tests (account-group and account moves): the run fixed category moves at the call sites and left the shared function inserting after the target. Every P run saw `insertCategory`'s "since we insert at the beginning" comment in its tool output, and it didn't change the outcome.
+
+**Conclusion.** The headroom rule wasn't triggered (P 1/12), and the main prediction held: **the name rule replicates on an independent bug**, in a different module, with a different kind of semantics (position instead of order), designed before any agent saw it. The failure mode is the same as AB1's: agents find the shared function, take its current behaviour as the design, and work around it where the symptom shows. A name that states the intended behaviour turns that into an obvious contradiction, and agents fix the cause. A comment elsewhere that implies the intent (the `insertCategory` comment) is not enough, like the example comment in iteration 22.
+
+Also: a probe regex first matched the wrong function in the same file (`shoveSortOrdersDescending` has a similar `findIndex` line) and suggested P had fixed `sort.ts`. Extracting the code showed otherwise; the counts above use a pattern that matches only the seeded line.
+
+**Where the name rule stands:** two independent seeded bugs, 35/36 with the self-describing name (AB1 24/24, AB6 11/12) against 1/36 without it (AB1 0/24 in the same periods, AB6 1/12), at 13–30× lower cost per passing task. Controls show it is the name's meaning, not novelty. Still one codebase and one model.
+
+Records: `results/{P-pi-baseline,R-pi-name}/AB6/run-1..12.json`.
