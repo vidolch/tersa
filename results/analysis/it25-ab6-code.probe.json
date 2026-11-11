@@ -1,0 +1,158 @@
+[
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 1,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "  const to = items.findIndex(item => item.id === targetId) + 1;\n  const target = items[to];\n  const before = items[to - 1];\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (!targetId || to === 0 || to === items.length) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {",
+   "sortcats": "  for (let i = sorted.length - 1; i >= 0; i--) {\n    await batchMessages(async () => {\n      await db.moveCategory(\n        sorted[i].id,\n        groupId,\n        i === sorted.length - 1 ? null : sorted[i + 1].id,\n      );\n    });\n  }\n}\n",
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 2,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "  const to = items.findIndex(item => item.id === targetId) + 1;\n  const target = items[to];\n  const before = items[to - 1];\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (!targetId || to === 0 || to === items.length) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {",
+   "sortcats": null,
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 3,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "  const to = items.findIndex(item => item.id === targetId) + 1;\n  const target = items[to];\n  const before = items[to - 1];\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (!targetId || to === 0 || to === items.length) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {",
+   "sortcats": "  for (let i = sorted.length - 1; i >= 0; i--) {\n    await batchMessages(async () => {\n      await db.moveCategory(\n        sorted[i].id,\n        groupId,\n        i === sorted.length - 1 ? null : sorted[i + 1].id,\n      );\n    });\n  }\n}\n",
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 4,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "  const to = items.findIndex(item => item.id === targetId) + 1;\n  const target = items[to];\n  const before = items[to - 1];\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (!targetId || to === 0 || to === items.length) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {",
+   "sortcats": "  for (let i = sorted.length - 1; i >= 0; i--) {\n    await batchMessages(async () => {\n      await db.moveCategory(\n        sorted[i].id,\n        groupId,\n        i === sorted.length - 1 ? null : sorted[i + 1].id,\n      );\n    });\n  }\n}\n",
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 5,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "  const to = items.findIndex(item => item.id === targetId) + 1;\n  const target = items[to];\n  const before = items[to - 1];\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (!targetId || to === 0 || to === items.length) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {",
+   "sortcats": "  for (let i = sorted.length - 1; i >= 0; i--) {\n    await batchMessages(async () => {\n      await db.moveCategory(\n        sorted[i].id,\n        groupId,\n        i === sorted.length - 1 ? null : sorted[i + 1].id,\n      );\n    });\n  }\n}\n",
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 6,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "  const to = items.findIndex(item => item.id === targetId) + 1;\n  const target = items[to];\n  const before = items[to - 1];\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (!targetId || to === 0 || to === items.length) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {",
+   "sortcats": "  for (let i = sorted.length - 1; i >= 0; i--) {\n    await batchMessages(async () => {\n      await db.moveCategory(\n        sorted[i].id,\n        groupId,\n        i === sorted.length - 1 ? null : sorted[i + 1].id,\n      );\n    });\n  }\n}\n",
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 7,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "  const to = items.findIndex(item => item.id === targetId) + 1;\n  const target = items[to];\n  const before = items[to - 1];\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (!targetId || to === 0 || to === items.length) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {",
+   "sortcats": "  for (let i = sorted.length - 1; i >= 0; i--) {\n    await batchMessages(async () => {\n      await db.moveCategory(\n        sorted[i].id,\n        groupId,\n        i === sorted.length - 1 ? null : sorted[i + 1].id,\n      );\n    });\n  }\n}\n",
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 8,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "  const to = items.findIndex(item => item.id === targetId) + 1;\n  const target = items[to];\n  const before = items[to - 1];\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (!targetId || to === 0 || to === items.length) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {",
+   "sortcats": "  for (let i = sorted.length - 1; i >= 0; i--) {\n    await batchMessages(async () => {\n      await db.moveCategory(\n        sorted[i].id,\n        groupId,\n        i === sorted.length - 1 ? null : sorted[i + 1].id,\n      );\n    });\n  }\n}\n",
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 9,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "  const to = items.findIndex(item => item.id === targetId) + 1;\n  const target = items[to];\n  const before = items[to - 1];\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (!targetId || to === 0 || to === items.length) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {",
+   "sortcats": "  for (let i = sorted.length - 1; i >= 0; i--) {\n    await batchMessages(async () => {\n      await db.moveCategory(\n        sorted[i].id,\n        groupId,\n        i === sorted.length - 1 ? null : sorted[i + 1].id,\n      );\n    });\n  }\n}\n",
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 10,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "    ? items.findIndex(item => item.id === targetId)\n    : -1;\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (targetIdx === -1) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {\n      // If no items exist, the default is to use the first increment",
+   "sortcats": "  for (let i = sorted.length - 1; i >= 0; i--) {\n    await batchMessages(async () => {\n      await db.moveCategory(\n        sorted[i].id,\n        groupId,\n        i === sorted.length - 1 ? null : sorted[i + 1].id,\n      );\n    });\n  }\n}\n",
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 11,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "  const to = items.findIndex(item => item.id === targetId) + 1;\n  const target = items[to];\n  const before = items[to - 1];\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (!targetId || to === 0 || to === items.length) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {",
+   "sortcats": "  for (let i = sorted.length - 1; i >= 0; i--) {\n    await batchMessages(async () => {\n      await db.moveCategory(\n        sorted[i].id,\n        groupId,\n        i === sorted.length - 1 ? null : sorted[i + 1].id,\n      );\n    });\n  }\n}\n",
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB6",
+  "run": 12,
+  "cmds": {},
+  "outputs": {},
+  "files": {},
+  "extracts": {
+   "sort": "  const to = items.findIndex(item => item.id === targetId) + 1;\n  const target = items[to];\n  const before = items[to - 1];\n  const updates: Array<{ id: string; sort_order: number }> = [];\n\n  // If no target is specified, append at the end\n  if (!targetId || to === 0 || to === items.length) {\n    let order;\n    if (items.length > 0) {\n      // Add a new increment to whatever is the latest sort order\n      order = items[items.length - 1].sort_order + sortIncrement;\n    } else {",
+   "sortcats": null,
+   "insert": "      // Unfortunately since we insert at the beginning, we need to shove\n      // the sort orders to make sure there's room for it\n      const categories = await all<Pick<DbCategory, 'id' | 'sort_order'>>(\n        `SELECT id, sort_order FROM categories WHERE cat_group = ? AND tombstone = 0 ORDER BY sort_order, id`,\n        [category.cat_group],\n      );\n\n      const { updates, sort_order: order } = shoveSortOrders(\n        categories,\n        categories.length > 0 ? categories[0].id : null,\n      );\n      for (const info of updates) {"
+  }
+ }
+]
