@@ -87,6 +87,24 @@ Secrets: `DEEPSEEK_API_KEY` (currently used) or `ANTHROPIC_API_KEY`. Each run ha
 
 Details: `harness/PROTOCOL.md`.
 
+## Where the research stands (after iteration 23)
+
+In plain terms (details in Findings and `docs/iterations.md`):
+
+| Question | Answer so far | Confidence |
+|---|---|---|
+| Does a query layer that serves exactly the right code cut cost? | No. Agents already read efficiently; extra tool calls add turns, and turns are what cost money (+5% to +126%, iterations 3–10). | High, on a ~50k-line codebase with Haiku and DeepSeek |
+| What drives cost? | Number of turns × context re-sent per turn. Lower effort halves cost (iteration 12); a leaner harness (pi) cuts 15–49% (iterations 19–21). | High; the harness result holds on two codebases |
+| Why do cheap agents fail? | Misleading primitives (`$like` that isn't LIKE) and bugs that look intended (they work around them instead of fixing them). | Medium, from a handful of tasks |
+| What fixes "looks intended"? | Intent in the name of the function that owns it: 12/12 on AB1, against 8/12 with contracts on read, 3/12 with an example comment, 1/12 with a sentence in the report. | One task; being replicated |
+| Contracts? | They help exactly where they repeat what correct code says, and that redundancy is also their ~20% tax. Filtering them removes the protection. | Medium |
+
+**Decisions.**
+- **Dropped:** the query layer as a way to save tokens. Revisit only for much larger codebases (a million-line monorepo), much weaker models, or very long sessions; none of these has been tested.
+- **Kept:** "show intent where code is read" as a small part of the toolchain (the contracts-on-read extension is a query layer that serves meaning, not code).
+- **Default harness for new experiments:** pi.
+- **Direction for Tersa:** meaning in names and types (direction, order, units), one definition per operator, no misleading names in the core vocabulary. Prose contracts are the fallback.
+
 ## Findings so far
 
 Arm A, `deepseek-v4-flash`, provider-only network, 6 runs per task (2026-11-03):

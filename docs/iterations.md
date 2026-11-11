@@ -853,3 +853,11 @@ That exposes a problem with the idea itself. **A contract's protective value is 
 That settles the harness question from iteration 21: **don't try to show fewer contracts; move the important ones into names.** A self-describing name gives the redundancy for free. It's read at every call site and costs nothing on tasks where nothing is wrong, which is exactly what iteration 22's arm R measured.
 
 Records: `results/{P-pi-baseline,Q-pi-contracts}/AB1/run-19..30.json`, `results/{R-pi-name,S-pi-example,T-pi-specintent,Q2-pi-selective}/AB1/run-1..12.json`.
+
+## Decision point after iteration 23
+
+Vicho asked whether the query layer is worth chasing. Answer, recorded as a decision (README, "Where the research stands"):
+- **The query layer as a token saver is dropped.** In iterations 3–10 it never lowered cost: agents already read efficiently, and every extra tool call is an extra turn. What it could still be good for is untested: much larger codebases, weaker models, very long sessions.
+- **What survives is its delivery mechanism.** Showing information where the agent already reads (the contracts-on-read extension, iteration 20c) works, with no extra turns. It should carry meaning, not code.
+- **pi becomes the default harness** for new experiments (cheaper on both codebases, same quality).
+- **Next:** replicate iteration 22's strongest result (a self-describing name fixes a bug that looks intended) on a second, independent seeded bug before building language features on it.
