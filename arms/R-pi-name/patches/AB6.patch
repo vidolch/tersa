@@ -1,0 +1,103 @@
+diff --git a/packages/loot-core/src/server/db/index.ts b/packages/loot-core/src/server/db/index.ts
+index 51922b5..809665d 100644
+--- a/packages/loot-core/src/server/db/index.ts
++++ b/packages/loot-core/src/server/db/index.ts
+@@ -35,7 +35,7 @@ import type { TransactionEntity } from '#types/models';
+ import type { WithRequired } from '#types/util';
+ 
+ import {
+-  shoveSortOrders,
++  shoveSortOrdersToInsertBefore,
+   shoveSortOrdersDescending,
+   SORT_INCREMENT,
+   TRANSACTION_SORT_INCREMENT,
+@@ -426,7 +426,7 @@ export async function moveCategoryGroup(
+     `SELECT id, sort_order FROM category_groups WHERE tombstone = 0 ORDER BY sort_order, id`,
+   );
+ 
+-  const { updates, sort_order } = shoveSortOrders(groups, targetId);
++  const { updates, sort_order } = shoveSortOrdersToInsertBefore(groups, targetId);
+   for (const info of updates) {
+     await update('category_groups', info);
+   }
+@@ -479,7 +479,7 @@ export async function insertCategory(
+         [category.cat_group],
+       );
+ 
+-      const { updates, sort_order: order } = shoveSortOrders(
++      const { updates, sort_order: order } = shoveSortOrdersToInsertBefore(
+         categories,
+         categories.length > 0 ? categories[0].id : null,
+       );
+@@ -528,7 +528,7 @@ export async function moveCategory(
+     [groupId],
+   );
+ 
+-  const { updates, sort_order } = shoveSortOrders(categories, targetId);
++  const { updates, sort_order } = shoveSortOrdersToInsertBefore(categories, targetId);
+   for (const info of updates) {
+     await update('categories', info);
+   }
+@@ -748,7 +748,7 @@ export async function insertAccount(account) {
+   );
+ 
+   // Don't pass a target in, it will default to appending at the end
+-  const { sort_order } = shoveSortOrders(accounts);
++  const { sort_order } = shoveSortOrdersToInsertBefore(accounts);
+ 
+   account = accountModel.validate({ ...account, sort_order });
+   return insertWithUUID('accounts', account);
+@@ -784,7 +784,7 @@ export async function moveAccount(
+     );
+   }
+ 
+-  const { updates, sort_order } = shoveSortOrders(accounts, targetId);
++  const { updates, sort_order } = shoveSortOrdersToInsertBefore(accounts, targetId);
+   await batchMessages(async () => {
+     for (const info of updates) {
+       void update('accounts', info);
+@@ -855,7 +855,7 @@ export async function moveAccountGroup(
+     `SELECT id, sort_order FROM account_groups WHERE tombstone = 0 ORDER BY sort_order, id`,
+   );
+ 
+-  const { updates, sort_order } = shoveSortOrders(groups, targetId);
++  const { updates, sort_order } = shoveSortOrdersToInsertBefore(groups, targetId);
+   await batchMessages(async () => {
+     for (const info of updates) {
+       await update('account_groups', info);
+diff --git a/packages/loot-core/src/server/db/sort.ts b/packages/loot-core/src/server/db/sort.ts
+index 1750aa2..926eead 100644
+--- a/packages/loot-core/src/server/db/sort.ts
++++ b/packages/loot-core/src/server/db/sort.ts
+@@ -21,18 +21,18 @@ function midpoint<T extends { sort_order: number }>(
+   }
+ }
+ 
+-export function shoveSortOrders<T extends { id: string; sort_order: number }>(
++export function shoveSortOrdersToInsertBefore<T extends { id: string; sort_order: number }>(
+   items: T[],
+-  targetId: string | null = null,
++  beforeId: string | null = null,
+   sortIncrement: number = SORT_INCREMENT,
+ ) {
+-  const to = items.findIndex(item => item.id === targetId) + 1;
++  const to = items.findIndex(item => item.id === beforeId) + 1;
+   const target = items[to];
+   const before = items[to - 1];
+   const updates: Array<{ id: string; sort_order: number }> = [];
+ 
+   // If no target is specified, append at the end
+-  if (!targetId || to === 0 || to === items.length) {
++  if (!beforeId || to === 0 || to === items.length) {
+     let order;
+     if (items.length > 0) {
+       // Add a new increment to whatever is the latest sort order
+@@ -95,7 +95,7 @@ function midpointDescending<T extends { sort_order: number }>(
+ 
+ /**
+  * Calculate sort_order for placing an item after a target in a descending-ordered list.
+- * Mirrors shoveSortOrders but for lists sorted by sort_order DESC (higher values first).
++ * Mirrors shoveSortOrdersToInsertBefore but for lists sorted by sort_order DESC (higher values first).
+  *
+  * Use this when:
+  * - Items are displayed with highest sort_order at top

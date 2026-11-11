@@ -1,0 +1,19 @@
+diff --git a/packages/loot-core/src/server/db/sort.ts b/packages/loot-core/src/server/db/sort.ts
+--- a/packages/loot-core/src/server/db/sort.ts
++++ b/packages/loot-core/src/server/db/sort.ts
+@@ -26,13 +26,13 @@
+   beforeId: string | null = null,
+   sortIncrement: number = SORT_INCREMENT,
+ ) {
+-  const to = items.findIndex(item => item.id === beforeId) + 1;
++  const to = items.findIndex(item => item.id === beforeId);
+   const target = items[to];
+   const before = items[to - 1];
+   const updates: Array<{ id: string; sort_order: number }> = [];
+ 
+   // If no target is specified, append at the end
+-  if (!beforeId || to === 0 || to === items.length) {
++  if (!beforeId || to === -1) {
+     let order;
+     if (items.length > 0) {
+       // Add a new increment to whatever is the latest sort order

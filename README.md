@@ -23,6 +23,7 @@ Everything is measured by the benchmark in this repo, so each idea has to prove 
 | **Q** `Q-pi-contracts` | TypeScript | arm P + a pi extension that appends the contracts of the functions shown and called, once each, to tool results that show code (`arms/Q-pi-contracts/`) | iteration 20 |
 | **R / S / T** `R-pi-name`, `S-pi-example`, `T-pi-specintent` | TypeScript | arm P + one cheap signal of intent on AB1: a self-describing function name (R), a one-line example comment (S), one sentence of intent in the report (T) | iteration 22 |
 | **Q2** `Q2-pi-selective` | TypeScript | arm Q with only the contracts a model judged to add information beyond name, signature and comments (`query/src/contracts-filter.ts`) | iteration 23 |
+| **R2 / R3** `R2-pi-neutralname`, `R3-pi-wrongname` | TypeScript | controls for R on AB1: a neutral new name, and a name that agrees with the bug | iteration 24 |
 | **C** `C-tersa-lang` | Tersa → TypeScript | standard tools + query layer + language | not started |
 
 **B vs A** isolates the query layer. **F vs A** and **G vs A** each test one language rule without building the language. **C vs B** isolates the language. Everything else is identical between arms: model, harness, specs, caps, network policy and environment description. Arm B differs by its tools and their steering, defined in `arms/B-ts-query/agent.json` and `harness/runner/src/steering.ts`: the usage note (counted as overhead) and a hook that denies code-reading calls the query tools cover, replying with the equivalent query call. Read stays allowed (Claude Code requires a Read before an Edit), as do tests, builds, git and non-code files.
@@ -45,7 +46,7 @@ P0 (building the wrong thing) is out of scope; specs are written to be unambiguo
 | Suite | Codebase | Tasks | Purpose |
 |---|---|---|---|
 | `urlshort` | URL shortener written for the benchmark (~500 lines) | T1–T5: build, feature, bugfix, refactor, fresh-session change | small control; validates the pipeline |
-| `actual` | [Actual Budget](https://github.com/actualbudget/actual) (MIT), ~49k lines in `loot-core`, pinned commit | AB1–AB5: two seeded bugs, three cross-module features (AB5 added in iteration 15) | where reading cost shows; see `suites/actual/README.md` |
+| `actual` | [Actual Budget](https://github.com/actualbudget/actual) (MIT), ~49k lines in `loot-core`, pinned commit | AB1–AB6: three seeded bugs, three cross-module features (AB5 added in iteration 15, AB6 in iteration 25) | where reading cost shows; see `suites/actual/README.md` |
 | `hono` | [Hono](https://github.com/honojs/hono) (MIT) v4.13.17, web framework, five router implementations | HN1–HN4: two seeded bugs, two features (one across all routers) | second codebase, iteration 21; see `suites/hono/README.md` |
 
 Every run is evaluated by hidden tests the agent never sees: black-box HTTP tests for `urlshort`, and tests through the public `@actual-app/api` package for `actual`. Both suites also run the project's own tests, restored from the original before checking.
@@ -123,6 +124,7 @@ Arm A, `deepseek-v4-flash`, provider-only network, 6 runs per task (2026-11-03):
 - **The query layer reaches every task's core files in one or two queries** (200–600 tokens of output, `query/test/actual.test.ts`).
 - **Steering made the tools used, but not cheaper (v1):** with the system-prompt note and redirects, the agent made 12–25 query calls per run, yet every task cost the same or more than arm A (AB1 $0.035 vs $0.019, and it broke an existing test). Agents still made 7–34 Read calls: Claude Code requires a Read before an Edit, so changed code is read twice. v1.1 trims query output; an edit tool in the query layer would remove the second read.
 - **A context bundle up front shortens orientation but doesn't lower cost — iteration 10 (arm D, Haiku, 6 runs per task):** first edit earlier on AB3 (turn 9.3 → 5.4) and AB4 (5.0 → 3.5); cost per pass $0.0282 vs A $0.0261 (+8%), no task significant. The ~6k-token bundle is re-sent every turn and eats the turns it saves. AB1 fails 0/6 in both arms on the same regression test.
+- **It's the name's meaning, not the rename — iteration 24:** a neutral new name (`_orderRules`) 1/12, a name that agrees with the bug 1/12, the self-describing name 12/12 again (24/24 in total).
 - **A self-describing name beats contracts — iteration 22 (AB1, pi, 12 runs per arm):** renaming one private function to `_rankLeastSpecificFirst` fixes AB1 in 12/12 runs at $0.0029 per pass and 7 turns, against 8/12 with contracts on read and 0/12 with nothing. A one-line example comment: 3/12. One sentence of intent in the bug report: 1/12, because it describes the system, so a call-site workaround satisfies it too. Intent must sit in the name or type of the unit that owns it.
 - **Filtering contracts removes the protection — iteration 23 (arm Q2):** keeping only contracts that "add information" to the correct code dropped the decisive one; AB1 1/12. A contract protects by being redundant with correct code; the tax and the protection are the same thing.
 - **Second codebase (Hono) — iteration 21, pre-registered (A vs P vs Q, 4 tasks × 8 runs):** the harness effect holds and is larger: pi −49% cost per pass vs Claude Code (32/32 vs 31/32). The contracts effect doesn't appear: agents fixed both seeded bugs at the cause in all 48 runs with or without contracts, so contracts were a ~22% tax. Likely reason: in Hono, intent was legible from the spec, names (`score: ++order`) and comments with examples; in AB1 it wasn't. Contracts are insurance for code whose intent isn't legible, not a default.
@@ -209,7 +211,8 @@ results/        run records, summary.md, archive/ of invalidated batches
 - [x] Iteration 21 (pre-registered): second codebase, Hono: harness −49% confirmed; contracts no effect possible (bugs fixed in every arm), ~22% tax
 - [x] Iteration 22: cheap signals of intent on AB1: a name 12/12, contracts 8/12, example comment 3/12, spec note 1/12, nothing 0/12
 - [x] Iteration 23: filtered contracts lose the protection (1/12)
-- [ ] Iteration 24: name meaning vs. rename (neutral name R2, bug-agreeing name R3)
+- [x] Iteration 24: it's the name's meaning: R 12/12 again, neutral name 1/12, bug-agreeing name 1/12
+- [ ] Iteration 25 (pre-registered): the name rule on an independent bug, AB6 (`shoveSortOrders` inserts after instead of before)
 - [ ] Arm B batch on `actual`, with a same-day arm A rerun
 - [ ] Compare B vs A; decide what the query layer needs next
 - [ ] Headline run on a Claude model

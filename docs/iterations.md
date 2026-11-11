@@ -877,3 +877,34 @@ Vicho asked whether the query layer is worth chasing. Answer, recorded as a deci
 - R3 is at or below P (0/12 or close). The workaround should be even more common, and agents may defend the bug in their final message. If R3 passes often, agents aren't trusting names, and the R result needs another explanation.
 
 **Run.** AB1, `claude-haiku-5-5`, `effort=low`, 12 runs per arm, same period.
+
+**Result** (AB1, pi, `effort=low`, 12 runs per arm, same period):
+
+| Arm | Name | Pass | Cost per pass | Turns |
+|---|---|---|---|---|
+| P | `_rankRules` (unchanged) | 0/12 | – | 15.1 |
+| R | `_rankLeastSpecificFirst` | **12/12** | **$0.0029** | 7.6 |
+| R2 | `_orderRules` (neutral) | 1/12 | $0.0994 | 17.0 |
+| R3 | `_rankMostSpecificFirst` (agrees with the bug) | 1/12 | $0.0934 | 15.8 |
+
+**Conclusion.** All three predictions held. The name's **meaning** is what works: R replicates (24/24 over iterations 22 and 24), a new but neutral name doesn't help, and a name that endorses the bug leaves agents where they were. (R3 can't show "worse than P" here, because P is already at 0/12.) With the identical code change apart from five words in an identifier, the pass rate goes from 1/12 to 12/12 and the cost per pass falls about 30×.
+
+Records: `results/{P-pi-baseline/AB1/run-31..42,R-pi-name/AB1/run-13..24,R2-pi-neutralname/AB1/run-1..12,R3-pi-wrongname/AB1/run-1..12}.json`.
+
+## Iteration 25 — The name rule on an independent bug: AB6 (pre-registered)
+
+**Why.** Everything about names so far comes from AB1. A second seeded bug of the same kind, in a different module, written before any agent sees it, tests whether "intent in the name of the unit that owns it" generalises.
+
+**Task AB6** (`suites/actual/tasks/AB6/`): `shoveSortOrders(items, targetId)` in `server/db/sort.ts` computes the sort order for inserting an item **before** `targetId` (null = at the end). It is shared by moving categories, category groups, accounts and account groups, and by inserting a new category. Nothing in its name or signature says "before"; "after the target" would be an equally natural design.
+- **Seed:** the item lands *after* the target (`to = index + 1`, with the end of the list treated as "append"). The behaviour is consistent, so it could pass for a design choice.
+- **Spec:** reports only the category symptom (drops land one position low; `categories-sort` scrambles a group). Rules: R1 a move with a target lands directly before it; R2 a null target appends; R3 `categories-sort` orders by name.
+- **Hidden:** the upstream tests that state the direction ("moves a group **before** a target…", `sortCategories`, account moves; 5 tests) are removed from the start state and restored for scoring. A call-site workaround (pass the next sibling from `category-move` and fix `sortCategories`) passes R1–R3 but breaks group and account moves, which the restored tests catch.
+- **Known legibility risk, stated before running:** `insertCategory` has the comment "since we insert at the beginning, we need to shove the sort orders", above a call that passes the first category as the target, which implies "before". Agents who read it may fix the cause without help, as on Hono. The comment is upstream and is left alone.
+- **Arm R's AB6 patch:** `shoveSortOrders` → `shoveSortOrdersToInsertBefore` (all 7 call sites) and its parameter `targetId` → `beforeId` (`arms/R-pi-name/patches/AB6.patch`).
+- Validation: `harness/validate-actual.sh AB6` passes for arms A and R (start fails R1, R3 and the regression; R2 already holds; the reference passes everything). For R the reference had to be rebased by hand; `rebase-reference.sh` now fails when its output is empty instead of writing an empty patch.
+
+**Predictions.**
+- **Headroom rule:** if P passes ≥ 8/12, the bug's intent is legible enough without help (most likely from `insertCategory`'s comment). The result is then "no effect possible", reported as such.
+- Otherwise, R passes clearly more often than P (Fisher p < 0.05), at a lower cost per pass.
+
+**Run.** AB6, pi, `claude-haiku-5-5`, `effort=low`, 12 runs per arm, same period: P runs 1–12, R runs 1–12.

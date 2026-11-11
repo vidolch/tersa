@@ -1,0 +1,31 @@
+{
+  "id": "AB6",
+  "type": "bugfix",
+  "startPatch": "start.patch",
+  "referencePatch": "reference.patch",
+  "relevant": {
+    "core": [
+      "packages/loot-core/src/server/db/sort.ts"
+    ],
+    "supporting": [
+      "packages/loot-core/src/server/db/index.ts",
+      "packages/loot-core/src/server/budget/app.ts",
+      "packages/loot-core/src/server/budget/sort-categories.ts",
+      "packages/loot-core/src/server/accounts/app.ts",
+      "packages/loot-core/src/server/account-groups/app.ts"
+    ]
+  },
+  "regression": {
+    "loot-core": [
+      "src/server/db",
+      "src/server/budget",
+      "src/server/account-groups",
+      "src/server/accounts"
+    ]
+  },
+  "expectStartFailing": [
+    "AB6 R1",
+    "AB6 R3",
+    "AB6 regression"
+  ]
+}

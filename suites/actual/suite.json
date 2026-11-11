@@ -8,7 +8,8 @@
     "AB2",
     "AB3",
     "AB4",
-    "AB5"
+    "AB5",
+    "AB6"
   ],
   "note": "Black-box acceptance through @actual-app/api built from the workspace; regression = the repo's own tests at the pinned commit, copied over the workspace before running."
 }

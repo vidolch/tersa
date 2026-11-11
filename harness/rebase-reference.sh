@@ -29,4 +29,5 @@ PY
   echo "resolved insertion conflict in $f"
 done
 git add -A && git diff --cached > "$ROOT/arms/$ARM/patches/$TASK.reference.patch"
+[[ -s "$ROOT/arms/$ARM/patches/$TASK.reference.patch" ]] || { echo "reference did not apply (empty result): rebase it by hand"; exit 1; }
 echo "wrote arms/$ARM/patches/$TASK.reference.patch ($(git diff --cached --stat | tail -1))"

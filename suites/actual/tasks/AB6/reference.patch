@@ -1,0 +1,20 @@
+diff --git a/packages/loot-core/src/server/db/sort.ts b/packages/loot-core/src/server/db/sort.ts
+index 1750aa2..0c6c787 100644
+--- a/packages/loot-core/src/server/db/sort.ts
++++ b/packages/loot-core/src/server/db/sort.ts
+@@ -26,13 +26,13 @@ export function shoveSortOrders<T extends { id: string; sort_order: number }>(
+   targetId: string | null = null,
+   sortIncrement: number = SORT_INCREMENT,
+ ) {
+-  const to = items.findIndex(item => item.id === targetId) + 1;
++  const to = items.findIndex(item => item.id === targetId);
+   const target = items[to];
+   const before = items[to - 1];
+   const updates: Array<{ id: string; sort_order: number }> = [];
+ 
+   // If no target is specified, append at the end
+-  if (!targetId || to === 0 || to === items.length) {
++  if (!targetId || to === -1) {
+     let order;
+     if (items.length > 0) {
+       // Add a new increment to whatever is the latest sort order
