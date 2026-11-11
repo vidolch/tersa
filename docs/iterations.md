@@ -809,6 +809,27 @@ Both code patches pass `ARM=… harness/validate-actual.sh AB1`.
 
 **Expected if the hypothesis holds.** At least one of R/S/T passes about as often as Q (iteration 20c: 4/6), clearly above P (1/6 in 20c, 2/6 in 19), at P's cost or less. If none does, a prose contract carries something these signals don't.
 
+**Result** (AB1, pi, `effort=low`, 12 runs per arm, same period; probe `results/analysis/it22-23.probe.json`):
+
+| Arm | Signal | Pass | Cost per pass | Turns | Fixed the comparator |
+|---|---|---|---|---|---|
+| P | none | 0/12 | – | 15.8 | 0/12 |
+| Q | contracts on read (all 264) | 8/12 | $0.0083 | 11.1 | 8/12 |
+| **R** | **self-describing name `_rankLeastSpecificFirst`** | **12/12** | **$0.0029** | **7.3** | 11/12 (+1 equivalent fix) |
+| S | one-line example comment | 3/12 | $0.0334 | 16.8 | 3/12 |
+| T | one sentence of intent in the report | 1/12 | $0.0756 | 13.8 | 1/12 |
+
+Fisher, passes: R vs P p ≈ 7e-7; Q vs P p = 0.001; R vs Q p = 0.09; S vs P p = 0.22. Mean cost per run: R $0.0029 vs P $0.0079 (p < 0.001). In every arm, a run passes exactly when it fixes the comparator itself.
+
+**Conclusion.**
+- **A name beats everything else tried on AB1.** Renaming one private function so that its name states the direction fixes AB1 every time, in half the turns, at a third of P's cost per run, and at a third of the contract arm's cost per pass. No prose, no tooling, no tax on other tasks.
+- **The example comment helps a little (3/12).** The example sits in a comment *above* code that contradicts it, and agents resolve the conflict in favour of the code about as often as without it.
+- **Intent in the report doesn't help (1/12), and the probe shows why.** "Rules run from least to most specific" is satisfied just as well by the workaround: reverse the order at the call site and leave `rankRules` returning the other order for its other callers. The note says what the *system* should do, not what the *function* should do. Intent only prevents the workaround when it is attached to the unit that owns it.
+- **Why a name works where a comment barely does** (interpretation): a name is read at every use, it is part of the code agents reason about, and a function called `_rankLeastSpecificFirst` that sorts most-specific-first is self-evidently wrong. A comment is text next to the code that agents can decide is stale.
+
+**For Tersa.** This is the most concrete language rule the project has produced: **ordering, direction and similar semantic choices must be in names or types, not in comments.** For example, a sort helper whose name or type states its direction (`sortAscendingBy(score)`, a `LeastSpecificFirst<Rule[]>` brand), or a ranking function whose return type says what order it guarantees. A language can enforce part of this: no bare comparator returned from a function named like a ranking. More generally, it can prefer APIs where the direction is a named argument (`sortBy(score, "ascending")`) over the sign convention of a comparator.
+
+
 ## Iteration 23 — Contracts shown only when they add information (arm Q2)
 
 **Hypothesis.** Contracts on read cost ~20% where intent is already legible (iteration 21). If the same blind model drops the contracts that only restate what a function's name, signature and comments already say, the tax should shrink. The AB1 effect should stay, if the decisive contract is judged informative.
@@ -824,3 +845,11 @@ That exposes a problem with the idea itself. **A contract's protective value is 
 **Prediction, recorded before the run:** Q2 on AB1 passes about as often as P (no contract-driven fix), because the decisive contract is gone.
 
 **Run.** AB1, `effort=low`, 12 runs, in the same period as iteration 22: Q2 runs 1–12.
+
+**Result.** Q2 (filtered contracts) on AB1: **1/12**, cost per pass $0.0968, 14.6 turns. As predicted, the `_rankRules` contract was shown in none of its runs, and the one pass fixed the comparator without it. Same period: Q (all contracts) 8/12, P 0/12.
+
+**Conclusion.** Filtering contracts by "does this add information to the correct code?" removes exactly the contracts that protect against regressions. The contracts that matter are the redundant ones: a statement of intent made twice (in the code and in the contract, or better in the name), so that a change to one shows up as a contradiction with the other. The tax and the protection are the same thing.
+
+That settles the harness question from iteration 21: **don't try to show fewer contracts; move the important ones into names.** A self-describing name gives the redundancy for free. It's read at every call site and costs nothing on tasks where nothing is wrong, which is exactly what iteration 22's arm R measured.
+
+Records: `results/{P-pi-baseline,Q-pi-contracts}/AB1/run-19..30.json`, `results/{R-pi-name,S-pi-example,T-pi-specintent,Q2-pi-selective}/AB1/run-1..12.json`.
