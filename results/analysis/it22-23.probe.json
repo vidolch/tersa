@@ -1,0 +1,1730 @@
+[
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 19,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 20,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 21,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 22,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 23,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 24,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 25,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 26,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 27,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 28,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 29,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "P-pi-baseline",
+  "task": "AB1",
+  "run": 30,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 19,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 3,
+    "firstTurn": 1
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 20,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 1
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 21,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 4
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 5
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 22,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 3,
+    "firstTurn": 4
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 4
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 23,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 6,
+    "firstTurn": 2
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 3
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 24,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 7,
+    "firstTurn": 2
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 3
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 25,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 7,
+    "firstTurn": 3
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 6
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 26,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 3,
+    "firstTurn": 3
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 3
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 27,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 1
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 28,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 1
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 1
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 29,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 3,
+    "firstTurn": 2
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 2
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q-pi-contracts",
+  "task": "AB1",
+  "run": 30,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 3,
+    "firstTurn": 2
+   },
+   "rankContract": {
+    "count": 1,
+    "firstTurn": 2
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 5,
+    "firstTurn": 1
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 5,
+    "firstTurn": 2
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 6,
+    "firstTurn": 4
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 2
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 7,
+    "firstTurn": 1
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 6,
+    "firstTurn": 3
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 6,
+    "firstTurn": 1
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 2
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 9,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 6,
+    "firstTurn": 2
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 10,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 5,
+    "firstTurn": 2
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 11,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 2
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "Q2-pi-selective",
+  "task": "AB1",
+  "run": 12,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 4,
+    "firstTurn": 1
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 9,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 10,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 11,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "R-pi-name",
+  "task": "AB1",
+  "run": 12,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 9,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 10,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 11,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "S-pi-example",
+  "task": "AB1",
+  "run": 12,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 1,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 2,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 3,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 4,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 5,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 6,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 7,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 8,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 9,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 10,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 11,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": false
+  },
+  "extracts": {}
+ },
+ {
+  "arm": "T-pi-specintent",
+  "task": "AB1",
+  "run": 12,
+  "cmds": {},
+  "outputs": {
+   "contracts": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "rankContract": {
+    "count": 0,
+    "firstTurn": null
+   },
+   "specNote": {
+    "count": 0,
+    "firstTurn": null
+   }
+  },
+  "files": {
+   "cmpFixed": true
+  },
+  "extracts": {}
+ }
+]
